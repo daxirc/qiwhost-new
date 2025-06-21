@@ -137,6 +137,47 @@ function slugify(text) {
             </div>
           </div>
 
+          <!-- Dedicated Servers -->
+          <a href="/dedicated-servers" class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
+            <i class="fas fa-hdd mr-1.5"></i>
+            <span class="font-semibold">Dedicated Servers</span>
+          </a>
+
+          <!-- Private RDP Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
+              <i class="fas fa-desktop mr-1.5"></i>
+              <span class="font-semibold">Private RDP</span>
+              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
+                <a href="/rdp/usa" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <img src="https://flagcdn.com/us.svg" width="20" alt="USA Flag" class="flag-icon mr-2">
+                  USA Private RDP
+                </a>
+                <a href="/rdp/singapore" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <img src="https://flagcdn.com/sg.svg" width="20" alt="Singapore Flag" class="flag-icon mr-2">
+                  Singapore Private RDP
+                </a>
+                <a href="/rdp/germany" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <img src="https://flagcdn.com/de.svg" width="20" alt="Germany Flag" class="flag-icon mr-2">
+                  Germany Private RDP
+                </a>
+                <a href="/rdp/finland" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <img src="https://flagcdn.com/fi.svg" width="20" alt="Finland Flag" class="flag-icon mr-2">
+                  Finland Private RDP
+                </a>
+                <a href="/rdp/uk" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <img src="https://flagcdn.com/gb.svg" width="20" alt="UK Flag" class="flag-icon mr-2">
+                  UK Private RDP
+                </a>
+              </div>
+            </div>
+          </div>
+
           <!-- Locations Dropdown -->
           <div class="relative group">
             <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
@@ -199,47 +240,6 @@ function slugify(text) {
               </div>
             </div>
           </div>
-
-          <!-- Dedicated Servers -->
-          <a href="/dedicated-servers" class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
-            <i class="fas fa-hdd mr-1.5"></i>
-            <span class="font-semibold">Dedicated Servers</span>
-          </a>
-
-          <!-- Private RDP Dropdown -->
-          <div class="relative group">
-            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
-              <i class="fas fa-desktop mr-1.5"></i>
-              <span class="font-semibold">Private RDP</span>
-              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href="/rdp/usa" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <img src="https://flagcdn.com/us.svg" width="20" alt="USA Flag" class="flag-icon mr-2">
-                  USA Private RDP
-                </a>
-                <a href="/rdp/singapore" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <img src="https://flagcdn.com/sg.svg" width="20" alt="Singapore Flag" class="flag-icon mr-2">
-                  Singapore Private RDP
-                </a>
-                <a href="/rdp/germany" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <img src="https://flagcdn.com/de.svg" width="20" alt="Germany Flag" class="flag-icon mr-2">
-                  Germany Private RDP
-                </a>
-                <a href="/rdp/finland" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <img src="https://flagcdn.com/fi.svg" width="20" alt="Finland Flag" class="flag-icon mr-2">
-                  Finland Private RDP
-                </a>
-                <a href="/rdp/uk" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <img src="https://flagcdn.com/gb.svg" width="20" alt="UK Flag" class="flag-icon mr-2">
-                  UK Private RDP
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -294,6 +294,45 @@ function slugify(text) {
         </div>
       </details>
 
+      <a href="/dedicated-servers" class="block py-2 text-gray-700 hover:text-primary-600">
+        <i class="fas fa-hdd mr-2 text-primary-500"></i>
+        Dedicated Servers
+      </a>
+
+      <details class="group">
+        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
+          <div class="flex items-center">
+            <i class="fas fa-desktop mr-2 text-primary-500"></i>
+            <span class="font-medium">Private RDP</span>
+          </div>
+          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="ml-6 mt-2 space-y-2">
+          <a href="/rdp/usa" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/us.svg" width="16" alt="USA Flag" class="flag-icon mr-2">
+            USA
+          </a>
+          <a href="/rdp/singapore" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/sg.svg" width="16" alt="Singapore Flag" class="flag-icon mr-2">
+            Singapore
+          </a>
+          <a href="/rdp/germany" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/de.svg" width="16" alt="Germany Flag" class="flag-icon mr-2">
+            Germany
+          </a>
+          <a href="/rdp/finland" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/fi.svg" width="16" alt="Finland Flag" class="flag-icon mr-2">
+            Finland
+          </a>
+          <a href="/rdp/uk" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/gb.svg" width="16" alt="UK Flag" class="flag-icon mr-2">
+            UK
+          </a>
+        </div>
+      </details>
+
       <details class="group">
         <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
           <div class="flex items-center">
@@ -335,45 +374,6 @@ function slugify(text) {
               </div>
             </details>
           ))}
-        </div>
-      </details>
-
-      <a href="/dedicated-servers" class="block py-2 text-gray-700 hover:text-primary-600">
-        <i class="fas fa-hdd mr-2 text-primary-500"></i>
-        Dedicated Servers
-      </a>
-
-      <details class="group">
-        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
-          <div class="flex items-center">
-            <i class="fas fa-desktop mr-2 text-primary-500"></i>
-            <span class="font-medium">Private RDP</span>
-          </div>
-          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="ml-6 mt-2 space-y-2">
-          <a href="/rdp/usa" class="flex items-center text-sm text-gray-700 hover:underline">
-            <img src="https://flagcdn.com/us.svg" width="16" alt="USA Flag" class="flag-icon mr-2">
-            USA
-          </a>
-          <a href="/rdp/singapore" class="flex items-center text-sm text-gray-700 hover:underline">
-            <img src="https://flagcdn.com/sg.svg" width="16" alt="Singapore Flag" class="flag-icon mr-2">
-            Singapore
-          </a>
-          <a href="/rdp/germany" class="flex items-center text-sm text-gray-700 hover:underline">
-            <img src="https://flagcdn.com/de.svg" width="16" alt="Germany Flag" class="flag-icon mr-2">
-            Germany
-          </a>
-          <a href="/rdp/finland" class="flex items-center text-sm text-gray-700 hover:underline">
-            <img src="https://flagcdn.com/fi.svg" width="16" alt="Finland Flag" class="flag-icon mr-2">
-            Finland
-          </a>
-          <a href="/rdp/uk" class="flex items-center text-sm text-gray-700 hover:underline">
-            <img src="https://flagcdn.com/gb.svg" width="16" alt="UK Flag" class="flag-icon mr-2">
-            UK
-          </a>
         </div>
       </details>
 
