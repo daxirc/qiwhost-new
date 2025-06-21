@@ -1,0 +1,186 @@
+---
+  // Navigation bar component
+---
+
+<header class="bg-white border-b border-gray-100">
+  <div class="container">
+    <!-- Desktop View -->
+    <div class="hidden lg:flex items-center justify-between h-20 w-full">
+      <!-- Left Side: Logo + Menu -->
+      <div class="flex items-center space-x-6">
+        <!-- Logo -->
+        <a href="/" class="flex items-center pl-6">
+          <img 
+            src="/logo-222.png" 
+            alt="QIW HOST" 
+            class="h-12 w-auto max-h-12" 
+            width="200" 
+            height="48"
+            loading="eager"
+          />
+        </a>
+
+        <!-- Menu Items -->
+        <div class="flex items-center space-x-2">
+          <!-- VPS Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
+              <i class="fas fa-server mr-1.5"></i>
+              <span class="font-semibold">VPS</span>
+              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
+                <a href="/vps" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <i class="fas fa-server mr-2 text-primary-500"></i>
+                  VPS Overview
+                </a>
+                <a href="/vps/windows" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <i class="fab fa-windows mr-2 text-primary-500"></i>
+                  Windows VPS
+                </a>
+                <a href="/vps/linux" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <i class="fab fa-linux mr-2 text-primary-500"></i>
+                  Linux VPS
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dedicated Servers -->
+          <a href="/dedicated-servers" class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
+            <i class="fas fa-hdd mr-1.5"></i>
+            <span class="font-semibold">Dedicated Servers</span>
+          </a>
+
+          <!-- Private RDP Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
+              <i class="fas fa-desktop mr-1.5"></i>
+              <span class="font-semibold">Private RDP</span>
+              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
+                <a href="/rdp/usa" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <span class="w-6 text-center mr-2" lang="en">🇺🇸</span>
+                  USA Private RDP
+                </a>
+                <a href="/rdp/singapore" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <span class="w-6 text-center mr-2" lang="en">🇸🇬</span>
+                  Singapore Private RDP
+                </a>
+                <a href="/rdp/germany" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <span class="w-6 text-center mr-2" lang="en">🇩🇪</span>
+                  Germany Private RDP
+                </a>
+                <a href="/rdp/finland" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <span class="w-6 text-center mr-2" lang="en">🇫🇮</span>
+                  Finland Private RDP
+                </a>
+                <a href="/rdp/uk" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <span class="w-6 text-center mr-2" lang="en">🇬🇧</span>
+                  UK Private RDP
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Client Area Button -->
+      <a href="/clientarea" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium transition pr-6">
+        <i class="far fa-user-circle"></i>
+        Client Area
+      </a>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="flex items-center justify-between h-20 w-full lg:hidden">
+      <!-- Logo -->
+      <a href="/" class="flex items-center pl-6">
+        <img 
+          src="/logo-222.png" 
+          alt="QIW HOST" 
+          class="h-10 w-auto max-h-10" 
+          width="160" 
+          height="38"
+          loading="eager"
+        />
+      </a>
+
+      <!-- Mobile Toggle -->
+      <button id="mobile-menu-button" class="relative w-10 h-10 flex items-center justify-center text-gray-700 hover:bg-gray-100 rounded-lg pr-6">
+        <span class="sr-only">Open menu</span>
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="mobile-menu-container lg:hidden bg-white shadow-md">
+    <div class="py-4 space-y-2">
+      <details class="group">
+        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
+          <div class="flex items-center">
+            <i class="fas fa-server mr-2 text-primary-500"></i>
+            <span class="font-medium">VPS</span>
+          </div>
+          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="ml-6 mt-2 space-y-2">
+          <a href="/vps" class="block text-sm text-gray-700 hover:underline">VPS Overview</a>
+          <a href="/vps/windows" class="block text-sm text-gray-700 hover:underline">Windows VPS</a>
+          <a href="/vps/linux" class="block text-sm text-gray-700 hover:underline">Linux VPS</a>
+        </div>
+      </details>
+
+      <a href="/dedicated-servers" class="block py-2 text-gray-700 hover:text-primary-600">
+        <i class="fas fa-hdd mr-2 text-primary-500"></i>
+        Dedicated Servers
+      </a>
+
+      <details class="group">
+        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
+          <div class="flex items-center">
+            <i class="fas fa-desktop mr-2 text-primary-500"></i>
+            <span class="font-medium">Private RDP</span>
+          </div>
+          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="ml-6 mt-2 space-y-2">
+          <a href="/rdp/usa" class="block text-sm text-gray-700 hover:underline">🇺🇸 USA</a>
+          <a href="/rdp/singapore" class="block text-sm text-gray-700 hover:underline">🇸🇬 Singapore</a>
+          <a href="/rdp/germany" class="block text-sm text-gray-700 hover:underline">🇩🇪 Germany</a>
+          <a href="/rdp/finland" class="block text-sm text-gray-700 hover:underline">🇫🇮 Finland</a>
+          <a href="/rdp/uk" class="block text-sm text-gray-700 hover:underline">🇬🇧 UK</a>
+        </div>
+      </details>
+
+      <a href="/clientarea" class="block mt-4 text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+        <i class="far fa-user-circle mr-2"></i> Client Area
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('mobile-menu-open');
+    });
+  });
+</script>

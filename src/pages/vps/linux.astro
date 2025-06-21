@@ -1,0 +1,148 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import FeaturesSection from '../../components/FeaturesSection.astro';
+import { supabase } from '../../lib/supabase';
+
+// Fetch plans from database
+const { data: linuxPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .eq('os_type', 'Linux')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = linuxPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    'Linux OS',
+    '24/7 Support'
+  ],
+  ctaText: "Order Now",
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text
+})) || [];
+
+// Linux distributions
+const distributions = [
+  { name: "Ubuntu", version: "22.04 LTS", icon: "fab fa-ubuntu" },
+  { name: "CentOS", version: "Stream 9", icon: "fab fa-centos" },
+  { name: "Debian", version: "11", icon: "fab fa-debian" },
+  { name: "Fedora", version: "37", icon: "fab fa-fedora" },
+  { name: "Rocky Linux", version: "9", icon: "fas fa-server" },
+  { name: "AlmaLinux", version: "9", icon: "fas fa-server" }
+];
+
+// Features data
+const features = [
+  {
+    title: "Full Root Access",
+    description: "Complete control over your Linux server environment",
+    icon: "fas fa-terminal"
+  },
+  {
+    title: "Choice of Distributions",
+    description: "Multiple Linux distributions to choose from",
+    icon: "fab fa-linux"
+  },
+  {
+    title: "SSH Access",
+    description: "Secure Shell access for remote server management",
+    icon: "fas fa-lock"
+  },
+  {
+    title: "Web Hosting Ready",
+    description: "Pre-configured for web hosting with Apache/Nginx, PHP, and MySQL",
+    icon: "fas fa-globe"
+  },
+  {
+    title: "Docker Support",
+    description: "Run containerized applications with Docker support",
+    icon: "fab fa-docker"
+  },
+  {
+    title: "Automated Backups",
+    description: "Optional daily or weekly backups for data protection",
+    icon: "fas fa-cloud-upload-alt"
+  }
+];
+---
+
+<Layout 
+  title="Linux VPS Hosting" 
+  description="High-performance Linux VPS solutions with dedicated resources, multiple distribution options, and full root access."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Linux VPS Hosting"
+    subtitle="Powerful and flexible Linux virtual servers with full root access and your choice of distributions."
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Locations -->
+  <section class="py-12 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Global Locations</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Low Latency Network</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24">
+    <PricingTable
+      title="Linux VPS Plans"
+      description="Choose the Linux VPS plan that fits your needs"
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title="Linux VPS Features"
+    subtitle="Everything you need for a powerful Linux server experience"
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started with Linux VPS?"
+    subtitle="Launch your Linux virtual server in minutes with QIW HOST."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>

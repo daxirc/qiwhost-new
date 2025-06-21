@@ -1,0 +1,84 @@
+---
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  faqs: FAQItem[];
+}
+
+const { 
+  title = "Frequently Asked Questions", 
+  subtitle = "Find answers to the most common questions about our services.",
+  faqs 
+} = Astro.props;
+---
+
+<section class="py-16 md:py-24">
+  <div class="container">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
+      <p class="text-xl text-gray-600">{subtitle}</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+      <div class="space-y-6">
+        {faqs.map((faq, index) => (
+          <div class="faq-item bg-white rounded-xl shadow-md overflow-hidden">
+            <button class="faq-question w-full flex items-center justify-between text-left px-6 py-4 focus:outline-none">
+              <span class="text-lg font-medium text-gray-900">{faq.question}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer px-6 pb-4 hidden">
+              <p class="text-gray-700">{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      const answer = item.querySelector('.faq-answer');
+      const icon = question.querySelector('svg');
+      
+      question.addEventListener('click', () => {
+        // Close all other answers
+        faqItems.forEach(otherItem => {
+          if (otherItem !== item) {
+            const otherAnswer = otherItem.querySelector('.faq-answer');
+            const otherIcon = otherItem.querySelector('.faq-question svg');
+            
+            otherAnswer.classList.add('hidden');
+            otherIcon.classList.remove('rotate-180');
+          }
+        });
+        
+        // Toggle current answer
+        answer.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+      });
+    });
+    
+    // Open first FAQ by default
+    if (faqItems.length > 0) {
+      const firstQuestion = faqItems[0].querySelector('.faq-question');
+      const firstAnswer = faqItems[0].querySelector('.faq-answer');
+      const firstIcon = firstQuestion.querySelector('svg');
+      
+      firstAnswer.classList.remove('hidden');
+      firstIcon.classList.add('rotate-180');
+    }
+  });
+</script>

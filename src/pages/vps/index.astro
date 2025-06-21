@@ -1,0 +1,136 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FeaturesSection from '../../components/FeaturesSection.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { supabase } from '../../lib/supabase';
+
+// Fetch plans from database
+const { data: vpsPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = vpsPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    '24/7 Support',
+    'Full Root Access'
+  ],
+  ctaText: "Order Now",
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text
+})) || [];
+
+// Features data
+const features = [
+  {
+    title: "High-Performance SSDs",
+    description: "All VPS plans include SSD storage for faster data access and improved application performance.",
+    icon: "fas fa-bolt"
+  },
+  {
+    title: "Dedicated Resources",
+    description: "Guaranteed CPU, RAM, and storage resources that are exclusively allocated to your VPS.",
+    icon: "fas fa-microchip"
+  },
+  {
+    title: "Full Root Access",
+    description: "Complete control over your virtual server with root access and SSH capabilities.",
+    icon: "fas fa-terminal"
+  },
+  {
+    title: "Instant Provisioning",
+    description: "Get your VPS up and running in minutes with our automated provisioning system.",
+    icon: "fas fa-clock"
+  },
+  {
+    title: "99.9% Uptime Guarantee",
+    description: "Our robust infrastructure ensures your services remain online and accessible.",
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: "Scalable Resources",
+    description: "Easily upgrade your VPS resources as your business grows without any downtime.",
+    icon: "fas fa-expand-arrows-alt"
+  }
+];
+---
+
+<Layout 
+  title="VPS Hosting" 
+  description="High-performance VPS hosting solutions with dedicated resources, SSD storage, and 99.9% uptime guarantee."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Virtual Private Server Hosting"
+    subtitle="High-performance VPS solutions with dedicated resources and full root access."
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
+  />
+
+  <!-- Locations -->
+  <section class="py-12 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Global Locations</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Low Latency Network</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24">
+    <PricingTable
+      title="VPS Hosting Plans"
+      description="Choose the perfect VPS plan for your needs"
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title="VPS Features"
+    subtitle="Everything you need for a powerful virtual server experience"
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started?"
+    subtitle="Launch your high-performance VPS today."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>

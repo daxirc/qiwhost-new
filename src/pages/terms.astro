@@ -1,0 +1,123 @@
+---
+import Layout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+
+const sections = [
+  {
+    title: "1. Acceptance of Terms",
+    content: `By accessing and using our services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using our services.`
+  },
+  {
+    title: "2. Service Description",
+    content: `We provide hosting services including but not limited to:
+    - Virtual Private Servers (VPS)
+    - Dedicated Servers
+    - Private RDP Solutions
+    - Related hosting services and support
+
+    Services are provided "as is" and we reserve the right to modify, suspend, or discontinue any aspect of our services at any time.`
+  },
+  {
+    title: "3. User Responsibilities",
+    content: `You agree to:
+    - Provide accurate account information
+    - Maintain the security of your account
+    - Comply with all applicable laws and regulations
+    - Use services in accordance with acceptable use policies
+    - Pay all fees when due
+    - Not engage in any unauthorized activities`
+  },
+  {
+    title: "4. Payment Terms",
+    content: `- Payment is required in advance for all services
+    - All fees are non-refundable unless otherwise specified
+    - We reserve the right to change pricing with notice
+    - Late payments may result in service suspension
+    - You are responsible for all applicable taxes`
+  },
+  {
+    title: "5. Service Level Agreement",
+    content: `- We strive to maintain 99.9% uptime for all services
+    - Credit may be issued for service interruptions
+    - Scheduled maintenance will be announced in advance
+    - We are not responsible for factors beyond our control
+    - Support response times vary by service level`
+  },
+  {
+    title: "6. Acceptable Use",
+    content: `Prohibited activities include:
+    - Illegal content or activities
+    - Spam or unsolicited mass messaging
+    - Network abuse or security violations
+    - Resource overuse affecting other users
+    - Distribution of malware
+    - Copyright infringement`
+  },
+  {
+    title: "7. Data Protection",
+    content: `- We implement reasonable security measures
+    - You retain ownership of your data
+    - We may access data for service provision
+    - Backups are not guaranteed unless specified
+    - You are responsible for your own data security`
+  },
+  {
+    title: "8. Termination",
+    content: `- Either party may terminate with notice
+    - We may terminate for violations of terms
+    - No refunds for termination due to violations
+    - You are responsible for data backup before termination
+    - Certain obligations survive termination`
+  },
+  {
+    title: "9. Limitation of Liability",
+    content: `- We are not liable for indirect damages
+    - Liability is limited to fees paid
+    - No warranty for uninterrupted service
+    - Force majeure events excuse performance
+    - You agree to indemnify us against claims`
+  },
+  {
+    title: "10. Changes to Terms",
+    content: "We reserve the right to modify these terms at any time. Continued use of services constitutes acceptance of modified terms."
+  }
+];
+---
+
+<Layout title="Terms of Service">
+  <Hero
+    title="Terms of Service"
+    subtitle="Last updated: March 1, 2025"
+    backgroundClass="bg-gradient-to-r from-gray-800 to-gray-900"
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="prose prose-lg">
+          <p class="text-xl text-gray-600 mb-12">
+            These Terms of Service ("Terms") govern your access to and use of QIW HOST's services. Please read these Terms carefully before using our services.
+          </p>
+
+          {sections.map(section => (
+            <div class="mb-12">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+              <div class="text-gray-600 space-y-4">
+                {section.content.split('\n').map(paragraph => (
+                  <p>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+            <p class="text-gray-600">
+              Effective Date: March 1, 2025<br>
+              Last Modified: March 1, 2025
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

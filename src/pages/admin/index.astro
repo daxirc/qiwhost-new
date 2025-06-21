@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import AdminPanel from '../../components/admin/AdminPanel';
+
+// Add noindex meta tag
+const noIndex = true;
+---
+
+<Layout title="Admin Panel">
+  <!-- Add noindex meta tag -->
+  {noIndex && (
+    <meta name="robots" content="noindex, nofollow" slot="head" />
+  )}
+  
+  <div id="admin-root">
+    <AdminPanel client:load />
+  </div>
+</Layout>
+
+<style is:global>
+  /* Hide the entire fixed header container (includes both top bar and navigation) */
+  body:has(#admin-root) .fixed.w-full.top-0.z-50 {
+    display: none !important;
+  }
+  
+  /* Remove support section and footer for admin */
+  body:has(#admin-root) footer,
+  body:has(#admin-root) section:not(:first-child) {
+    display: none !important;
+  }
+
+  /* Ensure admin panel takes full height */
+  body:has(#admin-root) main {
+    min-height: 100vh !important;
+    padding: 0 !important;
+  }
+  
+  /* Reset any top padding from main layout */
+  body:has(#admin-root) main {
+    padding-top: 0 !important;
+  }
+</style>

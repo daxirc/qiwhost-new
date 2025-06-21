@@ -1,0 +1,252 @@
+---
+import Layout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturesSection from '../components/FeaturesSection.astro';
+import PricingTable from '../components/PricingTable.astro';
+import DatacenterMap from '../components/DatacenterMap.astro';
+import ServerManagement from '../components/ServerManagement.astro';
+import FAQ from '../components/FAQ.astro';
+import CTABanner from '../components/CTABanner.astro';
+
+// Features data
+const features = [
+  {
+    title: "High-Performance VPS",
+    description: "SSD-based virtual private servers with guaranteed resources and high-speed connections.",
+    icon: "fas fa-server"
+  },
+  {
+    title: "Dedicated Servers",
+    description: "Powerful dedicated hardware with full root access and customizable configurations.",
+    icon: "fas fa-hdd"
+  },
+  {
+    title: "Private RDP Solutions",
+    description: "Secure Remote Desktop Protocol servers in multiple global locations.",
+    icon: "fas fa-desktop"
+  },
+  {
+    title: "99.9% Uptime Guarantee",
+    description: "Our infrastructure is designed for reliability with redundant systems.",
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: "24/7 Technical Support",
+    description: "Expert technicians available around the clock to assist with any issues.",
+    icon: "fas fa-headset"
+  },
+  {
+    title: "Global Network",
+    description: "Data centers in strategic locations worldwide for optimal performance.",
+    icon: "fas fa-globe"
+  }
+];
+
+// Pricing plans data
+const plans = [
+  {
+    name: "Starter VPS",
+    price: {
+      monthly: "$9.99",
+      yearly: "$7.99"
+    },
+    description: "Perfect for small websites and applications",
+    features: [
+      "1 vCPU",
+      "2GB RAM",
+      "30GB SSD Storage",
+      "1TB Bandwidth",
+      "24/7 Support"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "/clientarea"
+  },
+  {
+    name: "Business VPS",
+    price: {
+      monthly: "$19.99",
+      yearly: "$15.99"
+    },
+    description: "Ideal for growing businesses and e-commerce",
+    features: [
+      "2 vCPU",
+      "4GB RAM",
+      "60GB SSD Storage",
+      "2TB Bandwidth",
+      "24/7 Priority Support",
+      "Free SSL Certificate"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "/clientarea",
+    popular: true
+  },
+  {
+    name: "Enterprise VPS",
+    price: {
+      monthly: "$39.99",
+      yearly: "$31.99"
+    },
+    description: "For high-traffic sites and resource-intensive applications",
+    features: [
+      "4 vCPU",
+      "8GB RAM",
+      "120GB SSD Storage",
+      "4TB Bandwidth",
+      "24/7 Priority Support",
+      "Free SSL Certificate",
+      "Daily Backups"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "/clientarea"
+  }
+];
+
+// FAQ data
+const faqs = [
+  {
+    question: "What is the difference between VPS and Dedicated Servers?",
+    answer: "A VPS (Virtual Private Server) is a virtualized server that shares physical hardware with other VPSs, but has dedicated resources allocated to it. A Dedicated Server is an entire physical machine dedicated solely to your use, offering maximum performance and control."
+  },
+  {
+    question: "How secure are your Private RDP solutions?",
+    answer: "Our Private RDP solutions implement multiple security measures including enterprise-grade encryption, network isolation, custom firewall rules, and regular security updates. We also offer two-factor authentication and IP restrictions for additional security."
+  },
+  {
+    question: "Do you offer managed services?",
+    answer: "Yes, we provide managed services for all our hosting solutions. Our team can handle system updates, security patches, monitoring, backups, and troubleshooting, allowing you to focus on your business instead of server management."
+  },
+  {
+    question: "What is your uptime guarantee?",
+    answer: "We guarantee 99.9% uptime for all our services. In the rare event that we don't meet this guarantee, you'll receive credits according to our Service Level Agreement (SLA)."
+  },
+  {
+    question: "Can I upgrade my plan as my needs grow?",
+    answer: "Absolutely! All our plans are designed to scale with your business. You can easily upgrade your resources through our client portal without any service interruption or data loss."
+  }
+];
+---
+
+<Layout 
+  title="Cloud Hosting & VPS Solutions" 
+  description="QIW HOST provides high-performance VPS, dedicated servers, and private RDP solutions with 99.9% uptime guarantee and 24/7 support."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="High-Performance Cloud Hosting Solutions"
+    subtitle="Powerful, reliable, and secure hosting infrastructure for businesses of all sizes."
+    ctaText="Get Started"
+    ctaLink="/pricing"
+    secondaryCtaText="Learn More"
+    secondaryCtaLink="#features"
+  />
+
+  <!-- Trust Indicators -->
+  <section class="py-8 bg-white border-b">
+    <div class="container">
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-server text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">99.9% Uptime</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-headset text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">24/7 Support</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-globe text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Global Network</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <div id="features">
+    <FeaturesSection
+      title="Our Services"
+      subtitle="Discover the perfect hosting solution for your business needs"
+      features={features}
+    />
+  </div>
+
+  <!-- Why Choose Us Section -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Why Choose QIW HOST</h2>
+          <p class="text-lg text-gray-700 mb-8">Since 2017, we've been providing exceptional hosting solutions to businesses worldwide. Our commitment to reliability, performance, and customer satisfaction sets us apart.</p>
+          
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Enterprise-Grade Infrastructure</h3>
+                <p class="text-gray-600">State-of-the-art data centers with redundant power, cooling, and network connections.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Expert Technical Support</h3>
+                <p class="text-gray-600">Our experienced team is available 24/7 to assist with any technical challenges.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Transparent Pricing</h3>
+                <p class="text-gray-600">No hidden fees or surprise charges. Pay only for what you need.</p>
+              </div>
+            </div>
+          </div>
+          
+          <a href="/about" class="btn btn-primary mt-8">Learn More About Us</a>
+        </div>
+        
+        <div class="relative">
+          <div class="bg-primary-100 rounded-lg p-8 relative z-10">
+            <img src="https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Data Center" class="rounded-lg shadow-lg" />
+          </div>
+          <div class="absolute top-8 left-8 right-8 bottom-8 border-2 border-primary-500 rounded-lg -z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Preview -->
+  <PricingTable
+    title="Simple, Transparent Pricing"
+    description="Choose the plan that works best for your business needs"
+    plans={plans}
+  />
+
+  <!-- Datacenter Map -->
+  <DatacenterMap />
+
+  <!-- Server Management Features -->
+  <ServerManagement />
+
+  <!-- FAQ Section -->
+  <FAQ faqs={faqs} />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started?"
+    subtitle="Experience the power of QIW HOST's hosting solutions today."
+    ctaText="Get Started Now"
+    ctaLink="/clientarea"
+  />
+</Layout>

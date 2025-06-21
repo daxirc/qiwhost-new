@@ -1,0 +1,153 @@
+---
+import NavBar from '../components/NavBar.astro';
+import Footer from '../components/Footer.astro';
+import SupportSection from '../components/SupportSection.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  keywords?: string;
+  canonicalURL?: string;
+}
+
+const { 
+  title, 
+  description = "QIW HOST provides reliable cloud solutions, VPS hosting, dedicated servers, and private RDP services for businesses and individuals.",
+  ogImage = "/images/og-image.jpg",
+  keywords = "VPS hosting, dedicated servers, private RDP, cloud hosting, web hosting, server hosting",
+  canonicalURL
+} = Astro.props;
+
+// Generate canonical URL if not provided
+const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Primary Meta Tags -->
+    <title>{title} | QIW HOST</title>
+    <meta name="title" content={`${title} | QIW HOST`} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="QIW HOST" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonical} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={`${title} | QIW HOST`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.url)} />
+    <meta property="og:site_name" content="QIW HOST" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonical} />
+    <meta property="twitter:title" content={`${title} | QIW HOST`} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(ogImage, Astro.url)} />
+    <meta property="twitter:site" content="@qiwhost" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#3365f3" />
+    <meta name="msapplication-TileColor" content="#3365f3" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "QIW HOST",
+        "url": "https://qiwhost.com",
+        "logo": "https://qiwhost.com/logo.png",
+        "description": "Reliable cloud hosting solutions including VPS, dedicated servers, and private RDP services.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-234-567-890",
+          "contactType": "customer service",
+          "email": "support@qiwhost.com"
+        },
+        "sameAs": [
+          "https://twitter.com/qiwhost",
+          "https://facebook.com/qiwhost",
+          "https://linkedin.com/company/qiwhost"
+        ]
+      }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Allow pages to inject their own head elements -->
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <!-- Sticky Header Container (Top Bar + Navbar) -->
+    <div class="fixed w-full top-0 z-50">
+      <!-- Blue Top Bar -->
+      <div class="bg-blue-600 text-white py-2">
+        <div class="container">
+          <div class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+            <!-- Contact Info -->
+            <div class="flex items-center space-x-4 text-sm">
+              <div class="flex items-center">
+                <i class="fas fa-phone mr-2"></i>
+                <span>+1-234-567-8901</span>
+              </div>
+              <div class="hidden sm:block text-gray-300">|</div>
+              <div class="flex items-center">
+                <i class="fas fa-envelope mr-2"></i>
+                <span>support@qiwhost.com</span>
+              </div>
+            </div>
+            
+            <!-- Live Chat Button -->
+            <button class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center">
+              <i class="fas fa-comments mr-2"></i>
+              Live Chat
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- White Navbar -->
+      <NavBar />
+    </div>
+
+    <main class="flex-grow pt-[110px]">
+      <slot />
+    </main>
+    <SupportSection />
+    <Footer />
+    <script>
+      // JavaScript for sticky navigation
+      document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 20) {
+            header.classList.add('sticky-nav');
+          } else {
+            header.classList.remove('sticky-nav');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

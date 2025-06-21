@@ -1,0 +1,245 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import FeaturesSection from '../../components/FeaturesSection.astro';
+import { supabase } from '../../lib/supabase';
+
+// Fetch plans from database
+const { data: rdpPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'RDP')
+  .eq('visible', true)
+  .eq('location', 'USA')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = rdpPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Windows Server 2022',
+    'USA Location',
+    '24/7 Support'
+  ],
+  ctaText: "Order Now",
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text
+})) || [];
+
+// Country-specific information
+const country = {
+  name: "USA",
+  flag: "🇺🇸",
+  locations: ["New York", "Dallas", "Los Angeles"],
+  ping: "< 40ms from North America"
+};
+
+// Features data
+const features = [
+  {
+    title: "100% Resource Isolation",
+    description: "Dedicated CPU, RAM, and storage resources that are never shared or oversold.",
+    icon: "fas fa-layer-group"
+  },
+  {
+    title: "Administrator Access",
+    description: "Full administrator privileges to install software and customize your environment.",
+    icon: "fas fa-user-shield"
+  },
+  {
+    title: "SSD Storage",
+    description: "Fast SSD storage for improved application performance and responsiveness.",
+    icon: "fas fa-hdd"
+  },
+  {
+    title: "99.9% Uptime Guarantee",
+    description: "Our infrastructure ensures your RDP service remains accessible and reliable.",
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: "Secure Connection",
+    description: "Enterprise-grade encryption and security measures to protect your data.",
+    icon: "fas fa-lock"
+  },
+  {
+    title: "24/7 Support",
+    description: "Technical assistance available around the clock to help with any issues.",
+    icon: "fas fa-headset"
+  }
+];
+
+// Use cases
+const useCases = [
+  {
+    title: "Remote Work",
+    description: "Access your work environment from anywhere with a secure and reliable connection.",
+    icon: "fas fa-laptop-house"
+  },
+  {
+    title: "Software Development",
+    description: "Create a powerful development environment with all your tools and dependencies.",
+    icon: "fas fa-code"
+  },
+  {
+    title: "Business Applications",
+    description: "Run resource-intensive business applications without upgrading your local hardware.",
+    icon: "fas fa-briefcase"
+  },
+  {
+    title: "Content Creation",
+    description: "Edit videos, render 3D models, and process large files with high-performance computing.",
+    icon: "fas fa-photo-video"
+  }
+];
+---
+
+<Layout 
+  title={`${country.flag} ${country.name} Private RDP`} 
+  description={`Secure and high-performance ${country.name} Private RDP solutions with dedicated resources, administrator access, and 99.9% uptime guarantee.`}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={`${country.flag} Secure & High-Performance ${country.name} Private RDP`}
+    subtitle="Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Locations -->
+  <section class="py-8 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Locations: {country.locations.join(", ")}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Ping: {country.ping}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section id="pricing" class="py-12 md:py-16">
+    <PricingTable
+      title={`${country.name} Private RDP Plans`}
+      description="Choose the plan that fits your requirements"
+      plans={plans}
+    />
+  </section>
+
+  <!-- RDP Overview -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            {country.flag} Premium {country.name} Private RDP Solutions
+          </h2>
+          <p class="text-lg text-gray-700 mb-6">
+            Our {country.name} Private RDP solutions provide dedicated virtual machines with guaranteed resources, hosted in state-of-the-art data centers across {country.name}.
+          </p>
+          <p class="text-lg text-gray-700 mb-6">
+            With full administrator access, you have complete control over your Windows environment, allowing you to install custom applications, configure services, and optimize performance according to your specific needs.
+          </p>
+          
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">Strategic {country.name} Locations</h3>
+                <p class="text-gray-600">Choose from multiple data center locations across {country.name}.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">Low Latency Connections</h3>
+                <p class="text-gray-600">Optimized network for minimal latency and smooth RDP experience.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-1">Instant Provisioning</h3>
+                <p class="text-gray-600">Get your Private RDP up and running in minutes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative">
+          <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="USA Private RDP" class="rounded-xl shadow-xl" />
+          <div class="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-lg shadow-lg">
+            <span class="text-3xl">{country.flag}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Perfect For</h2>
+        <p class="text-xl text-gray-600">
+          Our {country.name} Private RDP solutions are ideal for various use cases.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {useCases.map(useCase => (
+          <div class="bg-white p-6 rounded-xl shadow-md text-center">
+            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class={`${useCase.icon} text-primary-600 text-2xl`}></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">{useCase.title}</h3>
+            <p class="text-gray-600">{useCase.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={`Ready to Get Started with ${country.name} Private RDP?`}
+    subtitle="Experience premium performance and reliability today."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>

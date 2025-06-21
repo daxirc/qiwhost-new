@@ -1,0 +1,215 @@
+---
+interface PricingPlan {
+  name: string;
+  price: {
+    monthly: string;
+    yearly?: string;
+  };
+  description: string;
+  features: string[];
+  ctaText: string;
+  ctaLink: string;
+  popular?: boolean;
+  sale_enabled?: boolean;
+  sale_price_monthly?: string;
+  sale_price_yearly?: string;
+  sale_badge_text?: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  plans: PricingPlan[];
+  category?: string;
+}
+
+const { title, description, plans, category } = Astro.props;
+---
+
+<section class="py-16 md:py-24">
+  <div class="container">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
+      {description && <p class="text-xl text-gray-600">{description}</p>}
+      
+      {category !== 'DEDICATED' && (
+        <div class="flex items-center justify-center mt-8">
+          <span class="text-lg font-medium text-gray-700 mr-3">Monthly</span>
+          <label for="pricing-toggle" class="relative inline-block w-14 h-7 cursor-pointer">
+            <input type="checkbox" id="pricing-toggle" class="sr-only peer">
+            <div class="w-14 h-7 bg-gray-200 rounded-full peer peer-checked:after:translate-x-7 peer-checked:bg-primary-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
+          </label>
+          <span class="text-lg font-medium text-gray-700 ml-3">Yearly <span class="text-sm text-primary-600">Save 20%</span></span>
+        </div>
+      )}
+    </div>
+
+    {category === 'DEDICATED' ? (
+      <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200">
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 rounded-tl-xl">Name</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">CPU</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">RAM</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Storage</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Network</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Price</th>
+              <th class="px-6 py-4 rounded-tr-xl"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {plans.map((plan, index) => (
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <div class="text-sm font-medium text-gray-900">{plan.name}</div>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <i class="fas fa-microchip text-primary-500 mr-2"></i>
+                    <span class="text-sm text-gray-900">{plan.features[0]}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <i class="fas fa-memory text-primary-500 mr-2"></i>
+                    <span class="text-sm text-gray-900">{plan.features[1]}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <i class="fas fa-hdd text-primary-500 mr-2"></i>
+                    <span class="text-sm text-gray-900">{plan.features[2]}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <i class="fas fa-network-wired text-primary-500 mr-2"></i>
+                    <span class="text-sm text-gray-900">{plan.features[3]}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  {plan.sale_enabled ? (
+                    <div class="flex flex-col">
+                      <div class="text-lg font-bold text-primary-600">{plan.sale_price_monthly}</div>
+                      <div class="text-sm text-gray-500 line-through">{plan.price.monthly}</div>
+                    </div>
+                  ) : (
+                    <div class="text-lg font-bold text-gray-900">{plan.price.monthly}</div>
+                  )}
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex flex-col items-end gap-2">
+                    {plan.sale_enabled && (
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white shadow-sm">
+                        <i class="fas fa-tag mr-1"></i>
+                        {plan.sale_badge_text || 'SAVE!'}
+                      </span>
+                    )}
+                    <a
+                      href={plan.ctaLink}
+                      class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-gray-900 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
+                    >
+                      {plan.ctaText}
+                      <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {plans.map(plan => (
+          <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
+            {(plan.popular || plan.sale_enabled) && (
+              <div class={`${plan.sale_enabled ? 'bg-red-500' : 'bg-primary-500'} text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg`}>
+                {plan.sale_enabled ? (plan.sale_badge_text || 'On Sale!') : 'Most Popular'}
+              </div>
+            )}
+            <div class="p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+              <div class="pricing-amount mb-6">
+                <div class="monthly-price">
+                  {plan.sale_enabled ? (
+                    <div>
+                      <span class="text-4xl font-bold text-gray-900">{plan.sale_price_monthly}</span>
+                      <span class="text-gray-600">/month</span>
+                      <div class="text-sm mt-2">
+                        <span class="line-through text-gray-400">{plan.price.monthly}</span>
+                        <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
+                      <span class="text-gray-600">/month</span>
+                    </div>
+                  )}
+                </div>
+                {category !== 'DEDICATED' && plan.price.yearly && (
+                  <div class="yearly-price hidden">
+                    {plan.sale_enabled && plan.sale_price_yearly ? (
+                      <div>
+                        <span class="text-4xl font-bold text-gray-900">{plan.sale_price_yearly}</span>
+                        <span class="text-gray-600">/month</span>
+                        <div class="text-sm mt-2">
+                          <span class="line-through text-gray-400">{plan.price.yearly}</span>
+                          <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
+                        </div>
+                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
+                        <span class="text-gray-600">/month</span>
+                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              <p class="text-gray-600 mb-6">{plan.description}</p>
+              <ul class="space-y-3 mb-8">
+                {plan.features.map(feature => (
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
+                    <span class="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular || plan.sale_enabled ? 'bg-primary-600 text-white hover:bg-gray-900' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
+                {plan.ctaText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  // Pricing toggle functionality - only for non-dedicated servers
+  document.addEventListener('DOMContentLoaded', function() {
+    const pricingToggle = document.getElementById('pricing-toggle');
+    if (!pricingToggle) return; // Exit if toggle doesn't exist (dedicated servers)
+    
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+    
+    pricingToggle.addEventListener('change', function() {
+      if (this.checked) {
+        monthlyPrices.forEach(el => el.classList.add('hidden'));
+        yearlyPrices.forEach(el => el.classList.remove('hidden'));
+      } else {
+        monthlyPrices.forEach(el => el.classList.remove('hidden'));
+        yearlyPrices.forEach(el => el.classList.add('hidden'));
+      }
+    });
+  });
+</script>

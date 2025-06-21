@@ -1,0 +1,29 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  ctaText: string;
+  ctaLink: string;
+  backgroundClass?: string;
+}
+
+const { 
+  title, 
+  subtitle, 
+  ctaText, 
+  ctaLink,
+  backgroundClass = "bg-primary-600" 
+} = Astro.props;
+---
+
+<section class={`py-16 ${backgroundClass}`}>
+  <div class="container">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h2>
+      {subtitle && <p class="text-xl text-white/90 mb-8">{subtitle}</p>}
+      <a href={ctaLink} class="btn bg-white text-primary-600 hover:bg-gray-100 shadow-lg">
+        {ctaText}
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,243 @@
+---
+import Layout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturesSection from '../components/FeaturesSection.astro';
+import PricingTable from '../components/PricingTable.astro';
+import CTABanner from '../components/CTABanner.astro';
+import { supabase } from '../lib/supabase';
+
+// Fetch plans from database
+const { data: plans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'DEDICATED')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert plans to pricing table format
+function formatPlans(plans) {
+  return plans.map(plan => ({
+    name: plan.name,
+    price: {
+      monthly: `$${plan.price_monthly}`
+    },
+    description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+    features: [
+      plan.cpu,
+      plan.ram,
+      plan.storage,
+      plan.bandwidth,
+      'Full Root Access',
+      '24/7 Support'
+    ],
+    ctaText: "Order Now",
+    ctaLink: plan.order_url,
+    sale_enabled: plan.sale_enabled,
+    sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+    sale_badge_text: plan.sale_badge_text
+  }));
+}
+
+// Group plans by subcategory
+const valueServers = formatPlans(plans?.filter(plan => plan.subcategory === 'VALUE') || []);
+const customServers = formatPlans(plans?.filter(plan => plan.subcategory === 'CUSTOM') || []);
+const gpuServers = formatPlans(plans?.filter(plan => plan.subcategory === 'GPU') || []);
+
+// Features data
+const features = [
+  {
+    title: "Enterprise Hardware",
+    description: "Latest generation Intel Xeon or AMD EPYC processors with DDR4 ECC RAM.",
+    icon: "fas fa-microchip"
+  },
+  {
+    title: "Full Root Access",
+    description: "Complete control over your server with root/administrator access.",
+    icon: "fas fa-key"
+  },
+  {
+    title: "RAID Configuration",
+    description: "Hardware RAID options for enhanced data protection and performance.",
+    icon: "fas fa-hdd"
+  },
+  {
+    title: "DDoS Protection",
+    description: "Advanced DDoS mitigation to keep your services online.",
+    icon: "fas fa-shield-alt"
+  },
+  {
+    title: "24/7 Support",
+    description: "Expert technical support available around the clock.",
+    icon: "fas fa-headset"
+  },
+  {
+    title: "Global Network",
+    description: "10Gbps network with multiple tier-1 providers for optimal connectivity.",
+    icon: "fas fa-globe"
+  }
+];
+---
+
+<Layout 
+  title="Dedicated Servers" 
+  description="High-performance dedicated servers with enterprise-grade hardware, full root access, and 24/7 support."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Dedicated Server"
+    subtitle="Unleash powerful performance with enterprise-grade bare metal servers and full root access."
+    ctaText="View Servers"
+    ctaLink="#pricing"
+    showFeatureBadges={true}
+  />
+
+  <!-- Server Plans -->
+  <section id="pricing" class="py-16 md:py-24">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Choose Your Dedicated Server</h2>
+        <p class="text-xl text-gray-600">Select from our range of high-performance dedicated servers.</p>
+      </div>
+
+      <!-- Server Type Tabs -->
+      <div class="mb-12">
+        <div class="flex flex-wrap justify-center">
+          <div class="bg-white rounded-xl shadow-lg p-1.5 inline-flex">
+            <button 
+              id="value-tab" 
+              class="tab-button active px-8 py-3 rounded-lg font-medium text-lg transition-all duration-200"
+            >
+              <span>Value Servers</span>
+            </button>
+            <button 
+              id="custom-tab" 
+              class="tab-button px-8 py-3 rounded-lg font-medium text-lg transition-all duration-200"
+            >
+              <span>Custom Servers</span>
+            </button>
+            <button 
+              id="gpu-tab" 
+              class="tab-button px-8 py-3 rounded-lg font-medium text-lg transition-all duration-200"
+            >
+              <span>GPU Servers</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto">
+        <!-- Value Servers -->
+        <div id="value-servers">
+          <PricingTable
+            title="Value Dedicated Servers"
+            description="Affordable dedicated servers with great performance"
+            plans={valueServers}
+            category="DEDICATED"
+          />
+        </div>
+
+        <!-- Custom Servers -->
+        <div id="custom-servers" class="hidden">
+          <PricingTable
+            title="Custom Dedicated Servers"
+            description="Customizable dedicated servers for specific requirements"
+            plans={customServers}
+            category="DEDICATED"
+          />
+        </div>
+
+        <!-- GPU Servers -->
+        <div id="gpu-servers" class="hidden">
+          <PricingTable
+            title="GPU Dedicated Servers"
+            description="High-performance servers with dedicated GPUs"
+            plans={gpuServers}
+            category="DEDICATED"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title="Server Features"
+    subtitle="Enterprise-grade hardware and premium features included with every server"
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started with Dedicated Hosting?"
+    subtitle="Deploy your high-performance dedicated server today."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>
+
+<style>
+  .tab-button {
+    @apply text-gray-700 hover:text-primary-600 relative overflow-hidden;
+  }
+
+  .tab-button::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-700 opacity-0 transition-opacity duration-200;
+    z-index: 0;
+  }
+
+  .tab-button.active {
+    @apply text-white;
+  }
+
+  .tab-button.active::after {
+    @apply opacity-100;
+  }
+
+  .tab-button span {
+    @apply relative z-10;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const valueTab = document.getElementById('value-tab');
+    const customTab = document.getElementById('custom-tab');
+    const gpuTab = document.getElementById('gpu-tab');
+    
+    const valueServers = document.getElementById('value-servers');
+    const customServers = document.getElementById('custom-servers');
+    const gpuServers = document.getElementById('gpu-servers');
+    
+    function showTab(tab) {
+      // Hide all tables
+      valueServers.classList.add('hidden');
+      customServers.classList.add('hidden');
+      gpuServers.classList.add('hidden');
+      
+      // Reset all tab styles
+      [valueTab, customTab, gpuTab].forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      // Show selected table and style active tab
+      if (tab === 'value') {
+        valueServers.classList.remove('hidden');
+        valueTab.classList.add('active');
+      } else if (tab === 'custom') {
+        customServers.classList.remove('hidden');
+        customTab.classList.add('active');
+      } else if (tab === 'gpu') {
+        gpuServers.classList.remove('hidden');
+        gpuTab.classList.add('active');
+      }
+    }
+    
+    valueTab.addEventListener('click', () => showTab('value'));
+    customTab.addEventListener('click', () => showTab('custom'));
+    gpuTab.addEventListener('click', () => showTab('gpu'));
+  });
+</script>

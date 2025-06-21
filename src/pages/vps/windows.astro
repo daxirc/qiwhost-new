@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import FeaturesSection from '../../components/FeaturesSection.astro';
+import { supabase } from '../../lib/supabase';
+
+// Fetch plans from database
+const { data: windowsPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .eq('os_type', 'Windows')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = windowsPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    'Windows Server 2022',
+    plan.bandwidth,
+    'RDP Access',
+    '24/7 Support'
+  ],
+  ctaText: "Order Now",
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text
+})) || [];
+
+// Features data
+const features = [
+  {
+    title: "Windows Server 2022",
+    description: "Latest Windows Server with enhanced security and performance",
+    icon: "fab fa-windows"
+  },
+  {
+    title: "Remote Desktop Access",
+    description: "Secure RDP access to manage your server from anywhere",
+    icon: "fas fa-desktop"
+  },
+  {
+    title: "IIS Web Server",
+    description: "Pre-installed Internet Information Services for web hosting",
+    icon: "fas fa-globe"
+  },
+  {
+    title: ".NET Framework Support",
+    description: "Full support for all .NET Framework versions and ASP.NET",
+    icon: "fas fa-code"
+  },
+  {
+    title: "SQL Server Compatible",
+    description: "Install SQL Server for database applications (licenses sold separately)",
+    icon: "fas fa-database"
+  },
+  {
+    title: "Windows Updates",
+    description: "Automated or manual Windows updates management",
+    icon: "fas fa-sync"
+  }
+];
+---
+
+<Layout 
+  title="Windows VPS Hosting" 
+  description="High-performance Windows VPS solutions with dedicated resources, the latest Windows Server OS, and full RDP access."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Windows VPS Hosting"
+    subtitle="Powerful and reliable Windows virtual servers with the latest Windows Server and full RDP access."
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
+  />
+
+  <!-- Locations -->
+  <section class="py-12 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Global Locations</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Low Latency Network</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24">
+    <PricingTable
+      title="Windows VPS Plans"
+      description="Choose the Windows VPS plan that fits your needs"
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title="Windows VPS Features"
+    subtitle="Everything you need for a powerful Windows server experience"
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started with Windows VPS?"
+    subtitle="Launch your Windows virtual server in minutes with QIW HOST."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>

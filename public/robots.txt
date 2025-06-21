@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /admin/*
+
+# Allow all other pages
+Allow: /
+
+# Sitemap location
+Sitemap: https://qiwhost.com/sitemap-index.xml

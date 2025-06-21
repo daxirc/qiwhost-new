@@ -1,0 +1,163 @@
+---
+// Footer component
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-gray-900 text-white py-12">
+  <div class="container">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-12">
+      <!-- Company Info -->
+      <div class="md:col-span-4">
+        <div class="mb-6">
+          <img 
+            src="/logofooter.png" 
+            alt="QIW HOST" 
+            class="h-16 w-auto max-h-16" 
+            width="320" 
+            height="64"
+            loading="lazy"
+          />
+        </div>
+        <p class="text-gray-300 mb-6 leading-relaxed">
+          Reliable cloud hosting solutions since 2017. Empowering businesses with high-performance infrastructure.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-full">
+            <i class="fab fa-facebook-f w-4 text-center"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-full">
+            <i class="fab fa-x-twitter w-4 text-center"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-800 rounded-full">
+            <i class="fab fa-linkedin-in w-4 text-center"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="md:col-span-3">
+        <h3 class="text-lg font-semibold mb-4">Services</h3>
+        <ul class="space-y-3">
+          <li>
+            <a href="/vps" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-server w-5 text-primary-400 group-hover:text-white"></i>
+              <span>VPS Hosting</span>
+            </a>
+          </li>
+          <li>
+            <a href="/dedicated-servers" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-hdd w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Dedicated Servers</span>
+            </a>
+          </li>
+          <li>
+            <a href="/rdp/usa" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-desktop w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Private RDP</span>
+            </a>
+          </li>
+          <li>
+            <a href="/pricing" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-tags w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Pricing</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="md:col-span-2">
+        <h3 class="text-lg font-semibold mb-4">Company</h3>
+        <ul class="space-y-3">
+          <li>
+            <a href="/about" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-info-circle w-5 text-primary-400 group-hover:text-white"></i>
+              <span>About Us</span>
+            </a>
+          </li>
+          <li>
+            <a href="/contact" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-envelope w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Contact</span>
+            </a>
+          </li>
+          <li>
+            <a href="/clientarea" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-user w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Client Area</span>
+            </a>
+          </li>
+          <li>
+            <a href="/refund-policy" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-undo w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Refund Policy</span>
+            </a>
+          </li>
+          <li>
+            <a href="/privacy-policy" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-shield-alt w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Privacy Policy</span>
+            </a>
+          </li>
+          <li>
+            <a href="/terms" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-file-alt w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Terms of Service</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="md:col-span-3">
+        <h3 class="text-lg font-semibold mb-4">Contact</h3>
+        <ul class="space-y-4">
+          <li class="flex items-start">
+            <i class="fas fa-map-marker-alt mt-1.5 w-5 text-primary-400"></i>
+            <span class="text-gray-400 ml-2">123 Hosting Street,<br/>Server City, 10010</span>
+          </li>
+          <li>
+            <a href="mailto:support@qiwhost.com" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-envelope w-5 text-primary-400 group-hover:text-white"></i>
+              <span class="ml-2">support@qiwhost.com</span>
+            </a>
+          </li>
+          <li>
+            <a href="tel:+1234567890" class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fas fa-phone w-5 text-primary-400 group-hover:text-white"></i>
+              <span class="ml-2">+1 (234) 567-890</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 mt-12 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <p class="text-gray-400 text-sm">© {currentYear} QIW HOST. All rights reserved.</p>
+        
+        <!-- Payment Methods -->
+        <div class="flex items-center space-x-6">
+          <div class="flex items-center space-x-4">
+            <i class="fab fa-cc-paypal text-2xl text-gray-400 hover:text-white transition-colors" title="PayPal"></i>
+            <i class="fab fa-cc-visa text-2xl text-gray-400 hover:text-white transition-colors" title="Visa"></i>
+            <i class="fab fa-cc-mastercard text-2xl text-gray-400 hover:text-white transition-colors" title="Mastercard"></i>
+            <i class="fab fa-cc-jcb text-2xl text-gray-400 hover:text-white transition-colors" title="UnionPay"></i>
+            <i class="fab fa-bitcoin text-2xl text-gray-400 hover:text-white transition-colors" title="Bitcoin"></i>
+            <i class="fab fa-cc-stripe text-2xl text-gray-400 hover:text-white transition-colors" title="2Checkout"></i>
+          </div>
+          <div class="border-l border-gray-700 pl-6 flex items-center space-x-4">
+            <div class="flex items-center text-gray-400">
+              <i class="fas fa-shield-alt text-primary-400 mr-2"></i>
+              <span class="text-sm">Privacy Protected</span>
+            </div>
+            <div class="flex items-center text-gray-400">
+              <i class="fas fa-lock text-primary-400 mr-2"></i>
+              <span class="text-sm">Secure Checkout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
