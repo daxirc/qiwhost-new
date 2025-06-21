@@ -7,6 +7,10 @@ interface Plan {
   name: string;
   category: string;
   subcategory?: string | null;
+  region?: string | null;
+  flag_icon?: string | null;
+  page_description?: string | null;
+  plan_type?: string | null;
   ram: string;
   cpu: string;
   storage: string;
@@ -31,6 +35,8 @@ interface Props {
 
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
 const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
+const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America'];
+const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
 export default function PlansManager({ category }: Props) {
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -43,12 +49,15 @@ export default function PlansManager({ category }: Props) {
   const [selectedLocation, setSelectedLocation] = useState<string>(
     category === 'RDP' ? 'USA' : ''
   );
+  const [selectedRegion, setSelectedRegion] = useState<string>(
+    category === 'VPS' ? 'North America' : ''
+  );
   const [isSaleEnabled, setIsSaleEnabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchPlans();
-  }, [category, selectedSubcategory, selectedLocation]);
+  }, [category, selectedSubcategory, selectedLocation, selectedRegion]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -73,6 +82,10 @@ export default function PlansManager({ category }: Props) {
 
       if (category === 'RDP' && selectedLocation) {
         query = query.eq('location', selectedLocation);
+      }
+
+      if (category === 'VPS' && selectedRegion) {
+        query = query.eq('region', selectedRegion);
       }
 
       const { data, error } = await query;
@@ -140,6 +153,7 @@ export default function PlansManager({ category }: Props) {
         order_url: orderUrl,
         category,
         subcategory: category === 'DEDICATED' ? selectedSubcategory : null,
+        region: category === 'VPS' ? (plan.region || selectedRegion) : null,
         location: category === 'RDP' ? selectedLocation : plan.location,
         available_locations: category === 'RDP' ? RDP_LOCATIONS : null,
         os_type: plan.os_type || null,
@@ -188,6 +202,9 @@ export default function PlansManager({ category }: Props) {
     setIsSaleEnabled(plan.sale_enabled);
     if (category === 'DEDICATED') {
       setSelectedSubcategory(plan.subcategory || 'VALUE');
+    }
+    if (category === 'VPS') {
+      setSelectedRegion(plan.region || 'North America');
     }
   }
 
@@ -241,6 +258,23 @@ export default function PlansManager({ category }: Props) {
               ))}
             </div>
           )}
+          {category === 'VPS' && (
+            <div className="flex flex-wrap gap-2">
+              {VPS_REGIONS.map((region) => (
+                <button
+                  key={region}
+                  onClick={() => setSelectedRegion(region)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedRegion === region
+                      ? 'bg-primary-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {region}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <button 
           onClick={() => {
@@ -282,6 +316,10 @@ export default function PlansManager({ category }: Props) {
             const salePriceMonthlyValue = formData.get('sale_price_monthly') as string;
             const salePriceYearlyValue = formData.get('sale_price_yearly') as string;
             const saleBadgeTextValue = formData.get('sale_badge_text') as string;
+            const regionValue = formData.get('region') as string;
+            const flagIconValue = formData.get('flag_icon') as string;
+            const pageDescriptionValue = formData.get('page_description') as string;
+            const planTypeValue = formData.get('plan_type') as string;
             
             const planData = {
               name: formData.get('name') as string,
@@ -290,6 +328,10 @@ export default function PlansManager({ category }: Props) {
               storage: formData.get('storage') as string,
               bandwidth: formData.get('bandwidth') as string,
               location: formData.get('location') as string,
+              region: category === 'VPS' ? (regionValue || selectedRegion) : null,
+              flag_icon: category === 'VPS' ? flagIconValue : null,
+              page_description: category === 'VPS' ? pageDescriptionValue : null,
+              plan_type: category === 'VPS' ? planTypeValue : null,
               os_type: osTypeValue ? osTypeValue : null,
               price_monthly: parseFloat(formData.get('price_monthly') as string),
               price_yearly: category !== 'DEDICATED' && priceYearlyValue ? parseFloat(priceYearlyValue) : null,
@@ -315,6 +357,49 @@ export default function PlansManager({ category }: Props) {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
+
+              {category === 'VPS' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Region *</label>
+                    <select
+                      name="region"
+                      defaultValue={editingPlan?.region || selectedRegion}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      {VPS_REGIONS.map((region) => (
+                        <option key={region} value={region}>{region}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Flag Icon *</label>
+                    <input
+                      type="text"
+                      name="flag_icon"
+                      defaultValue={editingPlan?.flag_icon || ''}
+                      required
+                      placeholder="🇺🇸"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Plan Type *</label>
+                    <select
+                      name="plan_type"
+                      defaultValue={editingPlan?.plan_type || 'Basic'}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      {PLAN_TYPES.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">RAM *</label>
                 <input
@@ -378,7 +463,7 @@ export default function PlansManager({ category }: Props) {
                     name="location"
                     defaultValue={editingPlan?.location}
                     required
-                    placeholder="e.g., USA"
+                    placeholder="e.g., Silicon Valley"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 )}
@@ -415,6 +500,19 @@ export default function PlansManager({ category }: Props) {
                     required
                     step="0.01"
                     min="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  />
+                </div>
+              )}
+
+              {category === 'VPS' && (
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Page Description</label>
+                  <textarea
+                    name="page_description"
+                    defaultValue={editingPlan?.page_description || ''}
+                    rows={3}
+                    placeholder="Description for the VPS location page"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
@@ -595,6 +693,12 @@ export default function PlansManager({ category }: Props) {
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    {category === 'VPS' && (
+                      <>
+                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Region</th>
+                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Type</th>
+                      </>
+                    )}
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specs</th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
@@ -612,6 +716,25 @@ export default function PlansManager({ category }: Props) {
                           <div className="text-sm text-gray-500">{plan.os_type}</div>
                         )}
                       </td>
+                      {category === 'VPS' && (
+                        <>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center">
+                              {plan.flag_icon && <span className="mr-2">{plan.flag_icon}</span>}
+                              <span className="text-sm text-gray-900">{plan.region}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              plan.plan_type === 'Pro' ? 'bg-purple-100 text-purple-800' :
+                              plan.plan_type === 'Standard' ? 'bg-blue-100 text-blue-800' :
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {plan.plan_type || 'Basic'}
+                            </span>
+                          </td>
+                        </>
+                      )}
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">
                           <div>{plan.cpu}</div>

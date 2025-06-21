@@ -1,0 +1,213 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import PricingTable from '../../../components/PricingTable.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import { supabase } from '../../../lib/supabase';
+
+export async function getStaticPaths() {
+  // Fetch all VPS locations to generate static paths
+  const { data: locations, error } = await supabase
+    .from('hosting_plans')
+    .select('location, region, flag_icon, page_description')
+    .eq('category', 'VPS')
+    .eq('visible', true)
+    .not('region', 'is', null)
+    .not('location', 'is', null);
+
+  if (error) {
+    console.error('Error fetching VPS locations:', error);
+    return [];
+  }
+
+  // Remove duplicates and create paths
+  const uniqueLocations = locations.reduce((acc, location) => {
+    const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    if (!acc.find(l => l.slug === slug)) {
+      acc.push({
+        slug,
+        location: location.location,
+        region: location.region,
+        flag_icon: location.flag_icon,
+        page_description: location.page_description
+      });
+    }
+    return acc;
+  }, []);
+
+  return uniqueLocations.map(location => ({
+    params: { city: location.slug },
+    props: { 
+      cityName: location.location,
+      region: location.region,
+      flagIcon: location.flag_icon,
+      pageDescription: location.page_description
+    }
+  }));
+}
+
+const { city } = Astro.params;
+const { cityName, region, flagIcon, pageDescription } = Astro.props;
+
+// Fetch VPS plans for this specific city
+const { data: cityPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('location', cityName)
+  .eq('visible', true)
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching city plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = cityPlans?.map(plan => ({
+  name: `${plan.plan_type || plan.name}`,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    '24/7 Support',
+    'SSD Storage'
+  ],
+  ctaText: "Order Now",
+  ctaLink: plan.order_url,
+  popular: plan.plan_type === 'Standard',
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text
+})) || [];
+
+// Features data
+const features = [
+  {
+    title: "High-Performance SSDs",
+    description: "Lightning-fast SSD storage for optimal application performance and quick data access.",
+    icon: "fas fa-bolt"
+  },
+  {
+    title: "Dedicated Resources",
+    description: "Guaranteed CPU, RAM, and storage resources exclusively allocated to your VPS.",
+    icon: "fas fa-microchip"
+  },
+  {
+    title: "Full Root Access",
+    description: "Complete administrative control with root access and SSH capabilities.",
+    icon: "fas fa-terminal"
+  },
+  {
+    title: "99.9% Uptime SLA",
+    description: "Reliable infrastructure with industry-leading uptime guarantee.",
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: "DDoS Protection",
+    description: "Advanced DDoS mitigation to keep your services online and secure.",
+    icon: "fas fa-shield-alt"
+  },
+  {
+    title: "24/7 Expert Support",
+    description: "Round-the-clock technical assistance from our experienced team.",
+    icon: "fas fa-headset"
+  }
+];
+---
+
+<Layout 
+  title={`${flagIcon} ${cityName} VPS Hosting`}
+  description={`High-performance VPS hosting in ${cityName}, ${region}. ${pageDescription}`}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={`${flagIcon} ${cityName} VPS Hosting`}
+    subtitle={pageDescription || `Deploy your applications in ${cityName} with premium VPS hosting featuring dedicated resources and enterprise-grade infrastructure.`}
+    ctaText="View Plans"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Location Info -->
+  <section class="py-8 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Location: {cityName}, {region}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Low Latency Network</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">Enterprise Security</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Description Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          Why Choose {cityName} VPS Hosting?
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          {pageDescription || `Experience premium VPS hosting in ${cityName} with state-of-the-art infrastructure, guaranteed resources, and exceptional performance. Our ${cityName} data center provides optimal connectivity and reliability for your applications.`}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section id="pricing" class="py-16 md:py-24 bg-gray-50">
+    <PricingTable
+      title={`${cityName} VPS Plans`}
+      description="Choose the perfect plan for your hosting needs"
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">VPS Features</h2>
+        <p class="text-xl text-gray-600">Everything you need for a powerful hosting experience</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map(feature => (
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
+                <i class={`${feature.icon} text-2xl`}></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={`Ready to Get Started with ${cityName} VPS?`}
+    subtitle="Deploy your applications today with our premium hosting infrastructure."
+    ctaText="Order Now"
+    ctaLink="/clientarea"
+  />
+</Layout>
