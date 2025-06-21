@@ -30,7 +30,7 @@ if (vpsLocations && !error) {
       locationsByRegion[location.region].push({
         location: location.location,
         flag_icon: location.flag_icon,
-        slug: location.location.toLowerCase().replace(/\s+/g, '-')
+        slug: location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
       });
     }
   });
@@ -90,7 +90,7 @@ function slugify(text) {
             </div>
           </div>
 
-          <!-- Locations Multi-level Dropdown -->
+          <!-- Locations Dropdown -->
           <div class="relative group">
             <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
               <i class="fas fa-globe mr-1.5"></i>
@@ -99,72 +99,49 @@ function slugify(text) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div class="absolute left-0 mt-1 w-96 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
-              <div class="bg-white rounded-lg shadow-xl ring-1 ring-gray-200 flex">
-                <!-- Left column: Regions -->
-                <div class="w-48 bg-gray-50 rounded-l-lg">
-                  <div class="py-2">
-                    {Object.keys(locationsByRegion).map(region => (
-                      <div class="group/region relative">
-                        <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors">
-                          <span class="font-medium">{region}</span>
-                          <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </div>
-                        <!-- Cities submenu for this region -->
-                        <div class="absolute left-full top-0 w-48 bg-white rounded-r-lg opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-lg border-l border-gray-200">
-                          <div class="py-2 max-h-80 overflow-y-auto">
-                            {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
-                              locationsByRegion[region].map(location => (
-                                <a 
-                                  href={`/vps/locations/${location.slug}`}
-                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  <span class="mr-3 text-base">{location.flag_icon}</span>
-                                  <span>{location.location} VPS</span>
-                                </a>
-                              ))
-                            ) : (
-                              <div class="px-4 py-2 text-sm text-gray-500 italic">
-                                Coming Soon
-                              </div>
-                            )}
-                          </div>
+            <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <div class="bg-white rounded-lg shadow-xl ring-1 ring-gray-200">
+                <div class="py-2">
+                  {Object.keys(locationsByRegion).map(region => (
+                    <div class="group/region relative">
+                      <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
+                        <span class="font-medium">{region}</span>
+                        <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                      <!-- Cities submenu for this region -->
+                      <div class="absolute left-full top-0 w-56 bg-white rounded-lg opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-xl ring-1 ring-gray-200 ml-1">
+                        <div class="py-2 max-h-80 overflow-y-auto">
+                          {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
+                            locationsByRegion[region].map(location => (
+                              <a 
+                                href={`/vps/locations/${location.slug}`}
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                              >
+                                <span class="mr-3 text-base">{location.flag_icon}</span>
+                                <span>{location.location} VPS</span>
+                              </a>
+                            ))
+                          ) : (
+                            <div class="px-4 py-2 text-sm text-gray-500 italic">
+                              Coming Soon
+                            </div>
+                          )}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <!-- Right column: Default view showing popular locations -->
-                <div class="w-48 bg-white rounded-r-lg">
-                  <div class="py-2">
-                    <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                      Popular Locations
                     </div>
-                    {Object.keys(locationsByRegion).slice(0, 3).map(region => (
-                      locationsByRegion[region] && locationsByRegion[region].length > 0 && (
-                        locationsByRegion[region].slice(0, 2).map(location => (
-                          <a 
-                            href={`/vps/locations/${location.slug}`}
-                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          >
-                            <span class="mr-3 text-base">{location.flag_icon}</span>
-                            <span>{location.location}</span>
-                          </a>
-                        ))
-                      )
-                    ))}
-                    <div class="border-t border-gray-100 mt-2 pt-2">
-                      <a 
-                        href="/vps"
-                        class="flex items-center px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 transition-colors font-medium"
-                      >
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        View All Locations
-                      </a>
-                    </div>
+                  ))}
+                  
+                  <!-- View All Locations Link -->
+                  <div class="border-t border-gray-100 mt-2 pt-2">
+                    <a 
+                      href="/vps"
+                      class="flex items-center px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 transition-colors font-medium"
+                    >
+                      <i class="fas fa-arrow-right mr-2"></i>
+                      View All Locations
+                    </a>
                   </div>
                 </div>
               </div>
