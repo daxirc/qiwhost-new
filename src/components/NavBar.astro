@@ -110,6 +110,35 @@ function slugify(text) {
 
         <!-- Menu Items -->
         <div class="flex items-center space-x-2">
+          <!-- Domains -->
+          <a href="/domains" class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
+            <i class="fas fa-globe mr-1.5"></i>
+            <span class="font-semibold">Domains</span>
+          </a>
+
+          <!-- Web Hosting Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
+              <i class="fas fa-cloud mr-1.5"></i>
+              <span class="font-semibold">Web Hosting</span>
+              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
+              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
+                <a href="/web-hosting/shared" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <i class="fas fa-share-alt mr-2 text-primary-500"></i>
+                  Shared Hosting
+                </a>
+                <a href="/web-hosting/wordpress" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                  <i class="fab fa-wordpress mr-2 text-primary-500"></i>
+                  WordPress Hosting
+                </a>
+              </div>
+            </div>
+          </div>
+
           <!-- VPS Dropdown -->
           <div class="relative group">
             <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
@@ -181,7 +210,7 @@ function slugify(text) {
           <!-- Locations Dropdown -->
           <div class="relative group">
             <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
-              <i class="fas fa-globe mr-1.5"></i>
+              <i class="fas fa-map-marker-alt mr-1.5"></i>
               <span class="font-semibold">Locations</span>
               <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -277,6 +306,27 @@ function slugify(text) {
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="mobile-menu-container lg:hidden bg-white shadow-md">
     <div class="py-4 space-y-2">
+      <a href="/domains" class="block py-2 text-gray-700 hover:text-primary-600">
+        <i class="fas fa-globe mr-2 text-primary-500"></i>
+        Domains
+      </a>
+
+      <details class="group">
+        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
+          <div class="flex items-center">
+            <i class="fas fa-cloud mr-2 text-primary-500"></i>
+            <span class="font-medium">Web Hosting</span>
+          </div>
+          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="ml-6 mt-2 space-y-2">
+          <a href="/web-hosting/shared" class="block text-sm text-gray-700 hover:underline">Shared Hosting</a>
+          <a href="/web-hosting/wordpress" class="block text-sm text-gray-700 hover:underline">WordPress Hosting</a>
+        </div>
+      </details>
+
       <details class="group">
         <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
           <div class="flex items-center">
@@ -336,7 +386,7 @@ function slugify(text) {
       <details class="group">
         <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
           <div class="flex items-center">
-            <i class="fas fa-globe mr-2 text-primary-500"></i>
+            <i class="fas fa-map-marker-alt mr-2 text-primary-500"></i>
             <span class="font-medium">Locations</span>
           </div>
           <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,0 +1,224 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import CTABanner from '../../components/CTABanner.astro';
+
+// Features data
+const features = [
+  {
+    title: "Optimized for WordPress",
+    description: "Server configurations specifically tuned for WordPress performance.",
+    icon: "fab fa-wordpress"
+  },
+  {
+    title: "Automatic Updates",
+    description: "Keep WordPress core, themes, and plugins updated automatically.",
+    icon: "fas fa-sync"
+  },
+  {
+    title: "Enhanced Security",
+    description: "Advanced security measures to protect against WordPress threats.",
+    icon: "fas fa-shield-alt"
+  },
+  {
+    title: "Staging Environment",
+    description: "Test changes safely with one-click staging environments.",
+    icon: "fas fa-flask"
+  },
+  {
+    title: "WordPress Toolkit",
+    description: "Powerful tools for managing multiple WordPress installations.",
+    icon: "fas fa-toolbox"
+  },
+  {
+    title: "Expert Support",
+    description: "WordPress specialists available 24/7 to help with any issues.",
+    icon: "fas fa-user-tie"
+  }
+];
+---
+
+<Layout 
+  title="WordPress Hosting" 
+  description="Managed WordPress hosting with automatic updates, enhanced security, and expert support. Optimized for WordPress performance."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Managed WordPress Hosting"
+    subtitle="Powerful, secure, and optimized hosting specifically designed for WordPress websites with expert management."
+    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
+  />
+
+  <!-- Coming Soon Section -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="bg-white rounded-xl shadow-lg p-12">
+          <div class="text-primary-600 text-6xl mb-6">
+            <i class="fab fa-wordpress"></i>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            WordPress Hosting Plans Coming Soon!
+          </h2>
+          <p class="text-xl text-gray-600 mb-8">
+            We're developing the ultimate WordPress hosting experience with managed updates, 
+            enhanced security, and performance optimization. Get ready for hassle-free WordPress hosting!
+          </p>
+          
+          <!-- Notify Me Form -->
+          <div class="max-w-md mx-auto mb-8">
+            <form id="notifyForm" class="flex gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                required
+              />
+              <button
+                type="submit"
+                class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+              >
+                Notify Me
+              </button>
+            </form>
+          </div>
+
+          <p class="text-sm text-gray-500">
+            Be among the first to experience our managed WordPress hosting!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Preview -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">WordPress-Focused Features</h2>
+        <p class="text-xl text-gray-600">Everything you need for a fast, secure, and well-maintained WordPress website</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {features.map(feature => (
+          <div class="bg-white p-6 rounded-xl shadow-md text-center">
+            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class={`${feature.icon} text-primary-600 text-2xl`}></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+            <p class="text-gray-600">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WordPress Benefits -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Managed WordPress?</h2>
+          <p class="text-xl text-gray-600">Focus on your content while we handle the technical details</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Hands-Free Maintenance</h3>
+                <p class="text-gray-600">Automatic updates, backups, and security monitoring so you can focus on creating content.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Lightning Fast Performance</h3>
+                <p class="text-gray-600">Optimized servers and caching specifically configured for WordPress speed.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Enhanced Security</h3>
+                <p class="text-gray-600">Advanced security measures and monitoring to protect against WordPress-specific threats.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Expert WordPress Support</h3>
+                <p class="text-gray-600">Get help from WordPress specialists who understand the platform inside and out.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Staging Environments</h3>
+                <p class="text-gray-600">Test changes safely before pushing them live with one-click staging.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="bg-primary-100 rounded-full p-2 mt-1 mr-4">
+                <i class="fas fa-check text-primary-600"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Scalable Solutions</h3>
+                <p class="text-gray-600">Easily scale your hosting as your WordPress site grows in traffic and complexity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Need WordPress Hosting Now?"
+    subtitle="Install WordPress on our VPS hosting for full control and flexibility."
+    ctaText="View VPS Plans"
+    ctaLink="/vps"
+  />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const notifyForm = document.getElementById('notifyForm');
+    
+    notifyForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = e.target.querySelector('input[type="email"]').value;
+      
+      // Replace form with success message
+      notifyForm.innerHTML = `
+        <div class="text-center py-4">
+          <div class="text-green-600 text-4xl mb-4">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Thank You!</h3>
+          <p class="text-gray-600">We'll notify you when WordPress hosting is available.</p>
+        </div>
+      `;
+    });
+  });
+</script>

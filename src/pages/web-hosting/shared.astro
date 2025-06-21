@@ -1,0 +1,146 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import CTABanner from '../../components/CTABanner.astro';
+
+// Features data
+const features = [
+  {
+    title: "cPanel Control Panel",
+    description: "Industry-standard control panel for easy website management.",
+    icon: "fas fa-cogs"
+  },
+  {
+    title: "Free SSL Certificates",
+    description: "Secure your website with free SSL certificates included.",
+    icon: "fas fa-lock"
+  },
+  {
+    title: "99.9% Uptime Guarantee",
+    description: "Reliable hosting with industry-leading uptime guarantee.",
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: "24/7 Support",
+    description: "Expert technical support available around the clock.",
+    icon: "fas fa-headset"
+  },
+  {
+    title: "One-Click Installs",
+    description: "Install popular applications like WordPress with one click.",
+    icon: "fas fa-mouse-pointer"
+  },
+  {
+    title: "Daily Backups",
+    description: "Automatic daily backups to keep your data safe.",
+    icon: "fas fa-cloud-upload-alt"
+  }
+];
+---
+
+<Layout 
+  title="Shared Hosting" 
+  description="Affordable shared hosting solutions with cPanel, free SSL, and 24/7 support. Perfect for websites and small businesses."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="Shared Web Hosting"
+    subtitle="Affordable and reliable shared hosting solutions perfect for websites, blogs, and small businesses."
+    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
+  />
+
+  <!-- Coming Soon Section -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="bg-white rounded-xl shadow-lg p-12">
+          <div class="text-primary-600 text-6xl mb-6">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Shared Hosting Plans Coming Soon!
+          </h2>
+          <p class="text-xl text-gray-600 mb-8">
+            We're working hard to bring you the best shared hosting experience with competitive pricing, 
+            powerful features, and exceptional support. Stay tuned for our launch!
+          </p>
+          
+          <!-- Notify Me Form -->
+          <div class="max-w-md mx-auto mb-8">
+            <form id="notifyForm" class="flex gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                required
+              />
+              <button
+                type="submit"
+                class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+              >
+                Notify Me
+              </button>
+            </form>
+          </div>
+
+          <p class="text-sm text-gray-500">
+            Be the first to know when our shared hosting plans are available!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Preview -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What to Expect</h2>
+        <p class="text-xl text-gray-600">Our shared hosting will include all the features you need for a successful website</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {features.map(feature => (
+          <div class="bg-white p-6 rounded-xl shadow-md text-center">
+            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class={`${feature.icon} text-primary-600 text-2xl`}></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+            <p class="text-gray-600">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Need Hosting Right Now?"
+    subtitle="Check out our VPS hosting solutions for immediate deployment and full control."
+    ctaText="View VPS Plans"
+    ctaLink="/vps"
+  />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const notifyForm = document.getElementById('notifyForm');
+    
+    notifyForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = e.target.querySelector('input[type="email"]').value;
+      
+      // Replace form with success message
+      notifyForm.innerHTML = `
+        <div class="text-center py-4">
+          <div class="text-green-600 text-4xl mb-4">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Thank You!</h3>
+          <p class="text-gray-600">We'll notify you as soon as shared hosting is available.</p>
+        </div>
+      `;
+    });
+  });
+</script>
