@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
-import Hero from '../components/Hero.astro';
 import CTABanner from '../components/CTABanner.astro';
 
 // Domain pricing data (demo prices)
@@ -64,17 +63,31 @@ const features = [
   title="Domain Registration" 
   description="Register your perfect domain name with QIW HOST. Competitive pricing, free DNS management, and 24/7 support."
 >
-  <!-- Hero Section -->
-  <Hero
-    title="Find Your Perfect Domain"
-    subtitle="Register your domain name today and establish your online presence with competitive pricing and reliable service."
-    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
-  />
+  <!-- Red Bar Notice -->
+  <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8">
+    <div class="container">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-exclamation-triangle text-red-500 text-xl mr-3"></i>
+        </div>
+        <div>
+          <p class="font-medium">
+            We are currently not offering domain registration, please wait for an update.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Domain Search Section -->
   <section class="py-16 md:py-24">
     <div class="container">
       <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Find Your Perfect Domain</h1>
+          <p class="text-xl text-gray-600">Register your domain name today and establish your online presence with competitive pricing and reliable service.</p>
+        </div>
+
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Search for Your Domain</h2>
           <p class="text-xl text-gray-600">Enter your desired domain name and check availability instantly</p>
