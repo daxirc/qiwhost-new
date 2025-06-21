@@ -33,6 +33,16 @@ const offices = [
     phone: "+91 (XXX) XXX-XXXX",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM IST",
     isMain: false
+  },
+  {
+    country: "UK",
+    flag: "🇬🇧",
+    title: "United Kingdom Office",
+    address: "61 Malvern Road, London E11 3DJ, United Kingdom",
+    email: "support@qiwhost.com",
+    phone: "+44 (XXX) XXX-XXXX",
+    hours: "Monday - Friday: 9:00 AM - 6:00 PM GMT",
+    isMain: false
   }
 ];
 
@@ -46,7 +56,7 @@ const contactInfo = {
 
 <Layout 
   title="Contact Us" 
-  description="Get in touch with the QIW HOST team for sales inquiries, technical support, or general questions. We have offices in USA, Pakistan, and India."
+  description="Get in touch with the QIW HOST team for sales inquiries, technical support, or general questions. We have offices in USA, Pakistan, India, and UK."
 >
   <!-- Hero Section -->
   <Hero
@@ -209,7 +219,7 @@ const contactInfo = {
         <p class="text-xl text-gray-600">We have offices around the world to serve you better</p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {offices.map(office => (
           <div class={`bg-white rounded-xl shadow-md p-8 relative ${office.isMain ? 'ring-2 ring-primary-500' : ''}`}>
             {office.isMain && (
