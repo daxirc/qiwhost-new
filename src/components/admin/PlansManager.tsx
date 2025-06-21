@@ -2,6 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
 
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇸🇬': 'sg', 
+  '🇩🇪': 'de',
+  '🇫🇮': 'fi',
+  '🇬🇧': 'gb',
+  '🇲🇽': 'mx',
+  '🇧🇬': 'bg',
+  '🇬🇷': 'gr',
+  '🇫🇷': 'fr',
+  '🇷🇺': 'ru',
+  '🇹🇷': 'tr',
+  '🇸🇦': 'sa',
+  '🇦🇪': 'ae',
+  '🇧🇭': 'bh',
+  '🇴🇲': 'om',
+  '🇰🇼': 'kw',
+  '🇮🇶': 'iq',
+  '🇶🇦': 'qa',
+  '🇹🇭': 'th',
+  '🇻🇳': 'vn',
+  '🇰🇭': 'kh',
+  '🇵🇭': 'ph',
+  '🇲🇾': 'my',
+  '🇮🇩': 'id',
+  '🇲🇲': 'mm',
+  '🇯🇵': 'jp',
+  '🇭🇰': 'hk',
+  '🇹🇼': 'tw',
+  '🇰🇷': 'kr',
+  '🇿🇦': 'za',
+  '🇪🇬': 'eg',
+  '🇧🇩': 'bd',
+  '🇵🇰': 'pk',
+  '🇳🇵': 'np',
+  '🇧🇷': 'br',
+  '🇦🇷': 'ar',
+  '🇨🇱': 'cl',
+  '🇨🇴': 'co'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 interface Plan {
   id: string;
   name: string;
@@ -720,7 +767,16 @@ export default function PlansManager({ category }: Props) {
                         <>
                           <td className="px-6 py-4">
                             <div className="flex items-center">
-                              {plan.flag_icon && <span className="mr-2">{plan.flag_icon}</span>}
+                              {plan.flag_icon && getFlagImageUrl(plan.flag_icon) ? (
+                                <img 
+                                  src={getFlagImageUrl(plan.flag_icon)} 
+                                  width="20" 
+                                  alt={`${plan.location} Flag`} 
+                                  class="flag-icon mr-2"
+                                />
+                              ) : (
+                                plan.flag_icon && <span className="mr-2">{plan.flag_icon}</span>
+                              )}
                               <span className="text-sm text-gray-900">{plan.region}</span>
                             </div>
                           </td>

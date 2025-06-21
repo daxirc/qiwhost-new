@@ -2,11 +2,25 @@
 import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇵🇰': 'pk',
+  '🇮🇳': 'in',
+  '🇬🇧': 'gb'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 // Office locations
 const offices = [
   {
     country: "USA",
     flag: "🇺🇸",
+    countryCode: "us",
     title: "United States Office",
     address: "828 Lane Allen Rd, Lexington, KY 40504, United States",
     email: "support@qiwhost.com",
@@ -17,6 +31,7 @@ const offices = [
   {
     country: "Pakistan",
     flag: "🇵🇰",
+    countryCode: "pk",
     title: "Pakistan Office",
     address: "House No 42/c Block A Housing Scheme Yazman, Yazman Mandi, 63210",
     email: "support@qiwhost.com",
@@ -27,6 +42,7 @@ const offices = [
   {
     country: "India",
     flag: "🇮🇳",
+    countryCode: "in",
     title: "India Office",
     address: "163, Hill Rd, Bandra West, Mumbai, Maharashtra 400050, India",
     email: "support@qiwhost.com",
@@ -37,6 +53,7 @@ const offices = [
   {
     country: "UK",
     flag: "🇬🇧",
+    countryCode: "gb",
     title: "United Kingdom Office",
     address: "61 Malvern Road, London E11 3DJ, United Kingdom",
     email: "support@qiwhost.com",
@@ -231,7 +248,14 @@ const contactInfo = {
             )}
             
             <div class="text-center mb-6">
-              <div class="text-4xl mb-3">{office.flag}</div>
+              <div class="mb-3">
+                <img 
+                  src={getFlagImageUrl(office.flag)} 
+                  width="30" 
+                  alt={`${office.country} Flag`} 
+                  class="flag-icon mx-auto"
+                />
+              </div>
               <h3 class="text-xl font-bold text-gray-900">{office.title}</h3>
             </div>
             

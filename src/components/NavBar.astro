@@ -2,6 +2,53 @@
   // Navigation bar component
 import { supabase } from '../lib/supabase';
 
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇸🇬': 'sg', 
+  '🇩🇪': 'de',
+  '🇫🇮': 'fi',
+  '🇬🇧': 'gb',
+  '🇲🇽': 'mx',
+  '🇧🇬': 'bg',
+  '🇬🇷': 'gr',
+  '🇫🇷': 'fr',
+  '🇷🇺': 'ru',
+  '🇹🇷': 'tr',
+  '🇸🇦': 'sa',
+  '🇦🇪': 'ae',
+  '🇧🇭': 'bh',
+  '🇴🇲': 'om',
+  '🇰🇼': 'kw',
+  '🇮🇶': 'iq',
+  '🇶🇦': 'qa',
+  '🇹🇭': 'th',
+  '🇻🇳': 'vn',
+  '🇰🇭': 'kh',
+  '🇵🇭': 'ph',
+  '🇲🇾': 'my',
+  '🇮🇩': 'id',
+  '🇲🇲': 'mm',
+  '🇯🇵': 'jp',
+  '🇭🇰': 'hk',
+  '🇹🇼': 'tw',
+  '🇰🇷': 'kr',
+  '🇿🇦': 'za',
+  '🇪🇬': 'eg',
+  '🇧🇩': 'bd',
+  '🇵🇰': 'pk',
+  '🇳🇵': 'np',
+  '🇧🇷': 'br',
+  '🇦🇷': 'ar',
+  '🇨🇱': 'cl',
+  '🇨🇴': 'co'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 // Fetch VPS locations for the dropdown
 const { data: vpsLocations, error } = await supabase
   .from('hosting_plans')
@@ -119,7 +166,12 @@ function slugify(text) {
                                 href={`/vps/locations/${location.slug}`}
                                 class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                               >
-                                <span class="mr-3 text-base">{location.flag_icon}</span>
+                                <img 
+                                  src={getFlagImageUrl(location.flag_icon)} 
+                                  width="20" 
+                                  alt={`${location.location} Flag`} 
+                                  class="flag-icon mr-3"
+                                />
                                 <span>{location.location} VPS</span>
                               </a>
                             ))
@@ -166,23 +218,23 @@ function slugify(text) {
             <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
               <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
                 <a href="/rdp/usa" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <span class="w-6 text-center mr-2" lang="en">🇺🇸</span>
+                  <img src="https://flagcdn.com/us.svg" width="20" alt="USA Flag" class="flag-icon mr-2">
                   USA Private RDP
                 </a>
                 <a href="/rdp/singapore" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <span class="w-6 text-center mr-2" lang="en">🇸🇬</span>
+                  <img src="https://flagcdn.com/sg.svg" width="20" alt="Singapore Flag" class="flag-icon mr-2">
                   Singapore Private RDP
                 </a>
                 <a href="/rdp/germany" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <span class="w-6 text-center mr-2" lang="en">🇩🇪</span>
+                  <img src="https://flagcdn.com/de.svg" width="20" alt="Germany Flag" class="flag-icon mr-2">
                   Germany Private RDP
                 </a>
                 <a href="/rdp/finland" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <span class="w-6 text-center mr-2" lang="en">🇫🇮</span>
+                  <img src="https://flagcdn.com/fi.svg" width="20" alt="Finland Flag" class="flag-icon mr-2">
                   Finland Private RDP
                 </a>
                 <a href="/rdp/uk" class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <span class="w-6 text-center mr-2" lang="en">🇬🇧</span>
+                  <img src="https://flagcdn.com/gb.svg" width="20" alt="UK Flag" class="flag-icon mr-2">
                   UK Private RDP
                 </a>
               </div>
@@ -268,7 +320,12 @@ function slugify(text) {
                       href={`/vps/locations/${location.slug}`}
                       class="flex items-center text-xs text-gray-700 hover:underline py-1"
                     >
-                      <span class="mr-2">{location.flag_icon}</span>
+                      <img 
+                        src={getFlagImageUrl(location.flag_icon)} 
+                        width="16" 
+                        alt={`${location.location} Flag`} 
+                        class="flag-icon mr-2"
+                      />
                       <span>{location.location} VPS</span>
                     </a>
                   ))
@@ -297,11 +354,26 @@ function slugify(text) {
           </svg>
         </summary>
         <div class="ml-6 mt-2 space-y-2">
-          <a href="/rdp/usa" class="block text-sm text-gray-700 hover:underline">🇺🇸 USA</a>
-          <a href="/rdp/singapore" class="block text-sm text-gray-700 hover:underline">🇸🇬 Singapore</a>
-          <a href="/rdp/germany" class="block text-sm text-gray-700 hover:underline">🇩🇪 Germany</a>
-          <a href="/rdp/finland" class="block text-sm text-gray-700 hover:underline">🇫🇮 Finland</a>
-          <a href="/rdp/uk" class="block text-sm text-gray-700 hover:underline">🇬🇧 UK</a>
+          <a href="/rdp/usa" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/us.svg" width="16" alt="USA Flag" class="flag-icon mr-2">
+            USA
+          </a>
+          <a href="/rdp/singapore" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/sg.svg" width="16" alt="Singapore Flag" class="flag-icon mr-2">
+            Singapore
+          </a>
+          <a href="/rdp/germany" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/de.svg" width="16" alt="Germany Flag" class="flag-icon mr-2">
+            Germany
+          </a>
+          <a href="/rdp/finland" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/fi.svg" width="16" alt="Finland Flag" class="flag-icon mr-2">
+            Finland
+          </a>
+          <a href="/rdp/uk" class="flex items-center text-sm text-gray-700 hover:underline">
+            <img src="https://flagcdn.com/gb.svg" width="16" alt="UK Flag" class="flag-icon mr-2">
+            UK
+          </a>
         </div>
       </details>
 

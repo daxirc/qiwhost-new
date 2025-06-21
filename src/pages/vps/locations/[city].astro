@@ -5,6 +5,53 @@ import PricingTable from '../../../components/PricingTable.astro';
 import CTABanner from '../../../components/CTABanner.astro';
 import { supabase } from '../../../lib/supabase';
 
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇸🇬': 'sg', 
+  '🇩🇪': 'de',
+  '🇫🇮': 'fi',
+  '🇬🇧': 'gb',
+  '🇲🇽': 'mx',
+  '🇧🇬': 'bg',
+  '🇬🇷': 'gr',
+  '🇫🇷': 'fr',
+  '🇷🇺': 'ru',
+  '🇹🇷': 'tr',
+  '🇸🇦': 'sa',
+  '🇦🇪': 'ae',
+  '🇧🇭': 'bh',
+  '🇴🇲': 'om',
+  '🇰🇼': 'kw',
+  '🇮🇶': 'iq',
+  '🇶🇦': 'qa',
+  '🇹🇭': 'th',
+  '🇻🇳': 'vn',
+  '🇰🇭': 'kh',
+  '🇵🇭': 'ph',
+  '🇲🇾': 'my',
+  '🇮🇩': 'id',
+  '🇲🇲': 'mm',
+  '🇯🇵': 'jp',
+  '🇭🇰': 'hk',
+  '🇹🇼': 'tw',
+  '🇰🇷': 'kr',
+  '🇿🇦': 'za',
+  '🇪🇬': 'eg',
+  '🇧🇩': 'bd',
+  '🇵🇰': 'pk',
+  '🇳🇵': 'np',
+  '🇧🇷': 'br',
+  '🇦🇷': 'ar',
+  '🇨🇱': 'cl',
+  '🇨🇴': 'co'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 export async function getStaticPaths() {
   // Fetch all VPS locations to generate static paths
   const { data: locations, error } = await supabase
@@ -121,15 +168,20 @@ const features = [
     icon: "fas fa-headset"
   }
 ];
+
+const flagImageUrl = getFlagImageUrl(flagIcon);
 ---
 
 <Layout 
-  title={`${flagIcon} ${cityName} VPS Hosting`}
+  title={`${cityName} VPS Hosting`}
   description={`High-performance VPS hosting in ${cityName}, ${region}. ${pageDescription}`}
 >
   <!-- Hero Section -->
   <Hero
-    title={`${flagIcon} ${cityName} VPS Hosting`}
+    title={flagImageUrl ? 
+      `<img src="${flagImageUrl}" width="30" alt="${cityName} Flag" class="flag-icon inline mr-3" />${cityName} VPS Hosting` :
+      `${flagIcon} ${cityName} VPS Hosting`
+    }
     subtitle={pageDescription || `Deploy your applications in ${cityName} with premium VPS hosting featuring dedicated resources and enterprise-grade infrastructure.`}
     ctaText="View Plans"
     ctaLink="#pricing"

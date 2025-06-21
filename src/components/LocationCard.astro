@@ -10,9 +10,57 @@ interface Props {
 
 const { locationName, regionName, flagIcon, slug, description, backgroundImageUrl } = Astro.props;
 
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇸🇬': 'sg', 
+  '🇩🇪': 'de',
+  '🇫🇮': 'fi',
+  '🇬🇧': 'gb',
+  '🇲🇽': 'mx',
+  '🇧🇬': 'bg',
+  '🇬🇷': 'gr',
+  '🇫🇷': 'fr',
+  '🇷🇺': 'ru',
+  '🇹🇷': 'tr',
+  '🇸🇦': 'sa',
+  '🇦🇪': 'ae',
+  '🇧🇭': 'bh',
+  '🇴🇲': 'om',
+  '🇰🇼': 'kw',
+  '🇮🇶': 'iq',
+  '🇶🇦': 'qa',
+  '🇹🇭': 'th',
+  '🇻🇳': 'vn',
+  '🇰🇭': 'kh',
+  '🇵🇭': 'ph',
+  '🇲🇾': 'my',
+  '🇮🇩': 'id',
+  '🇲🇲': 'mm',
+  '🇯🇵': 'jp',
+  '🇭🇰': 'hk',
+  '🇹🇼': 'tw',
+  '🇰🇷': 'kr',
+  '🇿🇦': 'za',
+  '🇪🇬': 'eg',
+  '🇧🇩': 'bd',
+  '🇵🇰': 'pk',
+  '🇳🇵': 'np',
+  '🇧🇷': 'br',
+  '🇦🇷': 'ar',
+  '🇨🇱': 'cl',
+  '🇨🇴': 'co'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 // Default fallback image if no specific background is provided
 const defaultBackground = "https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 const backgroundImage = backgroundImageUrl || defaultBackground;
+const flagImageUrl = getFlagImageUrl(flagIcon);
 ---
 
 <a 
@@ -31,8 +79,17 @@ const backgroundImage = backgroundImageUrl || defaultBackground;
     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
     
     <!-- Flag Icon -->
-    <div class="absolute top-4 right-4 text-3xl">
-      {flagIcon}
+    <div class="absolute top-4 right-4">
+      {flagImageUrl ? (
+        <img 
+          src={flagImageUrl} 
+          width="30" 
+          alt={`${locationName} Flag`} 
+          class="flag-icon"
+        />
+      ) : (
+        <span class="text-3xl">{flagIcon}</span>
+      )}
     </div>
     
     <!-- Location Info -->
