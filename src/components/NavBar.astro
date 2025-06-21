@@ -95,41 +95,35 @@ function slugify(text) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div class="absolute left-0 mt-1 w-96 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+            <div class="absolute left-0 mt-1 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
               <div class="bg-white rounded-lg shadow-xl ring-1 ring-gray-200 overflow-hidden">
-                <div class="flex">
-                  <!-- Left side: Regions -->
-                  <div class="w-48 bg-gray-50 border-r border-gray-200">
-                    <div class="py-2">
-                      {Object.keys(locationsByRegion).map(region => (
-                        <div class="group/region relative">
-                          <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                            <span class="font-medium">{region}</span>
-                            <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                          </div>
-                          <!-- Right side: Cities for this region -->
-                          <div class="absolute left-full top-0 w-48 bg-white border-l border-gray-200 opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-lg">
-                            <div class="py-2 max-h-80 overflow-y-auto">
-                              {locationsByRegion[region].map(location => (
-                                <a 
-                                  href={`/vps/locations/${location.slug}`}
-                                  class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                                >
-                                  <span class="mr-3 text-base">{location.flag_icon}</span>
-                                  <span>{location.location} VPS</span>
-                                </a>
-                              ))}
-                            </div>
+                <!-- Single column: Regions -->
+                <div class="w-48 bg-gray-50">
+                  <div class="py-2">
+                    {Object.keys(locationsByRegion).map(region => (
+                      <div class="group/region relative">
+                        <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                          <span class="font-medium">{region}</span>
+                          <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                        <!-- Cities submenu for this region -->
+                        <div class="absolute left-full top-0 w-48 bg-white border-l border-gray-200 opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-lg">
+                          <div class="py-2 max-h-80 overflow-y-auto">
+                            {locationsByRegion[region].map(location => (
+                              <a 
+                                href={`/vps/locations/${location.slug}`}
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                              >
+                                <span class="mr-3 text-base">{location.flag_icon}</span>
+                                <span>{location.location} VPS</span>
+                              </a>
+                            ))}
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                  <!-- Right side: Empty -->
-                  <div class="w-48 p-4">
-                    <!-- Empty div - no default message -->
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
