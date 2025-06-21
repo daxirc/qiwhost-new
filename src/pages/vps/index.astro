@@ -4,22 +4,25 @@ import Hero from '../../components/Hero.astro';
 import FeaturesSection from '../../components/FeaturesSection.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
+import LocationCard from '../../components/LocationCard.astro';
 import { supabase } from '../../lib/supabase';
 
-// Fetch plans from database
-const { data: vpsPlans, error } = await supabase
+// Fetch only Linux VPS plans (3 plans)
+const { data: linuxPlans, error: linuxError } = await supabase
   .from('hosting_plans')
   .select('*')
   .eq('category', 'VPS')
   .eq('visible', true)
-  .order('sort_order', { ascending: true });
+  .eq('os_type', 'Linux')
+  .order('sort_order', { ascending: true })
+  .limit(3);
 
-if (error) {
-  console.error('Error fetching plans:', error);
+if (linuxError) {
+  console.error('Error fetching Linux plans:', linuxError);
 }
 
 // Convert database plans to pricing table format
-const plans = vpsPlans?.map(plan => ({
+const plans = linuxPlans?.map(plan => ({
   name: plan.name,
   price: {
     monthly: `$${plan.price_monthly}`,
@@ -36,11 +39,43 @@ const plans = vpsPlans?.map(plan => ({
   ],
   ctaText: "Order Now",
   ctaLink: plan.order_url,
+  popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
   sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
   sale_badge_text: plan.sale_badge_text
 })) || [];
+
+// Fetch all unique VPS locations for the location cards
+const { data: vpsLocations, error: locationsError } = await supabase
+  .from('hosting_plans')
+  .select('region, location, flag_icon, page_description')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .not('region', 'is', null)
+  .not('location', 'is', null)
+  .order('region', { ascending: true })
+  .order('location', { ascending: true });
+
+if (locationsError) {
+  console.error('Error fetching VPS locations:', locationsError);
+}
+
+// Remove duplicates and create unique locations
+const uniqueLocations = vpsLocations?.reduce((acc, location) => {
+  const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  const exists = acc.find(l => l.slug === slug);
+  if (!exists) {
+    acc.push({
+      locationName: location.location,
+      regionName: location.region,
+      flagIcon: location.flag_icon,
+      slug,
+      description: location.page_description
+    });
+  }
+  return acc;
+}, []) || [];
 
 // Features data
 const features = [
@@ -113,10 +148,42 @@ const features = [
   <!-- Pricing -->
   <section id="pricing" class="py-16 md:py-24">
     <PricingTable
-      title="VPS Hosting Plans"
-      description="Choose the perfect VPS plan for your needs"
+      title="Linux VPS Hosting Plans"
+      description="Choose the perfect Linux VPS plan for your needs"
       plans={plans}
     />
+  </section>
+
+  <!-- All Available Locations Section -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">All Available Locations</h2>
+        <p class="text-xl text-gray-600">Deploy your VPS in strategic locations worldwide for optimal performance</p>
+      </div>
+
+      {uniqueLocations.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {uniqueLocations.map(location => (
+            <LocationCard
+              locationName={location.locationName}
+              regionName={location.regionName}
+              flagIcon={location.flagIcon}
+              slug={location.slug}
+              description={location.description}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <div class="text-gray-400 text-6xl mb-4">
+            <i class="fas fa-globe"></i>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">Locations Coming Soon</h3>
+          <p class="text-gray-500">We're expanding our global network. Check back soon for more locations.</p>
+        </div>
+      )}
+    </div>
   </section>
 
   <!-- Features -->
