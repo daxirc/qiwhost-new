@@ -178,10 +178,7 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
 >
   <!-- Hero Section -->
   <Hero
-    title={flagImageUrl ? 
-      `<img src="${flagImageUrl}" width="30" alt="${cityName} Flag" class="flag-icon inline mr-3" />${cityName} VPS Hosting` :
-      `${flagIcon} ${cityName} VPS Hosting`
-    }
+    title={`${cityName} VPS Hosting`}
     subtitle={pageDescription || `Deploy your applications in ${cityName} with premium VPS hosting featuring dedicated resources and enterprise-grade infrastructure.`}
     ctaText="View Plans"
     ctaLink="#pricing"
