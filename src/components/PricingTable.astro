@@ -53,7 +53,8 @@ const { title, description, plans, category } = Astro.props;
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">CPU</th>
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">RAM</th>
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Storage</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Network</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Bandwidth</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Location</th>
               <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Price</th>
               <th class="px-6 py-4 rounded-tr-xl"></th>
             </tr>
@@ -88,6 +89,12 @@ const { title, description, plans, category } = Astro.props;
                   <div class="flex items-center">
                     <i class="fas fa-network-wired text-primary-500 mr-2"></i>
                     <span class="text-sm text-gray-900">{plan.features[3]}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i>
+                    <span class="text-sm text-gray-900">{plan.features[4]}</span>
                   </div>
                 </td>
                 <td class="px-6 py-4">
