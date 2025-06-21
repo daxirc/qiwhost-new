@@ -118,7 +118,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
             </div>
             
             <!-- Live Chat Button -->
-            <button class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center">
+            <button onclick="Tawk_API?.maximize()" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center">
               <i class="fas fa-comments mr-2"></i>
               Live Chat
             </button>
@@ -135,6 +135,20 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
     </main>
     <SupportSection />
     <Footer />
+    
+    <!-- Tawk.to Live Chat Widget -->
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/605e5e1af7ce1827093463e5/1f1o9v6eb';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+    
     <script>
       // JavaScript for sticky navigation
       document.addEventListener('DOMContentLoaded', function() {
