@@ -41,7 +41,7 @@ const plans = rdpPlans?.map(plan => ({
     plan.ram,
     plan.storage,
     plan.bandwidth,
-    'Windows Server 2022',
+    plan.os_type || 'Windows Server 2022',
     'UK Location',
     '24/7 Support'
   ],
@@ -50,7 +50,8 @@ const plans = rdpPlans?.map(plan => ({
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
   sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
 })) || [];
 
 // Country-specific information
