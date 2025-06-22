@@ -14,6 +14,7 @@ interface PricingPlan {
   sale_price_monthly?: string;
   sale_price_yearly?: string;
   sale_badge_text?: string;
+  osType?: string;
 }
 
 interface Props {
@@ -72,6 +73,9 @@ function calculateYearlyTotal(monthlyPrice: string): string {
                 <td class="px-6 py-4">
                   <div class="flex items-center">
                     <div class="text-sm font-medium text-gray-900">{plan.name}</div>
+                    {plan.osType && (
+                      <div class="text-xs text-gray-500 mt-1">{plan.osType}</div>
+                    )}
                   </div>
                 </td>
                 <td class="px-6 py-4">
@@ -146,7 +150,12 @@ function calculateYearlyTotal(monthlyPrice: string): string {
               </div>
             )}
             <div class="p-8">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+              {plan.osType && (
+                <div class="text-sm text-gray-500 mb-4 bg-gray-100 px-3 py-1 rounded-full inline-block">
+                  {plan.osType}
+                </div>
+              )}
               <div class="pricing-amount mb-6">
                 <div class="monthly-price">
                   {plan.sale_enabled ? (

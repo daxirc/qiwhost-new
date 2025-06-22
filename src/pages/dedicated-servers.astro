@@ -38,7 +38,8 @@ function formatPlans(plans) {
     ctaLink: plan.order_url,
     sale_enabled: plan.sale_enabled,
     sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-    sale_badge_text: plan.sale_badge_text
+    sale_badge_text: plan.sale_badge_text,
+    osType: plan.os_type
   }));
 }
 

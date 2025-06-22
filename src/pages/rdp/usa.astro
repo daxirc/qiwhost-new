@@ -51,7 +51,8 @@ const plans = rdpPlans?.map(plan => ({
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
   sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text
+  sale_badge_text: plan.sale_badge_text,
+  osType: 'Windows Server 2022'
 })) || [];
 
 // Country-specific information
