@@ -24,6 +24,13 @@ interface Props {
 }
 
 const { title, description, plans, category } = Astro.props;
+
+// Helper function to calculate total yearly price
+function calculateYearlyTotal(monthlyPrice: string): string {
+  const numericPrice = parseFloat(monthlyPrice.replace('$', ''));
+  const yearlyTotal = numericPrice * 12;
+  return `$${yearlyTotal.toFixed(2)}`;
+}
 ---
 
 <section class="py-16 md:py-24">
@@ -168,13 +175,13 @@ const { title, description, plans, category } = Astro.props;
                           <span class="line-through text-gray-400">{plan.price.yearly}</span>
                           <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
                         </div>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                        <p class="text-sm text-primary-600 mt-1">Billed annually ({calculateYearlyTotal(plan.sale_price_yearly)})</p>
                       </div>
                     ) : (
                       <div>
                         <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
                         <span class="text-gray-600">/month</span>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                        <p class="text-sm text-primary-600 mt-1">Billed annually ({calculateYearlyTotal(plan.price.yearly)})</p>
                       </div>
                     )}
                   </div>
