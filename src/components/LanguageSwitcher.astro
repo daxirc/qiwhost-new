@@ -16,11 +16,22 @@ const currentLocale = Astro.currentLocale || 'en';
 const currentPath = Astro.url.pathname.replace(/^\/(es|fr|de)/, '') || '/';
 
 // Generate URLs for each language
-const languageUrls = Object.keys(languages).map(locale => ({
-  locale,
-  url: getRelativeLocaleUrl(locale, currentPath),
-  ...languages[locale]
-}));
+const languageUrls = Object.keys(languages).map(locale => {
+  let url;
+  if (locale === 'en') {
+    // For English, use the root path without prefix
+    url = currentPath === '/' ? '/' : currentPath;
+  } else {
+    // For other languages, use the locale prefix
+    url = getRelativeLocaleUrl(locale, currentPath);
+  }
+  
+  return {
+    locale,
+    url,
+    ...languages[locale]
+  };
+});
 ---
 
 <div class="relative group">
