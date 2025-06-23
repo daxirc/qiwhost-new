@@ -1,0 +1,144 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import PricingTable from '../../../components/PricingTable.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import FeaturesSection from '../../../components/FeaturesSection.astro';
+import { supabase } from '../../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
+// Fetch plans from database
+const { data: linuxPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .eq('os_type', 'Linux')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = linuxPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    'Linux OS',
+    '24/7 Support'
+  ],
+  ctaText: t.pricing.ctaText,
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
+})) || [];
+
+// Features data with translations
+const features = [
+  {
+    title: t.vps.linux.features.rootAccess.title,
+    description: t.vps.linux.features.rootAccess.description,
+    icon: "fas fa-terminal"
+  },
+  {
+    title: t.vps.linux.features.distributions.title,
+    description: t.vps.linux.features.distributions.description,
+    icon: "fab fa-linux"
+  },
+  {
+    title: t.vps.linux.features.sshAccess.title,
+    description: t.vps.linux.features.sshAccess.description,
+    icon: "fas fa-lock"
+  },
+  {
+    title: t.vps.linux.features.webHosting.title,
+    description: t.vps.linux.features.webHosting.description,
+    icon: "fas fa-globe"
+  },
+  {
+    title: t.vps.linux.features.docker.title,
+    description: t.vps.linux.features.docker.description,
+    icon: "fab fa-docker"
+  },
+  {
+    title: t.vps.linux.features.backups.title,
+    description: t.vps.linux.features.backups.description,
+    icon: "fas fa-cloud-upload-alt"
+  }
+];
+---
+
+<Layout 
+  title="Linux VPS Hosting" 
+  description="High-performance Linux VPS solutions with dedicated resources, multiple distribution options, and full root access."
+>
+  <!-- Hero Section -->
+  <Hero
+    title={t.vps.linux.hero.title}
+    subtitle={t.vps.linux.hero.subtitle}
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Locations -->
+  <section class="py-12 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.globalLocations}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.lowLatency}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.enterpriseSecurity}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24">
+    <PricingTable
+      title={t.vps.linux.pricing.title}
+      description={t.vps.linux.pricing.description}
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title={t.vps.linux.features.title}
+    subtitle={t.vps.linux.features.subtitle}
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={t.vps.linux.cta.title}
+    subtitle={t.vps.linux.cta.subtitle}
+    ctaText="Order Now"
+    ctaLink="https://portal.qiwhost.com/login"
+  />
+</Layout>

@@ -1,0 +1,144 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import PricingTable from '../../../components/PricingTable.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import FeaturesSection from '../../../components/FeaturesSection.astro';
+import { supabase } from '../../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
+// Fetch plans from database
+const { data: windowsPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .eq('os_type', 'Windows')
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = windowsPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    'Windows Server 2022',
+    plan.bandwidth,
+    'RDP Access',
+    '24/7 Support'
+  ],
+  ctaText: t.pricing.ctaText,
+  ctaLink: plan.order_url,
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
+})) || [];
+
+// Features data with translations
+const features = [
+  {
+    title: t.vps.windows.features.windowsServer.title,
+    description: t.vps.windows.features.windowsServer.description,
+    icon: "fab fa-windows"
+  },
+  {
+    title: t.vps.windows.features.rdpAccess.title,
+    description: t.vps.windows.features.rdpAccess.description,
+    icon: "fas fa-desktop"
+  },
+  {
+    title: t.vps.windows.features.iis.title,
+    description: t.vps.windows.features.iis.description,
+    icon: "fas fa-globe"
+  },
+  {
+    title: t.vps.windows.features.dotnet.title,
+    description: t.vps.windows.features.dotnet.description,
+    icon: "fas fa-code"
+  },
+  {
+    title: t.vps.windows.features.sqlServer.title,
+    description: t.vps.windows.features.sqlServer.description,
+    icon: "fas fa-database"
+  },
+  {
+    title: t.vps.windows.features.updates.title,
+    description: t.vps.windows.features.updates.description,
+    icon: "fas fa-sync"
+  }
+];
+---
+
+<Layout 
+  title="Windows VPS Hosting" 
+  description="High-performance Windows VPS solutions with dedicated resources, the latest Windows Server OS, and full RDP access."
+>
+  <!-- Hero Section -->
+  <Hero
+    title={t.vps.windows.hero.title}
+    subtitle={t.vps.windows.hero.subtitle}
+    ctaText="View Pricing"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
+  />
+
+  <!-- Locations -->
+  <section class="py-12 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.globalLocations}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.lowLatency}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vps.index.locations.enterpriseSecurity}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-16 md:py-24">
+    <PricingTable
+      title={t.vps.windows.pricing.title}
+      description={t.vps.windows.pricing.description}
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features -->
+  <FeaturesSection
+    title={t.vps.windows.features.title}
+    subtitle={t.vps.windows.features.subtitle}
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={t.vps.windows.cta.title}
+    subtitle={t.vps.windows.cta.subtitle}
+    ctaText="Order Now"
+    ctaLink="https://portal.qiwhost.com/login"
+  />
+</Layout>
