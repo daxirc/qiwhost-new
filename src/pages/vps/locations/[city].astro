@@ -4,6 +4,7 @@ import Hero from '../../../components/Hero.astro';
 import PricingTable from '../../../components/PricingTable.astro';
 import CTABanner from '../../../components/CTABanner.astro';
 import { supabase } from '../../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -96,6 +97,10 @@ export async function getStaticPaths() {
 const { city } = Astro.params;
 const { cityName, region, flagIcon, pageDescription } = Astro.props;
 
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
 // Fetch VPS plans for this specific city
 const { data: cityPlans, error } = await supabase
   .from('hosting_plans')
@@ -126,7 +131,7 @@ const plans = cityPlans?.map(plan => ({
     '24/7 Support',
     'SSD Storage'
   ],
-  ctaText: "Order Now",
+  ctaText: t.pricing.ctaText,
   ctaLink: plan.order_url,
   popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
@@ -136,41 +141,50 @@ const plans = cityPlans?.map(plan => ({
   osType: plan.os_type
 })) || [];
 
-// Features data
+// Features data with translations
 const features = [
   {
-    title: "High-Performance SSDs",
-    description: "Lightning-fast SSD storage for optimal application performance and quick data access.",
+    title: t.vpsLocations.features.ssdStorage.title,
+    description: t.vpsLocations.features.ssdStorage.description,
     icon: "fas fa-bolt"
   },
   {
-    title: "Dedicated Resources",
-    description: "Guaranteed CPU, RAM, and storage resources exclusively allocated to your VPS.",
+    title: t.vpsLocations.features.dedicatedResources.title,
+    description: t.vpsLocations.features.dedicatedResources.description,
     icon: "fas fa-microchip"
   },
   {
-    title: "Full Root Access",
-    description: "Complete administrative control with root access and SSH capabilities.",
+    title: t.vpsLocations.features.rootAccess.title,
+    description: t.vpsLocations.features.rootAccess.description,
     icon: "fas fa-terminal"
   },
   {
-    title: "99.9% Uptime SLA",
-    description: "Reliable infrastructure with industry-leading uptime guarantee.",
+    title: t.vpsLocations.features.uptime.title,
+    description: t.vpsLocations.features.uptime.description,
     icon: "fas fa-chart-line"
   },
   {
-    title: "DDoS Protection",
-    description: "Advanced DDoS mitigation to keep your services online and secure.",
+    title: t.vpsLocations.features.ddosProtection.title,
+    description: t.vpsLocations.features.ddosProtection.description,
     icon: "fas fa-shield-alt"
   },
   {
-    title: "24/7 Expert Support",
-    description: "Round-the-clock technical assistance from our experienced team.",
+    title: t.vpsLocations.features.support.title,
+    description: t.vpsLocations.features.support.description,
     icon: "fas fa-headset"
   }
 ];
 
 const flagImageUrl = getFlagImageUrl(flagIcon);
+
+// Create translated strings with city name replacement
+const heroTitle = t.vpsLocations.hero.title.replace('{cityName}', cityName);
+const heroSubtitle = pageDescription || t.vpsLocations.hero.subtitle.replace('{cityName}', cityName);
+const whyChooseTitle = t.vpsLocations.whyChoose.title.replace('{cityName}', cityName);
+const whyChooseDescription = pageDescription || t.vpsLocations.whyChoose.description.replace('{cityName}', cityName).replace('{cityName}', cityName);
+const pricingTitle = t.vpsLocations.pricing.title.replace('{cityName}', cityName);
+const ctaTitle = t.vpsLocations.cta.title.replace('{cityName}', cityName);
+const locationInfo = t.vpsLocations.locationInfo.location.replace('{cityName}', cityName).replace('{region}', region);
 ---
 
 <Layout 
@@ -179,8 +193,8 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
 >
   <!-- Hero Section -->
   <Hero
-    title={`${cityName} VPS Hosting`}
-    subtitle={pageDescription || `Deploy your applications in ${cityName} with premium VPS hosting featuring dedicated resources and enterprise-grade infrastructure.`}
+    title={heroTitle}
+    subtitle={heroSubtitle}
     ctaText="View Plans"
     ctaLink="#pricing"
     backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
@@ -192,15 +206,15 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
         <div class="flex items-center">
           <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Location: {cityName}, {region}</span>
+          <span class="font-semibold">{locationInfo}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Low Latency Network</span>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.lowLatency}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Enterprise Security</span>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.enterpriseSecurity}</span>
         </div>
       </div>
     </div>
@@ -211,10 +225,10 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-          Why Choose {cityName} VPS Hosting?
+          {whyChooseTitle}
         </h2>
         <p class="text-lg text-gray-700 leading-relaxed">
-          {pageDescription || `Experience premium VPS hosting in ${cityName} with state-of-the-art infrastructure, guaranteed resources, and exceptional performance. Our ${cityName} data center provides optimal connectivity and reliability for your applications.`}
+          {whyChooseDescription}
         </p>
       </div>
     </div>
@@ -223,8 +237,8 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
   <!-- Pricing Table -->
   <section id="pricing" class="py-16 md:py-24 bg-gray-50">
     <PricingTable
-      title={`${cityName} VPS Plans`}
-      description="Choose the perfect plan for your hosting needs"
+      title={pricingTitle}
+      description={t.vpsLocations.pricing.description}
       plans={plans}
     />
   </section>
@@ -233,8 +247,8 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
   <section class="py-16 md:py-24">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">VPS Features</h2>
-        <p class="text-xl text-gray-600">Everything you need for a powerful hosting experience</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.vpsLocations.features.title}</h2>
+        <p class="text-xl text-gray-600">{t.vpsLocations.features.subtitle}</p>
       </div>
 
       <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
@@ -255,8 +269,8 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
 
   <!-- CTA Banner -->
   <CTABanner
-    title={`Ready to Get Started with ${cityName} VPS?`}
-    subtitle="Deploy your applications today with our premium hosting infrastructure."
+    title={ctaTitle}
+    subtitle={t.vpsLocations.cta.subtitle}
     ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />

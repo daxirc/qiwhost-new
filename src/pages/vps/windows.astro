@@ -5,6 +5,11 @@ import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import FeaturesSection from '../../components/FeaturesSection.astro';
 import { supabase } from '../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 
 // Fetch plans from database
 const { data: windowsPlans, error } = await supabase
@@ -36,7 +41,7 @@ const plans = windowsPlans?.map(plan => ({
     'RDP Access',
     '24/7 Support'
   ],
-  ctaText: "Order Now",
+  ctaText: t.pricing.ctaText,
   ctaLink: plan.order_url,
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
@@ -45,36 +50,36 @@ const plans = windowsPlans?.map(plan => ({
   osType: plan.os_type
 })) || [];
 
-// Features data
+// Features data with translations
 const features = [
   {
-    title: "Windows Server 2022",
-    description: "Latest Windows Server with enhanced security and performance",
+    title: t.vps.windows.features.windowsServer.title,
+    description: t.vps.windows.features.windowsServer.description,
     icon: "fab fa-windows"
   },
   {
-    title: "Remote Desktop Access",
-    description: "Secure RDP access to manage your server from anywhere",
+    title: t.vps.windows.features.rdpAccess.title,
+    description: t.vps.windows.features.rdpAccess.description,
     icon: "fas fa-desktop"
   },
   {
-    title: "IIS Web Server",
-    description: "Pre-installed Internet Information Services for web hosting",
+    title: t.vps.windows.features.iis.title,
+    description: t.vps.windows.features.iis.description,
     icon: "fas fa-globe"
   },
   {
-    title: ".NET Framework Support",
-    description: "Full support for all .NET Framework versions and ASP.NET",
+    title: t.vps.windows.features.dotnet.title,
+    description: t.vps.windows.features.dotnet.description,
     icon: "fas fa-code"
   },
   {
-    title: "SQL Server Compatible",
-    description: "Install SQL Server for database applications (licenses sold separately)",
+    title: t.vps.windows.features.sqlServer.title,
+    description: t.vps.windows.features.sqlServer.description,
     icon: "fas fa-database"
   },
   {
-    title: "Windows Updates",
-    description: "Automated or manual Windows updates management",
+    title: t.vps.windows.features.updates.title,
+    description: t.vps.windows.features.updates.description,
     icon: "fas fa-sync"
   }
 ];
@@ -86,8 +91,8 @@ const features = [
 >
   <!-- Hero Section -->
   <Hero
-    title="Windows VPS Hosting"
-    subtitle="Powerful and reliable Windows virtual servers with the latest Windows Server and full RDP access."
+    title={t.vps.windows.hero.title}
+    subtitle={t.vps.windows.hero.subtitle}
     ctaText="View Pricing"
     ctaLink="#pricing"
     backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
@@ -99,15 +104,15 @@ const features = [
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
         <div class="flex items-center">
           <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Global Locations</span>
+          <span class="font-semibold">{t.vps.index.locations.globalLocations}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Low Latency Network</span>
+          <span class="font-semibold">{t.vps.index.locations.lowLatency}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Enterprise Security</span>
+          <span class="font-semibold">{t.vps.index.locations.enterpriseSecurity}</span>
         </div>
       </div>
     </div>
@@ -116,23 +121,23 @@ const features = [
   <!-- Pricing -->
   <section id="pricing" class="py-16 md:py-24">
     <PricingTable
-      title="Windows VPS Plans"
-      description="Choose the Windows VPS plan that fits your needs"
+      title={t.vps.windows.pricing.title}
+      description={t.vps.windows.pricing.description}
       plans={plans}
     />
   </section>
 
   <!-- Features -->
   <FeaturesSection
-    title="Windows VPS Features"
-    subtitle="Everything you need for a powerful Windows server experience"
+    title={t.vps.windows.features.title}
+    subtitle={t.vps.windows.features.subtitle}
     features={features}
   />
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Ready to Get Started with Windows VPS?"
-    subtitle="Launch your Windows virtual server in minutes with QIW HOST."
+    title={t.vps.windows.cta.title}
+    subtitle={t.vps.windows.cta.subtitle}
     ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />

@@ -1,11 +1,11 @@
 ---
-import Layout from '../layouts/MainLayout.astro';
-import Hero from '../components/Hero.astro';
-import FeaturesSection from '../components/FeaturesSection.astro';
-import PricingTable from '../components/PricingTable.astro';
-import CTABanner from '../components/CTABanner.astro';
-import { supabase } from '../lib/supabase';
-import { getTranslations, getCurrentLocale } from '../i18n/utils';
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FeaturesSection from '../../components/FeaturesSection.astro';
+import PricingTable from '../../components/PricingTable.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { supabase } from '../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
 // Get translations for current locale
 const locale = getCurrentLocale(Astro.currentLocale);

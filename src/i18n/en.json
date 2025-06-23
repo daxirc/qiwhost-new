@@ -131,5 +131,327 @@
     "title": "Ready to Get Started?",
     "subtitle": "Experience the power of QIW HOST's hosting solutions today.",
     "ctaText": "Get Started Now"
+  },
+  "vps": {
+    "index": {
+      "hero": {
+        "title": "Virtual Private Server Hosting",
+        "subtitle": "High-performance VPS solutions with dedicated resources and full root access."
+      },
+      "locations": {
+        "globalLocations": "Global Locations",
+        "lowLatency": "Low Latency Network",
+        "enterpriseSecurity": "Enterprise Security"
+      },
+      "pricing": {
+        "title": "Linux VPS Hosting Plans",
+        "description": "Choose the perfect Linux VPS plan for your needs"
+      },
+      "allLocations": {
+        "title": "All Available Locations",
+        "subtitle": "Deploy your VPS in strategic locations worldwide for optimal performance",
+        "comingSoon": "Locations Coming Soon",
+        "comingSoonSubtitle": "We're expanding our global network. Check back soon for more locations."
+      },
+      "features": {
+        "title": "VPS Features",
+        "subtitle": "Everything you need for a powerful virtual server experience",
+        "ssdStorage": {
+          "title": "High-Performance SSDs",
+          "description": "All VPS plans include SSD storage for faster data access and improved application performance."
+        },
+        "dedicatedResources": {
+          "title": "Dedicated Resources",
+          "description": "Guaranteed CPU, RAM, and storage resources that are exclusively allocated to your VPS."
+        },
+        "rootAccess": {
+          "title": "Full Root Access",
+          "description": "Complete control over your virtual server with root access and SSH capabilities."
+        },
+        "instantProvisioning": {
+          "title": "Instant Provisioning",
+          "description": "Get your VPS up and running in minutes with our automated provisioning system."
+        },
+        "uptime": {
+          "title": "99.9% Uptime Guarantee",
+          "description": "Our robust infrastructure ensures your services remain online and accessible."
+        },
+        "scalable": {
+          "title": "Scalable Resources",
+          "description": "Easily upgrade your VPS resources as your business grows without any downtime."
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started?",
+        "subtitle": "Launch your high-performance VPS today."
+      }
+    },
+    "linux": {
+      "hero": {
+        "title": "Linux VPS Hosting",
+        "subtitle": "Powerful and flexible Linux virtual servers with full root access and your choice of distributions."
+      },
+      "pricing": {
+        "title": "Linux VPS Plans",
+        "description": "Choose the Linux VPS plan that fits your needs"
+      },
+      "features": {
+        "title": "Linux VPS Features",
+        "subtitle": "Everything you need for a powerful Linux server experience",
+        "rootAccess": {
+          "title": "Full Root Access",
+          "description": "Complete control over your Linux server environment"
+        },
+        "distributions": {
+          "title": "Choice of Distributions",
+          "description": "Multiple Linux distributions to choose from"
+        },
+        "sshAccess": {
+          "title": "SSH Access",
+          "description": "Secure Shell access for remote server management"
+        },
+        "webHosting": {
+          "title": "Web Hosting Ready",
+          "description": "Pre-configured for web hosting with Apache/Nginx, PHP, and MySQL"
+        },
+        "docker": {
+          "title": "Docker Support",
+          "description": "Run containerized applications with Docker support"
+        },
+        "backups": {
+          "title": "Automated Backups",
+          "description": "Optional daily or weekly backups for data protection"
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started with Linux VPS?",
+        "subtitle": "Launch your Linux virtual server in minutes with QIW HOST."
+      }
+    },
+    "windows": {
+      "hero": {
+        "title": "Windows VPS Hosting",
+        "subtitle": "Powerful and reliable Windows virtual servers with the latest Windows Server and full RDP access."
+      },
+      "pricing": {
+        "title": "Windows VPS Plans",
+        "description": "Choose the Windows VPS plan that fits your needs"
+      },
+      "features": {
+        "title": "Windows VPS Features",
+        "subtitle": "Everything you need for a powerful Windows server experience",
+        "windowsServer": {
+          "title": "Windows Server 2022",
+          "description": "Latest Windows Server with enhanced security and performance"
+        },
+        "rdpAccess": {
+          "title": "Remote Desktop Access",
+          "description": "Secure RDP access to manage your server from anywhere"
+        },
+        "iis": {
+          "title": "IIS Web Server",
+          "description": "Pre-installed Internet Information Services for web hosting"
+        },
+        "dotnet": {
+          "title": ".NET Framework Support",
+          "description": "Full support for all .NET Framework versions and ASP.NET"
+        },
+        "sqlServer": {
+          "title": "SQL Server Compatible",
+          "description": "Install SQL Server for database applications (licenses sold separately)"
+        },
+        "updates": {
+          "title": "Windows Updates",
+          "description": "Automated or manual Windows updates management"
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started with Windows VPS?",
+        "subtitle": "Launch your Windows virtual server in minutes with QIW HOST."
+      }
+    }
+  },
+  "vpsLocations": {
+    "hero": {
+      "title": "{cityName} VPS Hosting",
+      "subtitle": "Deploy your applications in {cityName} with premium VPS hosting featuring dedicated resources and enterprise-grade infrastructure."
+    },
+    "locationInfo": {
+      "location": "Location: {cityName}, {region}",
+      "lowLatency": "Low Latency Network",
+      "enterpriseSecurity": "Enterprise Security"
+    },
+    "whyChoose": {
+      "title": "Why Choose {cityName} VPS Hosting?",
+      "description": "Experience premium VPS hosting in {cityName} with state-of-the-art infrastructure, guaranteed resources, and exceptional performance. Our {cityName} data center provides optimal connectivity and reliability for your applications."
+    },
+    "pricing": {
+      "title": "{cityName} VPS Plans",
+      "description": "Choose the perfect plan for your hosting needs"
+    },
+    "features": {
+      "title": "VPS Features",
+      "subtitle": "Everything you need for a powerful hosting experience",
+      "ssdStorage": {
+        "title": "High-Performance SSDs",
+        "description": "Lightning-fast SSD storage for optimal application performance and quick data access."
+      },
+      "dedicatedResources": {
+        "title": "Dedicated Resources",
+        "description": "Guaranteed CPU, RAM, and storage resources exclusively allocated to your VPS."
+      },
+      "rootAccess": {
+        "title": "Full Root Access",
+        "description": "Complete administrative control with root access and SSH capabilities."
+      },
+      "uptime": {
+        "title": "99.9% Uptime SLA",
+        "description": "Reliable infrastructure with industry-leading uptime guarantee."
+      },
+      "ddosProtection": {
+        "title": "DDoS Protection",
+        "description": "Advanced DDoS mitigation to keep your services online and secure."
+      },
+      "support": {
+        "title": "24/7 Expert Support",
+        "description": "Round-the-clock technical assistance from our experienced team."
+      }
+    },
+    "cta": {
+      "title": "Ready to Get Started with {cityName} VPS?",
+      "subtitle": "Deploy your applications today with our premium hosting infrastructure."
+    }
+  },
+  "dedicatedServers": {
+    "hero": {
+      "title": "Dedicated Server",
+      "subtitle": "Unleash powerful performance with enterprise-grade bare metal servers and full root access."
+    },
+    "pricing": {
+      "title": "Choose Your Dedicated Server",
+      "subtitle": "Select from our range of high-performance dedicated servers.",
+      "valueServers": "Value Dedicated Servers",
+      "valueDescription": "Affordable dedicated servers with great performance",
+      "customServers": "Custom Dedicated Servers",
+      "customDescription": "Customizable dedicated servers for specific requirements",
+      "gpuServers": "GPU Dedicated Servers",
+      "gpuDescription": "High-performance servers with dedicated GPUs"
+    },
+    "features": {
+      "title": "Server Features",
+      "subtitle": "Enterprise-grade hardware and premium features included with every server",
+      "enterpriseHardware": {
+        "title": "Enterprise Hardware",
+        "description": "Latest generation Intel Xeon or AMD EPYC processors with DDR4 ECC RAM."
+      },
+      "rootAccess": {
+        "title": "Full Root Access",
+        "description": "Complete control over your server with root/administrator access."
+      },
+      "raid": {
+        "title": "RAID Configuration",
+        "description": "Hardware RAID options for enhanced data protection and performance."
+      },
+      "ddosProtection": {
+        "title": "DDoS Protection",
+        "description": "Advanced DDoS mitigation to keep your services online."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Expert technical support available around the clock."
+      },
+      "network": {
+        "title": "Global Network",
+        "description": "10Gbps network with multiple tier-1 providers for optimal connectivity."
+      }
+    },
+    "cta": {
+      "title": "Ready to Get Started with Dedicated Hosting?",
+      "subtitle": "Deploy your high-performance dedicated server today."
+    }
+  },
+  "rdp": {
+    "common": {
+      "locations": {
+        "locations": "Locations: {locations}",
+        "ping": "Ping: {ping}",
+        "enterpriseSecurity": "Enterprise Security"
+      },
+      "pricing": {
+        "title": "{country} Private RDP Plans",
+        "description": "Choose the plan that fits your requirements"
+      },
+      "overview": {
+        "title": "Premium {country} Private RDP Solutions",
+        "description1": "Our {country} Private RDP solutions provide dedicated virtual machines with guaranteed resources, hosted in state-of-the-art data centers across {country}.",
+        "description2": "With full administrator access, you have complete control over your Windows environment, allowing you to install custom applications, configure services, and optimize performance according to your specific needs.",
+        "strategicLocations": {
+          "title": "Strategic {country} Locations",
+          "description": "Choose from multiple data center locations across {country}."
+        },
+        "lowLatency": {
+          "title": "Low Latency Connections",
+          "description": "Optimized network for minimal latency and smooth RDP experience."
+        },
+        "instantProvisioning": {
+          "title": "Instant Provisioning",
+          "description": "Get your Private RDP up and running in minutes."
+        }
+      },
+      "useCases": {
+        "title": "Perfect For",
+        "subtitle": "Our {country} Private RDP solutions are ideal for various use cases.",
+        "remoteWork": {
+          "title": "Remote Work",
+          "description": "Access your work environment from anywhere with a secure and reliable connection."
+        },
+        "development": {
+          "title": "Software Development",
+          "description": "Create a powerful development environment with all your tools and dependencies."
+        },
+        "business": {
+          "title": "Business Applications",
+          "description": "Run resource-intensive business applications without upgrading your local hardware."
+        },
+        "content": {
+          "title": "Content Creation",
+          "description": "Edit videos, render 3D models, and process large files with high-performance computing."
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started with {country} Private RDP?",
+        "subtitle": "Experience premium performance and reliability today."
+      }
+    },
+    "usa": {
+      "hero": {
+        "title": "Secure & High-Performance USA Private RDP",
+        "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+      }
+    },
+    "singapore": {
+      "hero": {
+        "title": "Secure & High-Performance Singapore Private RDP",
+        "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+      }
+    },
+    "germany": {
+      "hero": {
+        "title": "Secure & High-Performance Germany Private RDP",
+        "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+      }
+    },
+    "finland": {
+      "hero": {
+        "title": "Secure & High-Performance Finland Private RDP",
+        "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+      }
+    },
+    "uk": {
+      "hero": {
+        "title": "Secure & High-Performance UK Private RDP",
+        "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+      }
+    }
   }
 }

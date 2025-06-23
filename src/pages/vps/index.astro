@@ -6,6 +6,11 @@ import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import LocationCard from '../../components/LocationCard.astro';
 import { supabase } from '../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 
 // Fetch only Linux VPS plans (3 plans)
 const { data: linuxPlans, error: linuxError } = await supabase
@@ -37,7 +42,7 @@ const plans = linuxPlans?.map(plan => ({
     '24/7 Support',
     'Full Root Access'
   ],
-  ctaText: "Order Now",
+  ctaText: t.pricing.ctaText,
   ctaLink: plan.order_url,
   popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
@@ -127,36 +132,36 @@ const uniqueLocations = vpsLocations?.reduce((acc, location) => {
   return acc;
 }, []) || [];
 
-// Features data
+// Features data with translations
 const features = [
   {
-    title: "High-Performance SSDs",
-    description: "All VPS plans include SSD storage for faster data access and improved application performance.",
+    title: t.vps.index.features.ssdStorage.title,
+    description: t.vps.index.features.ssdStorage.description,
     icon: "fas fa-bolt"
   },
   {
-    title: "Dedicated Resources",
-    description: "Guaranteed CPU, RAM, and storage resources that are exclusively allocated to your VPS.",
+    title: t.vps.index.features.dedicatedResources.title,
+    description: t.vps.index.features.dedicatedResources.description,
     icon: "fas fa-microchip"
   },
   {
-    title: "Full Root Access",
-    description: "Complete control over your virtual server with root access and SSH capabilities.",
+    title: t.vps.index.features.rootAccess.title,
+    description: t.vps.index.features.rootAccess.description,
     icon: "fas fa-terminal"
   },
   {
-    title: "Instant Provisioning",
-    description: "Get your VPS up and running in minutes with our automated provisioning system.",
+    title: t.vps.index.features.instantProvisioning.title,
+    description: t.vps.index.features.instantProvisioning.description,
     icon: "fas fa-clock"
   },
   {
-    title: "99.9% Uptime Guarantee",
-    description: "Our robust infrastructure ensures your services remain online and accessible.",
+    title: t.vps.index.features.uptime.title,
+    description: t.vps.index.features.uptime.description,
     icon: "fas fa-chart-line"
   },
   {
-    title: "Scalable Resources",
-    description: "Easily upgrade your VPS resources as your business grows without any downtime.",
+    title: t.vps.index.features.scalable.title,
+    description: t.vps.index.features.scalable.description,
     icon: "fas fa-expand-arrows-alt"
   }
 ];
@@ -168,8 +173,8 @@ const features = [
 >
   <!-- Hero Section -->
   <Hero
-    title="Virtual Private Server Hosting"
-    subtitle="High-performance VPS solutions with dedicated resources and full root access."
+    title={t.vps.index.hero.title}
+    subtitle={t.vps.index.hero.subtitle}
     ctaText="View Pricing"
     ctaLink="#pricing"
     backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
@@ -181,15 +186,15 @@ const features = [
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
         <div class="flex items-center">
           <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Global Locations</span>
+          <span class="font-semibold">{t.vps.index.locations.globalLocations}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Low Latency Network</span>
+          <span class="font-semibold">{t.vps.index.locations.lowLatency}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Enterprise Security</span>
+          <span class="font-semibold">{t.vps.index.locations.enterpriseSecurity}</span>
         </div>
       </div>
     </div>
@@ -198,8 +203,8 @@ const features = [
   <!-- Pricing -->
   <section id="pricing" class="py-16 md:py-24">
     <PricingTable
-      title="Linux VPS Hosting Plans"
-      description="Choose the perfect Linux VPS plan for your needs"
+      title={t.vps.index.pricing.title}
+      description={t.vps.index.pricing.description}
       plans={plans}
     />
   </section>
@@ -208,8 +213,8 @@ const features = [
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">All Available Locations</h2>
-        <p class="text-xl text-gray-600">Deploy your VPS in strategic locations worldwide for optimal performance</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.vps.index.allLocations.title}</h2>
+        <p class="text-xl text-gray-600">{t.vps.index.allLocations.subtitle}</p>
       </div>
 
       {uniqueLocations.length > 0 ? (
@@ -230,8 +235,8 @@ const features = [
           <div class="text-gray-400 text-6xl mb-4">
             <i class="fas fa-globe"></i>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">Locations Coming Soon</h3>
-          <p class="text-gray-500">We're expanding our global network. Check back soon for more locations.</p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">{t.vps.index.allLocations.comingSoon}</h3>
+          <p class="text-gray-500">{t.vps.index.allLocations.comingSoonSubtitle}</p>
         </div>
       )}
     </div>
@@ -239,15 +244,15 @@ const features = [
 
   <!-- Features -->
   <FeaturesSection
-    title="VPS Features"
-    subtitle="Everything you need for a powerful virtual server experience"
+    title={t.vps.index.features.title}
+    subtitle={t.vps.index.features.subtitle}
     features={features}
   />
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Ready to Get Started?"
-    subtitle="Launch your high-performance VPS today."
+    title={t.vps.index.cta.title}
+    subtitle={t.vps.index.cta.subtitle}
     ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />
