@@ -78,6 +78,7 @@ interface Plan {
 
 interface Props {
   category: string;
+  osTypeFilter?: string;
 }
 
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
@@ -85,7 +86,7 @@ const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
 const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America'];
 const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
-export default function PlansManager({ category }: Props) {
+export default function PlansManager({ category, osTypeFilter }: Props) {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -104,7 +105,7 @@ export default function PlansManager({ category }: Props) {
 
   useEffect(() => {
     fetchPlans();
-  }, [category, selectedSubcategory, selectedLocation, selectedRegion]);
+  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -123,6 +124,11 @@ export default function PlansManager({ category }: Props) {
         .eq('category', category)
         .order('sort_order', { ascending: true });
 
+      // Add OS type filter for VPS plans
+      if (category === 'VPS' && osTypeFilter) {
+        query = query.eq('os_type', osTypeFilter);
+      }
+
       if (category === 'DEDICATED' && selectedSubcategory) {
         query = query.eq('subcategory', selectedSubcategory);
       }
@@ -131,7 +137,7 @@ export default function PlansManager({ category }: Props) {
         query = query.eq('location', selectedLocation);
       }
 
-      if (category === 'VPS' && selectedRegion) {
+      if (category === 'VPS' && selectedRegion && !osTypeFilter) {
         query = query.eq('region', selectedRegion);
       }
 
@@ -203,7 +209,7 @@ export default function PlansManager({ category }: Props) {
         region: category === 'VPS' ? (plan.region || selectedRegion) : null,
         location: category === 'RDP' ? selectedLocation : plan.location,
         available_locations: category === 'RDP' ? RDP_LOCATIONS : null,
-        os_type: plan.os_type || null,
+        os_type: osTypeFilter || plan.os_type || null,
         price_yearly: category === 'DEDICATED' ? (plan.price_monthly! * 12) : (plan.price_yearly || null),
         sale_price_monthly: plan.sale_enabled ? plan.sale_price_monthly : null,
         sale_price_yearly: plan.sale_enabled && category !== 'DEDICATED' ? plan.sale_price_yearly : null,
@@ -266,11 +272,13 @@ export default function PlansManager({ category }: Props) {
     );
   }
 
+  const displayTitle = osTypeFilter ? `${osTypeFilter} ${category} Plans` : `${category} Plans`;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <h2 className="text-2xl font-bold text-gray-900">{category} Plans</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{displayTitle}</h2>
           {category === 'DEDICATED' && (
             <div className="flex flex-wrap gap-2">
               {DEDICATED_CATEGORIES.map((cat) => (
@@ -305,7 +313,7 @@ export default function PlansManager({ category }: Props) {
               ))}
             </div>
           )}
-          {category === 'VPS' && (
+          {category === 'VPS' && !osTypeFilter && (
             <div className="flex flex-wrap gap-2">
               {VPS_REGIONS.map((region) => (
                 <button
@@ -358,7 +366,7 @@ export default function PlansManager({ category }: Props) {
             e.preventDefault();
             const formData = new FormData(e.target as HTMLFormElement);
             
-            const osTypeValue = formData.get('os_type') as string;
+            const osTypeValue = osTypeFilter || (formData.get('os_type') as string);
             const priceYearlyValue = formData.get('price_yearly') as string;
             const salePriceMonthlyValue = formData.get('sale_price_monthly') as string;
             const salePriceYearlyValue = formData.get('sale_price_yearly') as string;
@@ -515,16 +523,18 @@ export default function PlansManager({ category }: Props) {
                   />
                 )}
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">OS Type</label>
-                <input
-                  type="text"
-                  name="os_type"
-                  defaultValue={editingPlan?.os_type || ''}
-                  placeholder="e.g., Linux/Windows"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                />
-              </div>
+              {!osTypeFilter && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">OS Type</label>
+                  <input
+                    type="text"
+                    name="os_type"
+                    defaultValue={editingPlan?.os_type || ''}
+                    placeholder="e.g., Linux/Windows"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  />
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Price ($) *</label>
                 <input
@@ -744,6 +754,9 @@ export default function PlansManager({ category }: Props) {
                       <>
                         <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Region</th>
                         <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Type</th>
+                        {!osTypeFilter && (
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OS Type</th>
+                        )}
                       </>
                     )}
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specs</th>
@@ -759,7 +772,7 @@ export default function PlansManager({ category }: Props) {
                     <tr key={plan.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="font-medium text-gray-900">{plan.name}</div>
-                        {plan.os_type && (
+                        {plan.os_type && osTypeFilter && (
                           <div className="text-sm text-gray-500">{plan.os_type}</div>
                         )}
                       </td>
@@ -789,6 +802,11 @@ export default function PlansManager({ category }: Props) {
                               {plan.plan_type || 'Basic'}
                             </span>
                           </td>
+                          {!osTypeFilter && (
+                            <td className="px-6 py-4">
+                              <span className="text-sm text-gray-900">{plan.os_type || 'Not specified'}</span>
+                            </td>
+                          )}
                         </>
                       )}
                       <td className="px-6 py-4">

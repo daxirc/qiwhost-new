@@ -13,6 +13,8 @@ export default function Dashboard({ session }) {
 
   const menuItems = [
     { id: 'vps', label: 'VPS Plans', icon: 'fas fa-server' },
+    { id: 'linux-vps', label: 'Linux VPS Plans', icon: 'fab fa-linux' },
+    { id: 'windows-vps', label: 'Windows VPS Plans', icon: 'fab fa-windows' },
     { id: 'rdp', label: 'RDP Plans', icon: 'fas fa-desktop' },
     { id: 'dedicated', label: 'Dedicated Servers', icon: 'fas fa-hdd' },
     { id: 'logo', label: 'Site Logo', icon: 'fas fa-image' },
@@ -112,6 +114,10 @@ export default function Dashboard({ session }) {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             {activeTab === 'logo' ? (
               <LogoManager />
+            ) : activeTab === 'linux-vps' ? (
+              <PlansManager category="VPS" osTypeFilter="Linux" />
+            ) : activeTab === 'windows-vps' ? (
+              <PlansManager category="VPS" osTypeFilter="Windows" />
             ) : (
               <PlansManager category={activeTab.toUpperCase()} />
             )}
