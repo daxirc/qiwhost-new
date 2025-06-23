@@ -7,6 +7,13 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://qiwhost.com',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es', 'fr', 'de'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
   integrations: [tailwind(), react(), sitemap()],
   vite: {
     server: {

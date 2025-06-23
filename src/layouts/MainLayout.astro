@@ -2,6 +2,7 @@
 import NavBar from '../components/NavBar.astro';
 import Footer from '../components/Footer.astro';
 import SupportSection from '../components/SupportSection.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import '../styles/global.css';
 
 export interface Props {
@@ -25,7 +26,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={Astro.currentLocale || 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -117,11 +118,17 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
               </div>
             </div>
             
-            <!-- Live Chat Button -->
-            <button onclick="Tawk_API?.maximize()" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center">
-              <i class="fas fa-comments mr-2"></i>
-              Live Chat
-            </button>
+            <!-- Right Side: Language Switcher + Live Chat -->
+            <div class="flex items-center space-x-3">
+              <!-- Language Switcher -->
+              <LanguageSwitcher />
+              
+              <!-- Live Chat Button -->
+              <button onclick="Tawk_API?.maximize()" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium hover:bg-blue-100 transition-colors flex items-center">
+                <i class="fas fa-comments mr-2"></i>
+                Live Chat
+              </button>
+            </div>
           </div>
         </div>
       </div>
