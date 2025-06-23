@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Cloud Hosting & VPS Solutions",
+    "description": "QIW HOST provides high-performance VPS, dedicated servers, and private RDP solutions with 99.9% uptime guarantee and 24/7 support."
+  },
+  "hero": {
+    "title": "High-Performance Cloud Hosting Solutions",
+    "subtitle": "Powerful, reliable, and secure hosting infrastructure for businesses of all sizes.",
+    "ctaText": "Get Started",
+    "secondaryCtaText": "Learn More"
+  },
+  "trustIndicators": {
+    "uptime": "99.9% Uptime",
+    "security": "Enterprise Security",
+    "support": "24/7 Support",
+    "network": "Global Network"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Discover the perfect hosting solution for your business needs",
+    "vps": {
+      "title": "High-Performance VPS",
+      "description": "SSD-based virtual private servers with guaranteed resources and high-speed connections."
+    },
+    "dedicated": {
+      "title": "Dedicated Servers",
+      "description": "Powerful dedicated hardware with full root access and customizable configurations."
+    },
+    "rdp": {
+      "title": "Private RDP Solutions",
+      "description": "Secure Remote Desktop Protocol servers in multiple global locations."
+    },
+    "uptime": {
+      "title": "99.9% Uptime Guarantee",
+      "description": "Our infrastructure is designed for reliability with redundant systems."
+    },
+    "techSupport": {
+      "title": "24/7 Technical Support",
+      "description": "Expert technicians available around the clock to assist with any issues."
+    },
+    "globalNetwork": {
+      "title": "Global Network",
+      "description": "Data centers in strategic locations worldwide for optimal performance."
+    }
+  },
+  "whyChooseUs": {
+    "title": "Why Choose QIW HOST",
+    "description": "Since 2017, we've been providing exceptional hosting solutions to businesses worldwide. Our commitment to reliability, performance, and customer satisfaction sets us apart.",
+    "enterpriseInfra": {
+      "title": "Enterprise-Grade Infrastructure",
+      "description": "State-of-the-art data centers with redundant power, cooling, and network connections."
+    },
+    "expertSupport": {
+      "title": "Expert Technical Support",
+      "description": "Our experienced team is available 24/7 to assist with any technical challenges."
+    },
+    "transparentPricing": {
+      "title": "Transparent Pricing",
+      "description": "No hidden fees or surprise charges. Pay only for what you need."
+    },
+    "learnMoreCta": "Learn More About Us"
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "description": "Choose the plan that works best for your business needs",
+    "starterVps": {
+      "name": "Starter VPS",
+      "description": "Perfect for small websites and applications",
+      "features": [
+        "1 vCPU",
+        "2GB RAM",
+        "30GB SSD Storage",
+        "1TB Bandwidth",
+        "24/7 Support"
+      ]
+    },
+    "businessVps": {
+      "name": "Business VPS",
+      "description": "Ideal for growing businesses and e-commerce",
+      "features": [
+        "2 vCPU",
+        "4GB RAM",
+        "60GB SSD Storage",
+        "2TB Bandwidth",
+        "24/7 Priority Support",
+        "Free SSL Certificate"
+      ]
+    },
+    "enterpriseVps": {
+      "name": "Enterprise VPS",
+      "description": "For high-traffic sites and resource-intensive applications",
+      "features": [
+        "4 vCPU",
+        "8GB RAM",
+        "120GB SSD Storage",
+        "4TB Bandwidth",
+        "24/7 Priority Support",
+        "Free SSL Certificate",
+        "Daily Backups"
+      ]
+    },
+    "ctaText": "Order Now"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to the most common questions about our services.",
+    "questions": [
+      {
+        "question": "What is the difference between VPS and Dedicated Servers?",
+        "answer": "A VPS (Virtual Private Server) is a virtualized server that shares physical hardware with other VPSs, but has dedicated resources allocated to it. A Dedicated Server is an entire physical machine dedicated solely to your use, offering maximum performance and control."
+      },
+      {
+        "question": "How secure are your Private RDP solutions?",
+        "answer": "Our Private RDP solutions implement multiple security measures including enterprise-grade encryption, network isolation, custom firewall rules, and regular security updates. We also offer two-factor authentication and IP restrictions for additional security."
+      },
+      {
+        "question": "Do you offer managed services?",
+        "answer": "Yes, we provide managed services for all our hosting solutions. Our team can handle system updates, security patches, monitoring, backups, and troubleshooting, allowing you to focus on your business instead of server management."
+      },
+      {
+        "question": "What is your uptime guarantee?",
+        "answer": "We guarantee 99.9% uptime for all our services. In the rare event that we don't meet this guarantee, you'll receive credits according to our Service Level Agreement (SLA)."
+      },
+      {
+        "question": "Can I upgrade my plan as my needs grow?",
+        "answer": "Absolutely! All our plans are designed to scale with your business. You can easily upgrade your resources through our client portal without any service interruption or data loss."
+      }
+    ]
+  },
+  "ctaBanner": {
+    "title": "Ready to Get Started?",
+    "subtitle": "Experience the power of QIW HOST's hosting solutions today.",
+    "ctaText": "Get Started Now"
+  }
+}

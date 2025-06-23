@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Cloud-Hosting & VPS-Lösungen",
+    "description": "QIW HOST bietet hochleistungsfähige VPS, dedizierte Server und private RDP-Lösungen mit 99,9% Verfügbarkeitsgarantie und 24/7-Support."
+  },
+  "hero": {
+    "title": "Hochleistungs-Cloud-Hosting-Lösungen",
+    "subtitle": "Leistungsstarke, zuverlässige und sichere Hosting-Infrastruktur für Unternehmen jeder Größe.",
+    "ctaText": "Loslegen",
+    "secondaryCtaText": "Mehr Erfahren"
+  },
+  "trustIndicators": {
+    "uptime": "99,9% Verfügbarkeit",
+    "security": "Unternehmenssicherheit",
+    "support": "24/7 Support",
+    "network": "Globales Netzwerk"
+  },
+  "services": {
+    "title": "Unsere Dienstleistungen",
+    "subtitle": "Entdecken Sie die perfekte Hosting-Lösung für Ihre Geschäftsanforderungen",
+    "vps": {
+      "title": "Hochleistungs-VPS",
+      "description": "SSD-basierte virtuelle private Server mit garantierten Ressourcen und Hochgeschwindigkeitsverbindungen."
+    },
+    "dedicated": {
+      "title": "Dedizierte Server",
+      "description": "Leistungsstarke dedizierte Hardware mit vollständigem Root-Zugriff und anpassbaren Konfigurationen."
+    },
+    "rdp": {
+      "title": "Private RDP-Lösungen",
+      "description": "Sichere Remote Desktop Protocol-Server an mehreren globalen Standorten."
+    },
+    "uptime": {
+      "title": "99,9% Verfügbarkeitsgarantie",
+      "description": "Unsere Infrastruktur ist für Zuverlässigkeit mit redundanten Systemen ausgelegt."
+    },
+    "techSupport": {
+      "title": "24/7 Technischer Support",
+      "description": "Expertentechniker stehen rund um die Uhr zur Verfügung, um bei allen Problemen zu helfen."
+    },
+    "globalNetwork": {
+      "title": "Globales Netzwerk",
+      "description": "Rechenzentren an strategischen Standorten weltweit für optimale Leistung."
+    }
+  },
+  "whyChooseUs": {
+    "title": "Warum QIW HOST Wählen",
+    "description": "Seit 2017 bieten wir außergewöhnliche Hosting-Lösungen für Unternehmen weltweit. Unser Engagement für Zuverlässigkeit, Leistung und Kundenzufriedenheit zeichnet uns aus.",
+    "enterpriseInfra": {
+      "title": "Infrastruktur auf Unternehmensebene",
+      "description": "Hochmoderne Rechenzentren mit redundanter Stromversorgung, Kühlung und Netzwerkverbindungen."
+    },
+    "expertSupport": {
+      "title": "Experten-Technischer Support",
+      "description": "Unser erfahrenes Team steht 24/7 zur Verfügung, um bei allen technischen Herausforderungen zu helfen."
+    },
+    "transparentPricing": {
+      "title": "Transparente Preisgestaltung",
+      "description": "Keine versteckten Gebühren oder Überraschungskosten. Zahlen Sie nur für das, was Sie benötigen."
+    },
+    "learnMoreCta": "Mehr Über Uns Erfahren"
+  },
+  "pricing": {
+    "title": "Einfache, Transparente Preisgestaltung",
+    "description": "Wählen Sie den Plan, der am besten für Ihre Geschäftsanforderungen funktioniert",
+    "starterVps": {
+      "name": "Starter VPS",
+      "description": "Perfekt für kleine Websites und Anwendungen",
+      "features": [
+        "1 vCPU",
+        "2GB RAM",
+        "30GB SSD-Speicher",
+        "1TB Bandbreite",
+        "24/7 Support"
+      ]
+    },
+    "businessVps": {
+      "name": "Business VPS",
+      "description": "Ideal für wachsende Unternehmen und E-Commerce",
+      "features": [
+        "2 vCPU",
+        "4GB RAM",
+        "60GB SSD-Speicher",
+        "2TB Bandbreite",
+        "24/7 Priority Support",
+        "Kostenloses SSL-Zertifikat"
+      ]
+    },
+    "enterpriseVps": {
+      "name": "Enterprise VPS",
+      "description": "Für hochfrequentierte Websites und ressourcenintensive Anwendungen",
+      "features": [
+        "4 vCPU",
+        "8GB RAM",
+        "120GB SSD-Speicher",
+        "4TB Bandbreite",
+        "24/7 Priority Support",
+        "Kostenloses SSL-Zertifikat",
+        "Tägliche Backups"
+      ]
+    },
+    "ctaText": "Jetzt Bestellen"
+  },
+  "faq": {
+    "title": "Häufig Gestellte Fragen",
+    "subtitle": "Finden Sie Antworten auf die häufigsten Fragen zu unseren Dienstleistungen.",
+    "questions": [
+      {
+        "question": "Was ist der Unterschied zwischen VPS und dedizierten Servern?",
+        "answer": "Ein VPS (Virtual Private Server) ist ein virtualisierter Server, der physische Hardware mit anderen VPS teilt, aber dedizierte Ressourcen zugewiesen bekommt. Ein dedizierter Server ist eine komplette physische Maschine, die ausschließlich für Ihre Nutzung bestimmt ist und maximale Leistung und Kontrolle bietet."
+      },
+      {
+        "question": "Wie sicher sind Ihre privaten RDP-Lösungen?",
+        "answer": "Unsere privaten RDP-Lösungen implementieren mehrere Sicherheitsmaßnahmen einschließlich Verschlüsselung auf Unternehmensebene, Netzwerkisolation, benutzerdefinierte Firewall-Regeln und regelmäßige Sicherheitsupdates. Wir bieten auch Zwei-Faktor-Authentifizierung und IP-Beschränkungen für zusätzliche Sicherheit."
+      },
+      {
+        "question": "Bieten Sie verwaltete Dienste an?",
+        "answer": "Ja, wir bieten verwaltete Dienste für alle unsere Hosting-Lösungen. Unser Team kann Systemupdates, Sicherheitspatches, Überwachung, Backups und Fehlerbehebung handhaben, sodass Sie sich auf Ihr Geschäft konzentrieren können anstatt auf die Serververwaltung."
+      },
+      {
+        "question": "Was ist Ihre Verfügbarkeitsgarantie?",
+        "answer": "Wir garantieren 99,9% Verfügbarkeit für alle unsere Dienste. In dem seltenen Fall, dass wir diese Garantie nicht erfüllen, erhalten Sie Gutschriften gemäß unserem Service Level Agreement (SLA)."
+      },
+      {
+        "question": "Kann ich meinen Plan upgraden, wenn meine Anforderungen wachsen?",
+        "answer": "Absolut! Alle unsere Pläne sind darauf ausgelegt, mit Ihrem Unternehmen zu skalieren. Sie können Ihre Ressourcen einfach über unser Kundenportal upgraden ohne Serviceunterbrechung oder Datenverlust."
+      }
+    ]
+  },
+  "ctaBanner": {
+    "title": "Bereit Loszulegen?",
+    "subtitle": "Erleben Sie die Kraft der Hosting-Lösungen von QIW HOST heute.",
+    "ctaText": "Jetzt Loslegen"
+  }
+}

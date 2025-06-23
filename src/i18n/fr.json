@@ -1,0 +1,135 @@
+{
+  "meta": {
+    "title": "Solutions d'Hébergement Cloud et VPS",
+    "description": "QIW HOST fournit des VPS haute performance, des serveurs dédiés et des solutions RDP privées avec une garantie de disponibilité de 99,9% et un support 24/7."
+  },
+  "hero": {
+    "title": "Solutions d'Hébergement Cloud Haute Performance",
+    "subtitle": "Infrastructure d'hébergement puissante, fiable et sécurisée pour les entreprises de toutes tailles.",
+    "ctaText": "Commencer",
+    "secondaryCtaText": "En Savoir Plus"
+  },
+  "trustIndicators": {
+    "uptime": "99,9% de Disponibilité",
+    "security": "Sécurité d'Entreprise",
+    "support": "Support 24/7",
+    "network": "Réseau Global"
+  },
+  "services": {
+    "title": "Nos Services",
+    "subtitle": "Découvrez la solution d'hébergement parfaite pour les besoins de votre entreprise",
+    "vps": {
+      "title": "VPS Haute Performance",
+      "description": "Serveurs privés virtuels basés sur SSD avec des ressources garanties et des connexions haut débit."
+    },
+    "dedicated": {
+      "title": "Serveurs Dédiés",
+      "description": "Matériel dédié puissant avec accès root complet et configurations personnalisables."
+    },
+    "rdp": {
+      "title": "Solutions RDP Privées",
+      "description": "Serveurs de Protocole de Bureau à Distance sécurisés dans plusieurs emplacements mondiaux."
+    },
+    "uptime": {
+      "title": "Garantie de 99,9% de Disponibilité",
+      "description": "Notre infrastructure est conçue pour la fiabilité avec des systèmes redondants."
+    },
+    "techSupport": {
+      "title": "Support Technique 24/7",
+      "description": "Techniciens experts disponibles 24h/24 pour aider avec tous les problèmes."
+    },
+    "globalNetwork": {
+      "title": "Réseau Global",
+      "description": "Centres de données dans des emplacements stratégiques dans le monde entier pour des performances optimales."
+    }
+  },
+  "whyChooseUs": {
+    "title": "Pourquoi Choisir QIW HOST",
+    "description": "Depuis 2017, nous fournissons des solutions d'hébergement exceptionnelles aux entreprises du monde entier. Notre engagement envers la fiabilité, les performances et la satisfaction client nous distingue.",
+    "enterpriseInfra": {
+      "title": "Infrastructure de Niveau Entreprise",
+      "description": "Centres de données de pointe avec alimentation, refroidissement et connexions réseau redondants."
+    },
+    "expertSupport": {
+      "title": "Support Technique Expert",
+      "description": "Notre équipe expérimentée est disponible 24/7 pour aider avec tous les défis techniques."
+    },
+    "transparentPricing": {
+      "title": "Tarification Transparente",
+      "description": "Pas de frais cachés ou de charges surprises. Payez seulement pour ce dont vous avez besoin."
+    },
+    "learnMoreCta": "En Savoir Plus Sur Nous"
+  },
+  "pricing": {
+    "title": "Tarification Simple et Transparente",
+    "description": "Choisissez le plan qui fonctionne le mieux pour les besoins de votre entreprise",
+    "starterVps": {
+      "name": "VPS Débutant",
+      "description": "Parfait pour les petits sites web et applications",
+      "features": [
+        "1 vCPU",
+        "2GB RAM",
+        "30GB Stockage SSD",
+        "1TB Bande Passante",
+        "Support 24/7"
+      ]
+    },
+    "businessVps": {
+      "name": "VPS Business",
+      "description": "Idéal pour les entreprises en croissance et le commerce électronique",
+      "features": [
+        "2 vCPU",
+        "4GB RAM",
+        "60GB Stockage SSD",
+        "2TB Bande Passante",
+        "Support Prioritaire 24/7",
+        "Certificat SSL Gratuit"
+      ]
+    },
+    "enterpriseVps": {
+      "name": "VPS Enterprise",
+      "description": "Pour les sites à fort trafic et les applications gourmandes en ressources",
+      "features": [
+        "4 vCPU",
+        "8GB RAM",
+        "120GB Stockage SSD",
+        "4TB Bande Passante",
+        "Support Prioritaire 24/7",
+        "Certificat SSL Gratuit",
+        "Sauvegardes Quotidiennes"
+      ]
+    },
+    "ctaText": "Commander Maintenant"
+  },
+  "faq": {
+    "title": "Questions Fréquemment Posées",
+    "subtitle": "Trouvez des réponses aux questions les plus courantes sur nos services.",
+    "questions": [
+      {
+        "question": "Quelle est la différence entre VPS et Serveurs Dédiés ?",
+        "answer": "Un VPS (Serveur Privé Virtuel) est un serveur virtualisé qui partage le matériel physique avec d'autres VPS, mais a des ressources dédiées qui lui sont allouées. Un Serveur Dédié est une machine physique entière dédiée exclusivement à votre usage, offrant des performances et un contrôle maximum."
+      },
+      {
+        "question": "À quel point vos solutions RDP Privées sont-elles sécurisées ?",
+        "answer": "Nos solutions RDP Privées implémentent plusieurs mesures de sécurité incluant le chiffrement de niveau entreprise, l'isolation réseau, des règles de pare-feu personnalisées et des mises à jour de sécurité régulières. Nous offrons également l'authentification à deux facteurs et les restrictions IP pour une sécurité supplémentaire."
+      },
+      {
+        "question": "Offrez-vous des services gérés ?",
+        "answer": "Oui, nous fournissons des services gérés pour toutes nos solutions d'hébergement. Notre équipe peut gérer les mises à jour système, les correctifs de sécurité, la surveillance, les sauvegardes et le dépannage, vous permettant de vous concentrer sur votre entreprise plutôt que sur la gestion des serveurs."
+      },
+      {
+        "question": "Quelle est votre garantie de disponibilité ?",
+        "answer": "Nous garantissons 99,9% de disponibilité pour tous nos services. Dans le rare cas où nous ne respecterions pas cette garantie, vous recevrez des crédits selon notre Accord de Niveau de Service (SLA)."
+      },
+      {
+        "question": "Puis-je mettre à niveau mon plan à mesure que mes besoins grandissent ?",
+        "answer": "Absolument ! Tous nos plans sont conçus pour évoluer avec votre entreprise. Vous pouvez facilement mettre à niveau vos ressources via notre portail client sans interruption de service ou perte de données."
+      }
+    ]
+  },
+  "ctaBanner": {
+    "title": "Prêt à Commencer ?",
+    "subtitle": "Découvrez la puissance des solutions d'hébergement de QIW HOST aujourd'hui.",
+    "ctaText": "Commencer Maintenant"
+  }
+}
