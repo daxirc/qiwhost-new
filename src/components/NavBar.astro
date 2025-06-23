@@ -2,6 +2,11 @@
   // Navigation bar component
 import { supabase } from '../lib/supabase';
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getTranslations, getCurrentLocale } from '../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -115,7 +120,7 @@ const currentLocale = Astro.currentLocale || 'en';
         <!-- Menu Items -->
         <div class="flex items-center space-x-2">
           <!-- Domains -->
-          <a href={getRelativeLocaleUrl(currentLocale, '/domains')} class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.domains)} class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
             <i class="fas fa-globe mr-1.5"></i>
             <span class="font-semibold">Domains</span>
           </a>
@@ -131,11 +136,11 @@ const currentLocale = Astro.currentLocale || 'en';
             </button>
             <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
               <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href={getRelativeLocaleUrl(currentLocale, '/web-hosting/shared')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingShared)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <i class="fas fa-share-alt mr-2 text-primary-500"></i>
                   Shared Hosting
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/web-hosting/wordpress')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingWordpress)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <i class="fab fa-wordpress mr-2 text-primary-500"></i>
                   WordPress Hosting
                 </a>
@@ -154,15 +159,15 @@ const currentLocale = Astro.currentLocale || 'en';
             </button>
             <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
               <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href={getRelativeLocaleUrl(currentLocale, '/vps')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.vps)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <i class="fas fa-server mr-2 text-primary-500"></i>
                   VPS Overview
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/vps/windows')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsWindows)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <i class="fab fa-windows mr-2 text-primary-500"></i>
                   Windows VPS
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/vps/linux')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsLinux)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <i class="fab fa-linux mr-2 text-primary-500"></i>
                   Linux VPS
                 </a>
@@ -171,7 +176,7 @@ const currentLocale = Astro.currentLocale || 'en';
           </div>
 
           <!-- Dedicated Servers -->
-          <a href={getRelativeLocaleUrl(currentLocale, '/dedicated-servers')} class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.dedicatedServers)} class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm">
             <i class="fas fa-hdd mr-1.5"></i>
             <span class="font-semibold">Dedicated Servers</span>
           </a>
@@ -187,23 +192,23 @@ const currentLocale = Astro.currentLocale || 'en';
             </button>
             <div class="absolute left-0 mt-1 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
               <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href={getRelativeLocaleUrl(currentLocale, '/rdp/usa')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpUsa)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <img src="https://flagcdn.com/us.svg" width="20" alt="USA Flag" class="flag-icon mr-2">
                   USA Private RDP
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/rdp/singapore')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpSingapore)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <img src="https://flagcdn.com/sg.svg" width="20" alt="Singapore Flag" class="flag-icon mr-2">
                   Singapore Private RDP
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/rdp/germany')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpGermany)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <img src="https://flagcdn.com/de.svg" width="20" alt="Germany Flag" class="flag-icon mr-2">
                   Germany Private RDP
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/rdp/finland')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpFinland)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <img src="https://flagcdn.com/fi.svg" width="20" alt="Finland Flag" class="flag-icon mr-2">
                   Finland Private RDP
                 </a>
-                <a href={getRelativeLocaleUrl(currentLocale, '/rdp/uk')} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpUk)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
                   <img src="https://flagcdn.com/gb.svg" width="20" alt="UK Flag" class="flag-icon mr-2">
                   UK Private RDP
                 </a>
@@ -262,7 +267,7 @@ const currentLocale = Astro.currentLocale || 'en';
                   <!-- View All Locations Link -->
                   <div class="border-t border-gray-100 mt-2 pt-2">
                     <a 
-                      href={getRelativeLocaleUrl(currentLocale, '/vps')}
+                      href={getRelativeLocaleUrl(currentLocale, t.paths.vps)}
                       class="flex items-center px-4 py-2 text-sm text-primary-600 hover:bg-primary-50 transition-colors font-medium"
                     >
                       <i class="fas fa-arrow-right mr-2"></i>
@@ -310,7 +315,7 @@ const currentLocale = Astro.currentLocale || 'en';
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="mobile-menu-container lg:hidden bg-white shadow-md">
     <div class="py-4 space-y-2">
-      <a href={getRelativeLocaleUrl(currentLocale, '/domains')} class="block py-2 text-gray-700 hover:text-primary-600">
+      <a href={getRelativeLocaleUrl(currentLocale, t.paths.domains)} class="block py-2 text-gray-700 hover:text-primary-600">
         <i class="fas fa-globe mr-2 text-primary-500"></i>
         Domains
       </a>
@@ -326,8 +331,8 @@ const currentLocale = Astro.currentLocale || 'en';
           </svg>
         </summary>
         <div class="ml-6 mt-2 space-y-2">
-          <a href={getRelativeLocaleUrl(currentLocale, '/web-hosting/shared')} class="block text-sm text-gray-700 hover:underline">Shared Hosting</a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/web-hosting/wordpress')} class="block text-sm text-gray-700 hover:underline">WordPress Hosting</a>
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingShared)} class="block text-sm text-gray-700 hover:underline">Shared Hosting</a>
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingWordpress)} class="block text-sm text-gray-700 hover:underline">WordPress Hosting</a>
         </div>
       </details>
 
@@ -342,13 +347,13 @@ const currentLocale = Astro.currentLocale || 'en';
           </svg>
         </summary>
         <div class="ml-6 mt-2 space-y-2">
-          <a href={getRelativeLocaleUrl(currentLocale, '/vps')} class="block text-sm text-gray-700 hover:underline">VPS Overview</a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/vps/windows')} class="block text-sm text-gray-700 hover:underline">Windows VPS</a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/vps/linux')} class="block text-sm text-gray-700 hover:underline">Linux VPS</a>
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.vps)} class="block text-sm text-gray-700 hover:underline">VPS Overview</a>
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsWindows)} class="block text-sm text-gray-700 hover:underline">Windows VPS</a>
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsLinux)} class="block text-sm text-gray-700 hover:underline">Linux VPS</a>
         </div>
       </details>
 
-      <a href={getRelativeLocaleUrl(currentLocale, '/dedicated-servers')} class="block py-2 text-gray-700 hover:text-primary-600">
+      <a href={getRelativeLocaleUrl(currentLocale, t.paths.dedicatedServers)} class="block py-2 text-gray-700 hover:text-primary-600">
         <i class="fas fa-hdd mr-2 text-primary-500"></i>
         Dedicated Servers
       </a>
@@ -364,23 +369,23 @@ const currentLocale = Astro.currentLocale || 'en';
           </svg>
         </summary>
         <div class="ml-6 mt-2 space-y-2">
-          <a href={getRelativeLocaleUrl(currentLocale, '/rdp/usa')} class="flex items-center text-sm text-gray-700 hover:underline">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpUsa)} class="flex items-center text-sm text-gray-700 hover:underline">
             <img src="https://flagcdn.com/us.svg" width="16" alt="USA Flag" class="flag-icon mr-2">
             USA
           </a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/rdp/singapore')} class="flex items-center text-sm text-gray-700 hover:underline">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpSingapore)} class="flex items-center text-sm text-gray-700 hover:underline">
             <img src="https://flagcdn.com/sg.svg" width="16" alt="Singapore Flag" class="flag-icon mr-2">
             Singapore
           </a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/rdp/germany')} class="flex items-center text-sm text-gray-700 hover:underline">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpGermany)} class="flex items-center text-sm text-gray-700 hover:underline">
             <img src="https://flagcdn.com/de.svg" width="16" alt="Germany Flag" class="flag-icon mr-2">
             Germany
           </a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/rdp/finland')} class="flex items-center text-sm text-gray-700 hover:underline">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpFinland)} class="flex items-center text-sm text-gray-700 hover:underline">
             <img src="https://flagcdn.com/fi.svg" width="16" alt="Finland Flag" class="flag-icon mr-2">
             Finland
           </a>
-          <a href={getRelativeLocaleUrl(currentLocale, '/rdp/uk')} class="flex items-center text-sm text-gray-700 hover:underline">
+          <a href={getRelativeLocaleUrl(currentLocale, t.paths.rdpUk)} class="flex items-center text-sm text-gray-700 hover:underline">
             <img src="https://flagcdn.com/gb.svg" width="16" alt="UK Flag" class="flag-icon mr-2">
             UK
           </a>

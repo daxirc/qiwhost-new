@@ -3,6 +3,20 @@
     "title": "Cloud-Hosting & VPS-Lösungen",
     "description": "QIW HOST bietet hochleistungsfähige VPS, dedizierte Server und private RDP-Lösungen mit 99,9% Verfügbarkeitsgarantie und 24/7-Support."
   },
+  "paths": {
+    "dedicatedServers": "/dedicated-servers",
+    "vps": "/vps",
+    "vpsLinux": "/vps/linux",
+    "vpsWindows": "/vps/windows",
+    "rdpUsa": "/rdp/usa",
+    "rdpSingapore": "/rdp/singapore",
+    "rdpGermany": "/rdp/germany",
+    "rdpFinland": "/rdp/finland",
+    "rdpUk": "/rdp/uk",
+    "domains": "/domains",
+    "webHostingShared": "/web-hosting/shared",
+    "webHostingWordpress": "/web-hosting/wordpress"
+  },
   "hero": {
     "title": "Hochleistungs-Cloud-Hosting-Lösungen",
     "subtitle": "Leistungsstarke, zuverlässige und sichere Hosting-Infrastruktur für Unternehmen jeder Größe.",

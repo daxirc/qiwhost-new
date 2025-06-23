@@ -3,6 +3,20 @@
     "title": "Soluciones de Hosting en la Nube y VPS",
     "description": "QIW HOST proporciona VPS de alto rendimiento, servidores dedicados y soluciones RDP privadas con garantía de tiempo de actividad del 99.9% y soporte 24/7."
   },
+  "paths": {
+    "dedicatedServers": "/dedicated-servers",
+    "vps": "/vps",
+    "vpsLinux": "/vps/linux",
+    "vpsWindows": "/vps/windows",
+    "rdpUsa": "/rdp/usa",
+    "rdpSingapore": "/rdp/singapore",
+    "rdpGermany": "/rdp/germany",
+    "rdpFinland": "/rdp/finland",
+    "rdpUk": "/rdp/uk",
+    "domains": "/domains",
+    "webHostingShared": "/web-hosting/shared",
+    "webHostingWordpress": "/web-hosting/wordpress"
+  },
   "hero": {
     "title": "Soluciones de Hosting en la Nube de Alto Rendimiento",
     "subtitle": "Infraestructura de hosting potente, confiable y segura para empresas de todos los tamaños.",
