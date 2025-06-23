@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import SupportSection from '../components/SupportSection.astro';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import '../styles/global.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 export interface Props {
   title: string;
@@ -23,6 +24,32 @@ const {
 
 // Generate canonical URL if not provided
 const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
+
+// Define all supported locales
+const supportedLocales = ['en', 'es', 'fr', 'de'];
+
+// Get current path without locale prefix
+const currentPath = Astro.url.pathname.replace(/^\/(es|fr|de)/, '') || '/';
+
+// Generate hreflang URLs for all locales
+const hreflangUrls = supportedLocales.map(locale => {
+  let url;
+  if (locale === 'en') {
+    // For English, use the root path without prefix
+    url = currentPath === '/' ? '/' : currentPath;
+  } else {
+    // For other languages, use the locale prefix
+    url = locale + currentPath;
+  }
+  
+  // Ensure URL is absolute by adding site origin
+  const absoluteUrl = new URL(url, Astro.site).href;
+  
+  return {
+    locale,
+    url: absoluteUrl
+  };
+});
 ---
 
 <!doctype html>
@@ -43,6 +70,12 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonical} />
+    
+    <!-- Hreflang Tags -->
+    {hreflangUrls.map(({ locale, url }) => (
+      <link rel="alternate" hreflang={locale} href={url} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={hreflangUrls.find(item => item.locale === 'en')?.url} />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
