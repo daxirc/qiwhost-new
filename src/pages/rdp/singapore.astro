@@ -6,6 +6,15 @@ import CTABanner from '../../components/CTABanner.astro';
 import { supabase } from '../../lib/supabase';
 import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
+export async function getStaticPaths() {
+  return [
+    { params: { locale: undefined } }, // Default locale (en)
+    { params: { locale: 'es' } },
+    { params: { locale: 'fr' } },
+    { params: { locale: 'de' } }
+  ];
+}
+
 // Get translations for current locale
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);

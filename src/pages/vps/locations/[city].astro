@@ -83,15 +83,37 @@ export async function getStaticPaths() {
     return acc;
   }, []);
 
-  return uniqueLocations.map(location => ({
-    params: { city: location.slug },
-    props: { 
-      cityName: location.location,
-      region: location.region,
-      flagIcon: location.flag_icon,
-      pageDescription: location.page_description
-    }
-  }));
+  // Generate paths for each location and locale
+  const paths = [];
+  const locales = ['en', 'es', 'fr', 'de'];
+  
+  uniqueLocations.forEach(location => {
+    // Default locale (en) - no locale prefix
+    paths.push({
+      params: { city: location.slug, locale: undefined },
+      props: { 
+        cityName: location.location,
+        region: location.region,
+        flagIcon: location.flag_icon,
+        pageDescription: location.page_description
+      }
+    });
+    
+    // Other locales
+    locales.filter(l => l !== 'en').forEach(locale => {
+      paths.push({
+        params: { city: location.slug, locale },
+        props: { 
+          cityName: location.location,
+          region: location.region,
+          flagIcon: location.flag_icon,
+          pageDescription: location.page_description
+        }
+      });
+    });
+  });
+
+  return paths;
 }
 
 const { city } = Astro.params;
