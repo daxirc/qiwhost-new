@@ -20,7 +20,7 @@ export default defineConfig({
       host: true,
       hmr: {
         overlay: false,
-        timeout: 300000,
+        timeout: 600000,
       },
     },
     define: {
