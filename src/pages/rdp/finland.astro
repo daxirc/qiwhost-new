@@ -4,6 +4,11 @@ import Hero from '../../components/Hero.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import { supabase } from '../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -45,7 +50,7 @@ const plans = rdpPlans?.map(plan => ({
     'Finland Location',
     '24/7 Support'
   ],
-  ctaText: "Order Now",
+  ctaText: t.pricing.ctaText,
   ctaLink: plan.order_url,
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
@@ -63,65 +68,43 @@ const country = {
   ping: "< 20ms from Northern Europe"
 };
 
-// Features data
-const features = [
-  {
-    title: "100% Resource Isolation",
-    description: "Dedicated CPU, RAM, and storage resources that are never shared or oversold.",
-    icon: "fas fa-layer-group"
-  },
-  {
-    title: "Administrator Access",
-    description: "Full administrator privileges to install software and customize your environment.",
-    icon: "fas fa-user-shield"
-  },
-  {
-    title: "SSD Storage",
-    description: "Fast SSD storage for improved application performance and responsiveness.",
-    icon: "fas fa-hdd"
-  },
-  {
-    title: "99.9% Uptime Guarantee",
-    description: "Our infrastructure ensures your RDP service remains accessible and reliable.",
-    icon: "fas fa-chart-line"
-  },
-  {
-    title: "Secure Connection",
-    description: "Enterprise-grade encryption and security measures to protect your data.",
-    icon: "fas fa-lock"
-  },
-  {
-    title: "24/7 Support",
-    description: "Technical assistance available around the clock to help with any issues.",
-    icon: "fas fa-headset"
-  }
-];
-
-// Use cases
+// Use cases with translations
 const useCases = [
   {
-    title: "Remote Work",
-    description: "Access your work environment from anywhere with a secure and reliable connection.",
+    title: t.rdp.common.useCases.remoteWork.title,
+    description: t.rdp.common.useCases.remoteWork.description,
     icon: "fas fa-laptop-house"
   },
   {
-    title: "Software Development",
-    description: "Create a powerful development environment with all your tools and dependencies.",
+    title: t.rdp.common.useCases.development.title,
+    description: t.rdp.common.useCases.development.description,
     icon: "fas fa-code"
   },
   {
-    title: "Business Applications",
-    description: "Run resource-intensive business applications without upgrading your local hardware.",
+    title: t.rdp.common.useCases.business.title,
+    description: t.rdp.common.useCases.business.description,
     icon: "fas fa-briefcase"
   },
   {
-    title: "Content Creation",
-    description: "Edit videos, render 3D models, and process large files with high-performance computing.",
+    title: t.rdp.common.useCases.content.title,
+    description: t.rdp.common.useCases.content.description,
     icon: "fas fa-photo-video"
   }
 ];
 
 const flagImageUrl = getFlagImageUrl(country.flag);
+
+// Create translated strings with country name replacement
+const pricingTitle = t.rdp.common.pricing.title.replace('{country}', country.name);
+const overviewTitle = t.rdp.common.overview.title.replace('{country}', country.name);
+const overviewDescription1 = t.rdp.common.overview.description1.replace('{country}', country.name);
+const overviewDescription2 = t.rdp.common.overview.description2;
+const strategicLocationsTitle = t.rdp.common.overview.strategicLocations.title.replace('{country}', country.name);
+const strategicLocationsDescription = t.rdp.common.overview.strategicLocations.description.replace('{country}', country.name);
+const useCasesSubtitle = t.rdp.common.useCases.subtitle.replace('{country}', country.name);
+const ctaTitle = t.rdp.common.cta.title.replace('{country}', country.name);
+const locationsText = t.rdp.common.locations.locations.replace('{locations}', country.locations.join(", "));
+const pingText = t.rdp.common.locations.ping.replace('{ping}', country.ping);
 ---
 
 <Layout 
@@ -130,8 +113,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
 >
   <!-- Hero Section -->
   <Hero
-    title={`Secure & High-Performance ${country.name} Private RDP`}
-    subtitle="Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
+    title={t.rdp.finland.hero.title}
+    subtitle={t.rdp.finland.hero.subtitle}
     ctaText="View Pricing"
     ctaLink="#pricing"
     backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
@@ -143,15 +126,15 @@ const flagImageUrl = getFlagImageUrl(country.flag);
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
         <div class="flex items-center">
           <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Locations: {country.locations.join(", ")}</span>
+          <span class="font-semibold">{locationsText}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Ping: {country.ping}</span>
+          <span class="font-semibold">{pingText}</span>
         </div>
         <div class="flex items-center">
           <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
-          <span class="font-semibold">Enterprise Security</span>
+          <span class="font-semibold">{t.rdp.common.locations.enterpriseSecurity}</span>
         </div>
       </div>
     </div>
@@ -160,8 +143,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
   <!-- Pricing Table -->
   <section id="pricing" class="py-12 md:py-16">
     <PricingTable
-      title={`${country.name} Private RDP Plans`}
-      description="Choose the plan that fits your requirements"
+      title={pricingTitle}
+      description={t.rdp.common.pricing.description}
       plans={plans}
     />
   </section>
@@ -175,17 +158,17 @@ const flagImageUrl = getFlagImageUrl(country.flag);
             {flagImageUrl ? (
               <span>
                 <img src={flagImageUrl} width="30" alt={`${country.name} Flag`} class="flag-icon inline mr-3" />
-                Premium {country.name} Private RDP Solutions
+                {overviewTitle}
               </span>
             ) : (
-              `${country.flag} Premium ${country.name} Private RDP Solutions`
+              `${country.flag} ${overviewTitle}`
             )}
           </h2>
           <p class="text-lg text-gray-700 mb-6">
-            Our {country.name} Private RDP solutions provide dedicated virtual machines with guaranteed resources, hosted in state-of-the-art data centers across {country.name}.
+            {overviewDescription1}
           </p>
           <p class="text-lg text-gray-700 mb-6">
-            With full administrator access, you have complete control over your Windows environment, allowing you to install custom applications, configure services, and optimize performance according to your specific needs.
+            {overviewDescription2}
           </p>
           
           <div class="mt-8 space-y-4">
@@ -194,8 +177,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
                 <i class="fas fa-check text-primary-600"></i>
               </div>
               <div>
-                <h3 class="text-xl font-semibold mb-1">Strategic {country.name} Locations</h3>
-                <p class="text-gray-600">Choose from multiple data center locations across {country.name}.</p>
+                <h3 class="text-xl font-semibold mb-1">{strategicLocationsTitle}</h3>
+                <p class="text-gray-600">{strategicLocationsDescription}</p>
               </div>
             </div>
             
@@ -204,8 +187,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
                 <i class="fas fa-check text-primary-600"></i>
               </div>
               <div>
-                <h3 class="text-xl font-semibold mb-1">Low Latency Connections</h3>
-                <p class="text-gray-600">Optimized network for minimal latency and smooth RDP experience.</p>
+                <h3 class="text-xl font-semibold mb-1">{t.rdp.common.overview.lowLatency.title}</h3>
+                <p class="text-gray-600">{t.rdp.common.overview.lowLatency.description}</p>
               </div>
             </div>
             
@@ -214,8 +197,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
                 <i class="fas fa-check text-primary-600"></i>
               </div>
               <div>
-                <h3 class="text-xl font-semibold mb-1">Instant Provisioning</h3>
-                <p class="text-gray-600">Get your Private RDP up and running in minutes.</p>
+                <h3 class="text-xl font-semibold mb-1">{t.rdp.common.overview.instantProvisioning.title}</h3>
+                <p class="text-gray-600">{t.rdp.common.overview.instantProvisioning.description}</p>
               </div>
             </div>
           </div>
@@ -239,9 +222,9 @@ const flagImageUrl = getFlagImageUrl(country.flag);
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Perfect For</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.rdp.common.useCases.title}</h2>
         <p class="text-xl text-gray-600">
-          Our {country.name} Private RDP solutions are ideal for various use cases.
+          {useCasesSubtitle}
         </p>
       </div>
       
@@ -261,8 +244,8 @@ const flagImageUrl = getFlagImageUrl(country.flag);
 
   <!-- CTA Banner -->
   <CTABanner
-    title={`Ready to Get Started with ${country.name} Private RDP?`}
-    subtitle="Experience premium performance and reliability today."
+    title={ctaTitle}
+    subtitle={t.rdp.common.cta.subtitle}
     ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />
