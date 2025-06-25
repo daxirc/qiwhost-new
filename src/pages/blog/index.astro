@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { supabase } from '../../lib/supabase';
+import { format } from 'date-fns';
+
+// Fetch all published blog posts
+const { data: posts, error } = await supabase
+  .from('blog_posts')
+  .select('*')
+  .eq('status', 'published')
+  .order('published_at', { ascending: false });
+
+if (error) {
+  console.error('Error fetching blog posts:', error);
+}
+
+// Function to create excerpt from content
+function createExcerpt(content, maxLength = 150) {
+  // Remove markdown formatting
+  const plainText = content
+    .replace(/#+\s(.*)/g, '$1') // Remove headings
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+    .replace(/\*(.*?)\*/g, '$1') // Remove italic
+    .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // Remove links
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '') // Remove images
+    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+    .replace(/`(.*?)`/g, '$1') // Remove inline code
+    .replace(/\n/g, ' ') // Replace newlines with spaces
+    .trim();
+  
+  if (plainText.length <= maxLength) return plainText;
+  
+  return plainText.substring(0, maxLength) + '...';
+}
+---
+
+<Layout 
+  title="Blog - QIW HOST" 
+  description="Read the latest articles about cloud hosting, VPS, dedicated servers, and technology trends from QIW HOST."
+>
+  <!-- Hero Section -->
+  <Hero
+    title="QIW HOST Blog"
+    subtitle="Insights, tutorials, and news about cloud hosting and server management"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Blog Posts Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      {posts && posts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post) => (
+            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <a href={`/blog/${post.slug}`} class="block">
+                <div class="h-48 overflow-hidden">
+                  <img 
+                    src={post.featured_image} 
+                    alt={post.title} 
+                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+              </a>
+              <div class="p-6">
+                <div class="text-sm text-gray-500 mb-2">
+                  {post.published_at && (
+                    <time datetime={post.published_at}>
+                      {format(new Date(post.published_at), 'MMMM d, yyyy')}
+                    </time>
+                  )}
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-3 hover:text-primary-600 transition-colors">
+                  <a href={`/blog/${post.slug}`}>{post.title}</a>
+                </h2>
+                <p class="text-gray-600 mb-4">
+                  {createExcerpt(post.description)}
+                </p>
+                <a 
+                  href={`/blog/${post.slug}`} 
+                  class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Read More
+                  <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <div class="text-gray-400 text-6xl mb-4">
+            <i class="fas fa-newspaper"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">No Posts Yet</h2>
+          <p class="text-gray-600 max-w-lg mx-auto">
+            We're working on creating valuable content for you. Check back soon for articles, tutorials, and news about cloud hosting and server management.
+          </p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title="Ready to Get Started with QIW HOST?"
+    subtitle="Experience our high-performance hosting solutions today."
+    ctaText="View Pricing"
+    ctaLink="/pricing"
+  />
+</Layout>

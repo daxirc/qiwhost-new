@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PlansManager from './PlansManager.tsx';
 import LogoManager from './LogoManager';
+import BlogPostsManager from './BlogPostsManager';
 import { Toaster } from 'react-hot-toast';
 import { supabase } from '../../lib/supabase';
 
@@ -18,6 +19,7 @@ export default function Dashboard({ session }) {
     { id: 'rdp', label: 'RDP Plans', icon: 'fas fa-desktop' },
     { id: 'dedicated', label: 'Dedicated Servers', icon: 'fas fa-hdd' },
     { id: 'logo', label: 'Site Logo', icon: 'fas fa-image' },
+    { id: 'blog', label: 'Blog Posts', icon: 'fas fa-blog' },
   ];
 
   return (
@@ -97,7 +99,11 @@ export default function Dashboard({ session }) {
                   {menuItems.find(item => item.id === activeTab)?.label}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  Manage your {activeTab === 'logo' ? 'site branding' : 'hosting plans'} and pricing
+                  {activeTab === 'logo' 
+                    ? 'Manage your site branding' 
+                    : activeTab === 'blog'
+                    ? 'Manage your blog posts and content'
+                    : 'Manage your hosting plans and pricing'}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
@@ -118,6 +124,8 @@ export default function Dashboard({ session }) {
               <PlansManager category="VPS" osTypeFilter="Linux" />
             ) : activeTab === 'windows-vps' ? (
               <PlansManager category="VPS" osTypeFilter="Windows" />
+            ) : activeTab === 'blog' ? (
+              <BlogPostsManager />
             ) : (
               <PlansManager category={activeTab.toUpperCase()} />
             )}
