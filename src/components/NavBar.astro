@@ -2,58 +2,11 @@
   // Navigation bar component
 import { supabase } from '../lib/supabase';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { getTranslations, getCurrentLocale } from '../i18n/utils';
+import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../i18n/utils';
 
 // Get translations for current locale
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
-
-// Flag emoji to country code mapping
-const flagEmojiToCountryCode = {
-  '🇺🇸': 'us',
-  '🇸🇬': 'sg', 
-  '🇩🇪': 'de',
-  '🇫🇮': 'fi',
-  '🇬🇧': 'gb',
-  '🇲🇽': 'mx',
-  '🇧🇬': 'bg',
-  '🇬🇷': 'gr',
-  '🇫🇷': 'fr',
-  '🇷🇺': 'ru',
-  '🇹🇷': 'tr',
-  '🇸🇦': 'sa',
-  '🇦🇪': 'ae',
-  '🇧🇭': 'bh',
-  '🇴🇲': 'om',
-  '🇰🇼': 'kw',
-  '🇮🇶': 'iq',
-  '🇶🇦': 'qa',
-  '🇹🇭': 'th',
-  '🇻🇳': 'vn',
-  '🇰🇭': 'kh',
-  '🇵🇭': 'ph',
-  '🇲🇾': 'my',
-  '🇮🇩': 'id',
-  '🇲🇲': 'mm',
-  '🇯🇵': 'jp',
-  '🇭🇰': 'hk',
-  '🇹🇼': 'tw',
-  '🇰🇷': 'kr',
-  '🇿🇦': 'za',
-  '🇪🇬': 'eg',
-  '🇧🇩': 'bd',
-  '🇵🇰': 'pk',
-  '🇳🇵': 'np',
-  '🇧🇷': 'br',
-  '🇦🇷': 'ar',
-  '🇨🇱': 'cl',
-  '🇨🇴': 'co'
-};
-
-function getFlagImageUrl(flagEmoji) {
-  const countryCode = flagEmojiToCountryCode[flagEmoji];
-  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
-}
 
 // Fetch VPS locations for the dropdown
 const { data: vpsLocations, error } = await supabase
@@ -174,6 +127,55 @@ const currentLocale = Astro.currentLocale || 'en';
                   <i class="fab fa-linux mr-2 text-primary-500"></i>
                   Linux VPS
                 </a>
+
+                <!-- Cloud VPS Sub-menu -->
+                <div class="relative group/sub">
+                  <button class="flex items-center justify-between w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+                    <div class="flex items-center">
+                      <i class="fas fa-cloud mr-2 text-primary-500"></i>
+                      <span class="font-medium">Cloud VPS</span>
+                    </div>
+                    <svg class="h-4 w-4 ml-1 transition-transform group-hover/sub:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                  <div class="absolute left-full top-0 mt-0 w-56 bg-white rounded-lg shadow-lg ring-1 ring-gray-200 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 transform translate-x-2 group-hover/sub:translate-x-0 z-50">
+                    <div class="py-2">
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/germany')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇩🇪')} width="20" alt="Germany Flag" class="flag-icon mr-2">
+                        Germany VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/finland')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇫🇮')} width="20" alt="Finland Flag" class="flag-icon mr-2">
+                        Finland VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/silicon-valley')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇺🇸')} width="20" alt="USA Flag" class="flag-icon mr-2">
+                        USA VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/london')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇬🇧')} width="20" alt="UK Flag" class="flag-icon mr-2">
+                        UK VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/singapore')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇸🇬')} width="20" alt="Singapore Flag" class="flag-icon mr-2">
+                        Singapore VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/tokyo')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇯🇵')} width="20" alt="Japan Flag" class="flag-icon mr-2">
+                        Japan VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/mumbai')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇮🇳')} width="20" alt="India Flag" class="flag-icon mr-2">
+                        India VPS
+                      </a>
+                      <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/sydney')} class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                        <img src={getFlagImageUrl('🇦🇺')} width="20" alt="Australia Flag" class="flag-icon mr-2">
+                        Australia VPS
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -353,6 +355,53 @@ const currentLocale = Astro.currentLocale || 'en';
           <a href={getRelativeLocaleUrl(currentLocale, t.paths.vps)} class="block text-sm text-gray-700 hover:underline">VPS Overview</a>
           <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsWindows)} class="block text-sm text-gray-700 hover:underline">Windows VPS</a>
           <a href={getRelativeLocaleUrl(currentLocale, t.paths.vpsLinux)} class="block text-sm text-gray-700 hover:underline">Linux VPS</a>
+          
+          <!-- Cloud VPS Submenu -->
+          <details class="group/cloud mt-2">
+            <summary class="flex items-center justify-between cursor-pointer py-1 text-sm text-gray-700 hover:text-primary-600">
+              <div class="flex items-center">
+                <i class="fas fa-cloud mr-2 text-primary-500"></i>
+                <span class="font-medium">Cloud VPS</span>
+              </div>
+              <svg class="w-3 h-3 transition-transform group-open/cloud:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <div class="ml-4 mt-1 space-y-1">
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/germany')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇩🇪')} width="16" alt="Germany Flag" class="flag-icon mr-2">
+                Germany VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/finland')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇫🇮')} width="16" alt="Finland Flag" class="flag-icon mr-2">
+                Finland VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/silicon-valley')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇺🇸')} width="16" alt="USA Flag" class="flag-icon mr-2">
+                USA VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/london')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇬🇧')} width="16" alt="UK Flag" class="flag-icon mr-2">
+                UK VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/singapore')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇸🇬')} width="16" alt="Singapore Flag" class="flag-icon mr-2">
+                Singapore VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/tokyo')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇯🇵')} width="16" alt="Japan Flag" class="flag-icon mr-2">
+                Japan VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/mumbai')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇮🇳')} width="16" alt="India Flag" class="flag-icon mr-2">
+                India VPS
+              </a>
+              <a href={getRelativeLocaleUrl(currentLocale, '/vps/locations/sydney')} class="flex items-center text-xs text-gray-700 hover:underline py-1">
+                <img src={getFlagImageUrl('🇦🇺')} width="16" alt="Australia Flag" class="flag-icon mr-2">
+                Australia VPS
+              </a>
+            </div>
+          </details>
         </div>
       </details>
 

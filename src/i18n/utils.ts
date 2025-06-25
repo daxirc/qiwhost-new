@@ -10,6 +10,60 @@ import de from './de.json';
 // Map locales to their translation objects
 const translations = { en, es, fr, de };
 
+// Flag emoji to country code mapping
+export const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇸🇬': 'sg', 
+  '🇩🇪': 'de',
+  '🇫🇮': 'fi',
+  '🇬🇧': 'gb',
+  '🇲🇽': 'mx',
+  '🇧🇬': 'bg',
+  '🇬🇷': 'gr',
+  '🇫🇷': 'fr',
+  '🇷🇺': 'ru',
+  '🇹🇷': 'tr',
+  '🇸🇦': 'sa',
+  '🇦🇪': 'ae',
+  '🇧🇭': 'bh',
+  '🇴🇲': 'om',
+  '🇰🇼': 'kw',
+  '🇮🇶': 'iq',
+  '🇶🇦': 'qa',
+  '🇹🇭': 'th',
+  '🇻🇳': 'vn',
+  '🇰🇭': 'kh',
+  '🇵🇭': 'ph',
+  '🇲🇾': 'my',
+  '🇮🇩': 'id',
+  '🇲🇲': 'mm',
+  '🇯🇵': 'jp',
+  '🇭🇰': 'hk',
+  '🇹🇼': 'tw',
+  '🇰🇷': 'kr',
+  '🇿🇦': 'za',
+  '🇪🇬': 'eg',
+  '🇧🇩': 'bd',
+  '🇵🇰': 'pk',
+  '🇳🇵': 'np',
+  '🇧🇷': 'br',
+  '🇦🇷': 'ar',
+  '🇨🇱': 'cl',
+  '🇨🇴': 'co',
+  '🇮🇳': 'in',
+  '🇦🇺': 'au'
+};
+
+/**
+ * Get flag image URL from emoji
+ * @param flagEmoji - The flag emoji
+ * @returns URL to the flag image or null if not found
+ */
+export function getFlagImageUrl(flagEmoji: string): string | null {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
 /**
  * Get translations for a specific locale
  * @param locale - The locale to get translations for
