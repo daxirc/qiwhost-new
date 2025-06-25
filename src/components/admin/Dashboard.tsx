@@ -4,8 +4,6 @@ import { toast, Toaster } from 'react-hot-toast';
 import PlansManager from './PlansManager.tsx';
 import LogoManager from './LogoManager';
 import BlogPostsManager from './BlogPostsManager';
-import { Toaster } from 'react-hot-toast';
-import { supabase } from '../../lib/supabase';
 
 export default function Dashboard({ session }) {
   const [activeTab, setActiveTab] = useState('vps');
