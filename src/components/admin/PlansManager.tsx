@@ -41,7 +41,9 @@ const flagEmojiToCountryCode = {
   '🇧🇷': 'br',
   '🇦🇷': 'ar',
   '🇨🇱': 'cl',
-  '🇨🇴': 'co'
+  '🇨🇴': 'co',
+  '🇮🇳': 'in',
+  '🇦🇺': 'au'
 };
 
 function getFlagImageUrl(flagEmoji) {
@@ -79,14 +81,15 @@ interface Plan {
 interface Props {
   category: string;
   osTypeFilter?: string;
+  showLocationFilter?: boolean;
 }
 
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
 const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
-const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America'];
+const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America', 'Oceania'];
 const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
-export default function PlansManager({ category, osTypeFilter }: Props) {
+export default function PlansManager({ category, osTypeFilter, showLocationFilter }: Props) {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -102,10 +105,15 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
   );
   const [isSaleEnabled, setIsSaleEnabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string>('All');
+  const [availableVpsLocations, setAvailableVpsLocations] = useState<string[]>([]);
 
   useEffect(() => {
     fetchPlans();
-  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion]);
+    if (showLocationFilter && category === 'VPS') {
+      fetchAvailableVpsLocations();
+    }
+  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedLocationFilter, showLocationFilter]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -114,6 +122,27 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
       setIsSaleEnabled(false);
     }
   }, [editingPlan]);
+
+  async function fetchAvailableVpsLocations() {
+    try {
+      const { data, error } = await supabase
+        .from('hosting_plans')
+        .select('location')
+        .eq('category', 'VPS')
+        .eq('visible', true)
+        .not('location', 'is', null)
+        .distinct('location');
+
+      if (error) {
+        console.error('Error fetching available VPS locations:', error);
+        return;
+      }
+      const locations = data.map(item => item.location).sort();
+      setAvailableVpsLocations(['All', ...locations]);
+    } catch (error) {
+      console.error('Error fetching available VPS locations:', error);
+    }
+  }
 
   async function fetchPlans() {
     try {
@@ -137,8 +166,14 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
         query = query.eq('location', selectedLocation);
       }
 
-      if (category === 'VPS' && selectedRegion && !osTypeFilter) {
+      // Only filter by region if not showing location filter
+      if (category === 'VPS' && selectedRegion && !osTypeFilter && !showLocationFilter) {
         query = query.eq('region', selectedRegion);
+      }
+
+      // New: Add location filter for VPS if showLocationFilter is true
+      if (category === 'VPS' && showLocationFilter && selectedLocationFilter !== 'All') {
+        query = query.eq('location', selectedLocationFilter);
       }
 
       const { data, error } = await query;
@@ -313,7 +348,7 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
               ))}
             </div>
           )}
-          {category === 'VPS' && !osTypeFilter && (
+          {category === 'VPS' && !osTypeFilter && !showLocationFilter && (
             <div className="flex flex-wrap gap-2">
               {VPS_REGIONS.map((region) => (
                 <button
@@ -328,6 +363,19 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
                   {region}
                 </button>
               ))}
+            </div>
+          )}
+          {category === 'VPS' && showLocationFilter && (
+            <div className="flex flex-wrap gap-2">
+              <select
+                value={selectedLocationFilter}
+                onChange={(e) => setSelectedLocationFilter(e.target.value)}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
+              >
+                {availableVpsLocations.map((loc) => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
             </div>
           )}
         </div>
@@ -767,14 +815,16 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-100">
                   {plans.map((plan) => (
                     <tr key={plan.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="font-medium text-gray-900">{plan.name}</div>
-                        {plan.os_type && osTypeFilter && (
-                          <div className="text-sm text-gray-500">{plan.os_type}</div>
-                        )}
+                        <div className="flex items-center">
+                          <div className="text-sm font-medium text-gray-900">{plan.name}</div>
+                          {plan.os_type && osTypeFilter && (
+                            <div className="text-sm text-gray-500">{plan.os_type}</div>
+                          )}
+                        </div>
                       </td>
                       {category === 'VPS' && (
                         <>
@@ -785,7 +835,7 @@ export default function PlansManager({ category, osTypeFilter }: Props) {
                                   src={getFlagImageUrl(plan.flag_icon)} 
                                   width="20" 
                                   alt={`${plan.location} Flag`} 
-                                  class="flag-icon mr-2"
+                                  className="flag-icon mr-2"
                                 />
                               ) : (
                                 plan.flag_icon && <span className="mr-2">{plan.flag_icon}</span>

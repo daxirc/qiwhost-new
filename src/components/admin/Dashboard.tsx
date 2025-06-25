@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
+import { toast, Toaster } from 'react-hot-toast';
 import PlansManager from './PlansManager.tsx';
 import LogoManager from './LogoManager';
 import BlogPostsManager from './BlogPostsManager';
@@ -104,6 +106,8 @@ export default function Dashboard({ session }) {
                     ? 'Manage your site branding' 
                     : activeTab === 'blog'
                     ? 'Manage your blog posts and content'
+                    : activeTab === 'cloud-vps'
+                    ? 'Manage your Cloud VPS plans by location'
                     : 'Manage your hosting plans and pricing'}
                 </p>
               </div>
