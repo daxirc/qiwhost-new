@@ -207,7 +207,7 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
           </label>
           <Editor
             id="content"
-            apiKey="no-api-key"
+            apiKey="460snwuhxcnqlpfm4tuclil2h4znqfgutekgs9qrs6ehpigr"
             value={content}
             onEditorChange={(newContent) => setContent(newContent)}
             init={{
