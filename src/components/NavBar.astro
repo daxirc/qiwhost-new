@@ -68,10 +68,13 @@ const { data: vpsLocations, error } = await supabase
 
 console.log('Fetched VPS Locations:', vpsLocations);
 
+// Filter out Germany from the locations
+const filteredLocations = vpsLocations?.filter(location => location.location !== 'Germany') || [];
+
 // Group locations by region
 const locationsByRegion = {};
-if (vpsLocations && !error) {
-  vpsLocations.forEach(location => {
+if (filteredLocations && !error) {
+  filteredLocations.forEach(location => {
     if (!locationsByRegion[location.region]) {
       locationsByRegion[location.region] = [];
     }
