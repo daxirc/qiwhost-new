@@ -6,16 +6,16 @@ import BlogSidebar from '../../../components/BlogSidebar.astro';
 import CTABanner from '../../../components/CTABanner.astro';
 import { supabase } from '../../../lib/supabase';
 
-// Define categories (for future implementation with actual database categories)
-const categories = [
-  { slug: 'vps-hosting', name: 'VPS Hosting' },
-  { slug: 'dedicated-servers', name: 'Dedicated Servers' },
-  { slug: 'rdp-solutions', name: 'RDP Solutions' },
-  { slug: 'tutorials', name: 'Tutorials' },
-  { slug: 'news', name: 'News' }
-];
-
 export function getStaticPaths() {
+  // Define categories within getStaticPaths to ensure they're in scope
+  const categories = [
+    { slug: 'vps-hosting', name: 'VPS Hosting' },
+    { slug: 'dedicated-servers', name: 'Dedicated Servers' },
+    { slug: 'rdp-solutions', name: 'RDP Solutions' },
+    { slug: 'tutorials', name: 'Tutorials' },
+    { slug: 'news', name: 'News' }
+  ];
+
   return categories.map(category => ({
     params: { category: category.slug },
     props: { categoryName: category.name }
