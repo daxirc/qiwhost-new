@@ -1,10 +1,10 @@
 ---
-import Layout from '../../../layouts/MainLayout.astro';
-import Hero from '../../../components/Hero.astro';
-import PricingTable from '../../../components/PricingTable.astro';
-import CTABanner from '../../../components/CTABanner.astro';
-import { supabase } from '../../../lib/supabase';
-import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
+import Layout from '../../../../layouts/MainLayout.astro';
+import Hero from '../../../../components/Hero.astro';
+import PricingTable from '../../../../components/PricingTable.astro';
+import CTABanner from '../../../../components/CTABanner.astro';
+import { supabase } from '../../../../lib/supabase';
+import { getTranslations, getCurrentLocale } from '../../../../i18n/utils';
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -90,7 +90,7 @@ export async function getStaticPaths() {
   uniqueLocations.forEach(location => {
     // Default locale (en) - no locale prefix
     paths.push({
-      params: { city: location.slug, locale: undefined },
+      params: { city: location.slug, locale: 'en' },
       props: { 
         cityName: location.location,
         region: location.region,
@@ -116,11 +116,11 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { city } = Astro.params;
+const { city, locale: urlLocale } = Astro.params;
 const { cityName, region, flagIcon, pageDescription } = Astro.props;
 
 // Get translations for current locale
-const locale = getCurrentLocale(Astro.currentLocale);
+const locale = getCurrentLocale(urlLocale);
 const t = getTranslations(locale);
 
 // Fetch VPS plans for this specific city
