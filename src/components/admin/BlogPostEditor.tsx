@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
+import { Editor } from '@tinymce/tinymce-react';
 
 interface BlogPost {
   id: string;
@@ -199,32 +200,44 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
           )}
         </div>
 
-        {/* Content */}
+        {/* Content - TinyMCE Editor */}
         <div>
           <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-            Content * <span className="text-xs text-gray-500">(Markdown supported)</span>
+            Content *
           </label>
-          <textarea
+          <Editor
             id="content"
+            apiKey="no-api-key"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            rows={15}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-mono text-sm"
+            onEditorChange={(newContent) => setContent(newContent)}
+            init={{
+              height: 500,
+              menubar: 'file edit view insert format tools table help',
+              plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+              ],
+              toolbar: 'undo redo | formatselect | ' +
+                'bold italic underline | h1 h2 h3 | bullist numlist | ' +
+                'blockquote code | link image | fullscreen | help',
+              content_style: `
+                body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 16px; line-height: 1.6; }
+                h1 { font-size: 2em; margin-top: 0.67em; margin-bottom: 0.67em; }
+                h2 { font-size: 1.5em; margin-top: 0.83em; margin-bottom: 0.83em; }
+                h3 { font-size: 1.17em; margin-top: 1em; margin-bottom: 1em; }
+                p { margin-top: 1em; margin-bottom: 1em; }
+                blockquote { margin: 1em 40px; border-left: 4px solid #e5e7eb; padding-left: 16px; }
+                code { font-family: monospace; background-color: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; }
+              `,
+              images_upload_handler: function (blobInfo, progress) {
+                return new Promise((resolve, reject) => {
+                  // For now, we'll reject direct uploads and require URLs
+                  reject('Please use image URLs instead of direct uploads');
+                });
+              }
+            }}
           />
-          <div className="mt-1 text-xs text-gray-500">
-            <p>Markdown cheatsheet:</p>
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-1">
-              <li><code># Heading 1</code></li>
-              <li><code>## Heading 2</code></li>
-              <li><code>**bold**</code></li>
-              <li><code>*italic*</code></li>
-              <li><code>[link](url)</code></li>
-              <li><code>![alt](image-url)</code></li>
-              <li><code>- list item</code></li>
-              <li><code>1. numbered</code></li>
-            </ul>
-          </div>
         </div>
 
         {/* SEO Settings */}

@@ -2,7 +2,6 @@
 import Layout from '../../layouts/MainLayout.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import { supabase } from '../../lib/supabase';
-import { marked } from 'marked';
 import { format } from 'date-fns';
 
 export async function getStaticPaths() {
@@ -26,8 +25,8 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 
-// Parse markdown content to HTML
-const contentHtml = marked.parse(post.content);
+// Content is now directly HTML, no need for Markdown parsing
+const contentHtml = post.content;
 
 // Format the published date
 const formattedDate = post.published_at 
