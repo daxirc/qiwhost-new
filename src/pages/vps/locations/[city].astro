@@ -21,8 +21,16 @@ export async function getStaticPaths() {
     return [];
   }
 
-  // Remove duplicates and create paths
+  // Define the countries that should be handled by the country-specific pages
+  const cloudVpsCountries = ['Germany', 'Finland', 'USA', 'UK', 'Singapore', 'Japan', 'India', 'Australia'];
+
+  // Remove duplicates and create paths, excluding cloud VPS countries
   const uniqueLocations = locations.reduce((acc, location) => {
+    // Skip locations that are actually countries for Cloud VPS
+    if (cloudVpsCountries.includes(location.location)) {
+      return acc;
+    }
+    
     const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
     if (!acc.find(l => l.slug === slug)) {
       acc.push({
