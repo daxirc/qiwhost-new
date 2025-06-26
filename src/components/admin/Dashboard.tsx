@@ -7,16 +7,56 @@ import BlogPostsManager from './BlogPostsManager';
 
 export default function Dashboard({ session }) {
   const [activeTab, setActiveTab] = useState('vps');
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+
+  useEffect(() => {
+    // Check if supabase is properly initialized
+    if (!supabase) {
+      setError('Supabase client not initialized');
+      setLoading(false);
+      return;
+    }
+
+    // Initial session check
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting session:', error);
+        setError(error.message);
+      } else {
+        setSession(session);
+      }
+      setLoading(false);
+    }).catch((err) => {
+      console.error('Error in getSession:', err);
+      setError(err.message);
+      setLoading(false);
+    });
+
+    // Listen for auth state changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setError(null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
 
   const menuItems = [
-    { id: 'vps', label: 'VPS Plans', icon: 'fas fa-server' },
+    { id: 'vps', label: 'VPS by City', icon: 'fas fa-server' },
     { id: 'linux-vps', label: 'Linux VPS Plans', icon: 'fab fa-linux' },
     { id: 'windows-vps', label: 'Windows VPS Plans', icon: 'fab fa-windows' },
-    { id: 'cloud-vps', label: 'Cloud VPS', icon: 'fas fa-cloud' },
+    { id: 'cloud-vps', label: 'VPS by Country', icon: 'fas fa-cloud' },
     { id: 'rdp', label: 'RDP Plans', icon: 'fas fa-desktop' },
     { id: 'dedicated', label: 'Dedicated Servers', icon: 'fas fa-hdd' },
     { id: 'logo', label: 'Site Logo', icon: 'fas fa-image' },
@@ -105,7 +145,9 @@ export default function Dashboard({ session }) {
                     : activeTab === 'blog'
                     ? 'Manage your blog posts and content'
                     : activeTab === 'cloud-vps'
-                    ? 'Manage your Cloud VPS plans by location'
+                    ? 'Manage your Cloud VPS plans by country'
+                    : activeTab === 'vps'
+                    ? 'Manage your VPS plans by city'
                     : 'Manage your hosting plans and pricing'}
                 </p>
               </div>
