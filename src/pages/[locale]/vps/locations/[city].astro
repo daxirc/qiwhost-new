@@ -88,9 +88,9 @@ export async function getStaticPaths() {
   const locales = ['en', 'es', 'fr', 'de'];
   
   uniqueLocations.forEach(location => {
-    // Default locale (en) - no locale prefix
+    // Default locale (en) - no locale prefix in params
     paths.push({
-      params: { city: location.slug, locale: 'en' },
+      params: { city: location.slug, locale: undefined },
       props: { 
         cityName: location.location,
         region: location.region,
