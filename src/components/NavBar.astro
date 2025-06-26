@@ -21,8 +21,11 @@ const { data: vpsLocations, error } = await supabase
 
 console.log('Fetched VPS Locations:', vpsLocations);
 
-// Filter out Germany from the locations
-const filteredLocations = vpsLocations?.filter(location => location.location !== 'Germany') || [];
+// Define countries that should be excluded from the locations dropdown
+const cloudVpsCountries = ['Germany', 'Finland', 'USA', 'UK', 'Singapore', 'Japan', 'India', 'Australia'];
+
+// Filter out countries that have dedicated pages
+const filteredLocations = vpsLocations?.filter(location => !cloudVpsCountries.includes(location.location)) || [];
 
 // Group locations by region
 const locationsByRegion = {};
