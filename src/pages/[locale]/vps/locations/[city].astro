@@ -4,54 +4,7 @@ import Hero from '../../../../components/Hero.astro';
 import PricingTable from '../../../../components/PricingTable.astro';
 import CTABanner from '../../../../components/CTABanner.astro';
 import { supabase } from '../../../../lib/supabase';
-import { getTranslations, getCurrentLocale } from '../../../../i18n/utils';
-
-// Flag emoji to country code mapping
-const flagEmojiToCountryCode = {
-  '🇺🇸': 'us',
-  '🇸🇬': 'sg', 
-  '🇩🇪': 'de',
-  '🇫🇮': 'fi',
-  '🇬🇧': 'gb',
-  '🇲🇽': 'mx',
-  '🇧🇬': 'bg',
-  '🇬🇷': 'gr',
-  '🇫🇷': 'fr',
-  '🇷🇺': 'ru',
-  '🇹🇷': 'tr',
-  '🇸🇦': 'sa',
-  '🇦🇪': 'ae',
-  '🇧🇭': 'bh',
-  '🇴🇲': 'om',
-  '🇰🇼': 'kw',
-  '🇮🇶': 'iq',
-  '🇶🇦': 'qa',
-  '🇹🇭': 'th',
-  '🇻🇳': 'vn',
-  '🇰🇭': 'kh',
-  '🇵🇭': 'ph',
-  '🇲🇾': 'my',
-  '🇮🇩': 'id',
-  '🇲🇲': 'mm',
-  '🇯🇵': 'jp',
-  '🇭🇰': 'hk',
-  '🇹🇼': 'tw',
-  '🇰🇷': 'kr',
-  '🇿🇦': 'za',
-  '🇪🇬': 'eg',
-  '🇧🇩': 'bd',
-  '🇵🇰': 'pk',
-  '🇳🇵': 'np',
-  '🇧🇷': 'br',
-  '🇦🇷': 'ar',
-  '🇨🇱': 'cl',
-  '🇨🇴': 'co'
-};
-
-function getFlagImageUrl(flagEmoji) {
-  const countryCode = flagEmojiToCountryCode[flagEmoji];
-  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
-}
+import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../../i18n/utils';
 
 export async function getStaticPaths() {
   // Fetch all VPS locations to generate static paths
@@ -88,9 +41,9 @@ export async function getStaticPaths() {
   const locales = ['en', 'es', 'fr', 'de'];
   
   uniqueLocations.forEach(location => {
-    // Default locale (en) - no locale prefix in params
+    // For English locale (default)
     paths.push({
-      params: { city: location.slug, locale: undefined },
+      params: { city: location.slug, locale: 'en' },
       props: { 
         cityName: location.location,
         region: location.region,
@@ -99,7 +52,7 @@ export async function getStaticPaths() {
       }
     });
     
-    // Other locales
+    // For other locales
     locales.filter(l => l !== 'en').forEach(locale => {
       paths.push({
         params: { city: location.slug, locale },
