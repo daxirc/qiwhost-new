@@ -1,0 +1,231 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import PricingTable from '../../../components/PricingTable.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import { supabase } from '../../../lib/supabase';
+import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
+
+export async function getStaticPaths() {
+  // Fetch all VPS locations to generate static paths
+  const { data: locations, error } = await supabase
+    .from('hosting_plans')
+    .select('location, region, flag_icon, page_description')
+    .eq('category', 'VPS')
+    .eq('visible', true)
+    .not('region', 'is', null)
+    .not('location', 'is', null);
+
+  if (error) {
+    console.error('Error fetching VPS locations:', error);
+    return [];
+  }
+
+  // Remove duplicates and create paths
+  const uniqueLocations = locations.reduce((acc, location) => {
+    const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    if (!acc.find(l => l.slug === slug)) {
+      acc.push({
+        slug,
+        location: location.location,
+        region: location.region,
+        flag_icon: location.flag_icon,
+        page_description: location.page_description
+      });
+    }
+    return acc;
+  }, []);
+
+  // Generate paths for each location
+  return uniqueLocations.map(location => ({
+    params: { city: location.slug },
+    props: { 
+      cityName: location.location,
+      region: location.region,
+      flagIcon: location.flag_icon,
+      pageDescription: location.page_description
+    }
+  }));
+}
+
+const { city } = Astro.params;
+const { cityName, region, flagIcon, pageDescription } = Astro.props;
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
+// Fetch VPS plans for this specific city
+const { data: cityPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('location', cityName)
+  .eq('visible', true)
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching city plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = cityPlans?.map(plan => ({
+  name: `${plan.plan_type || plan.name}`,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    '24/7 Support',
+    'SSD Storage'
+  ],
+  ctaText: t.pricing.ctaText,
+  ctaLink: plan.order_url,
+  popular: plan.plan_type === 'Standard',
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
+})) || [];
+
+// Features data with translations
+const features = [
+  {
+    title: t.vpsLocations.features.ssdStorage.title,
+    description: t.vpsLocations.features.ssdStorage.description,
+    icon: "fas fa-bolt"
+  },
+  {
+    title: t.vpsLocations.features.dedicatedResources.title,
+    description: t.vpsLocations.features.dedicatedResources.description,
+    icon: "fas fa-microchip"
+  },
+  {
+    title: t.vpsLocations.features.rootAccess.title,
+    description: t.vpsLocations.features.rootAccess.description,
+    icon: "fas fa-terminal"
+  },
+  {
+    title: t.vpsLocations.features.uptime.title,
+    description: t.vpsLocations.features.uptime.description,
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: t.vpsLocations.features.ddosProtection.title,
+    description: t.vpsLocations.features.ddosProtection.description,
+    icon: "fas fa-shield-alt"
+  },
+  {
+    title: t.vpsLocations.features.support.title,
+    description: t.vpsLocations.features.support.description,
+    icon: "fas fa-headset"
+  }
+];
+
+const flagImageUrl = getFlagImageUrl(flagIcon);
+
+// Create translated strings with city name replacement
+const heroTitle = t.vpsLocations.hero.title.replace('{cityName}', cityName);
+const heroSubtitle = pageDescription || t.vpsLocations.hero.subtitle.replace('{cityName}', cityName);
+const whyChooseTitle = t.vpsLocations.whyChoose.title.replace('{cityName}', cityName);
+const whyChooseDescription = pageDescription || t.vpsLocations.whyChoose.description.replace('{cityName}', cityName).replace('{cityName}', cityName);
+const pricingTitle = t.vpsLocations.pricing.title.replace('{cityName}', cityName);
+const ctaTitle = t.vpsLocations.cta.title.replace('{cityName}', cityName);
+const locationInfo = t.vpsLocations.locationInfo.location.replace('{cityName}', cityName).replace('{region}', region);
+---
+
+<Layout 
+  title={`${cityName} VPS Hosting`}
+  description={`High-performance VPS hosting in ${cityName}, ${region}. ${pageDescription}`}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={heroTitle}
+    subtitle={heroSubtitle}
+    ctaText="View Plans"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Location Info -->
+  <section class="py-8 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{locationInfo}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.lowLatency}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.enterpriseSecurity}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Description Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          {whyChooseTitle}
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          {whyChooseDescription}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section id="pricing" class="py-16 md:py-24 bg-gray-50">
+    <PricingTable
+      title={pricingTitle}
+      description={t.vpsLocations.pricing.description}
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.vpsLocations.features.title}</h2>
+        <p class="text-xl text-gray-600">{t.vpsLocations.features.subtitle}</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map(feature => (
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
+                <i class={`${feature.icon} text-2xl`}></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={ctaTitle}
+    subtitle={t.vpsLocations.cta.subtitle}
+    ctaText="Order Now"
+    ctaLink="https://portal.qiwhost.com/login"
+  />
+</Layout>
