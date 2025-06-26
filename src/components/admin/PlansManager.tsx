@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { getFlagImageUrl } from '../../i18n/utils';
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -46,10 +47,17 @@ const flagEmojiToCountryCode = {
   '🇦🇺': 'au'
 };
 
-function getFlagImageUrl(flagEmoji) {
-  const countryCode = flagEmojiToCountryCode[flagEmoji];
-  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
-}
+// Flag emoji to country name mapping
+const flagEmojiToCountryName = {
+  '🇺🇸': 'USA',
+  '🇸🇬': 'Singapore',
+  '🇩🇪': 'Germany',
+  '🇫🇮': 'Finland',
+  '🇬🇧': 'UK',
+  '🇯🇵': 'Japan',
+  '🇮🇳': 'India',
+  '🇦🇺': 'Australia'
+};
 
 interface Plan {
   id: string;
@@ -82,6 +90,7 @@ interface Props {
   category: string;
   osTypeFilter?: string;
   showLocationFilter?: boolean;
+  filterType?: 'location' | 'flag_icon';
 }
 
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
@@ -89,7 +98,7 @@ const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
 const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America', 'Oceania'];
 const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
-export default function PlansManager({ category, osTypeFilter, showLocationFilter }: Props) {
+export default function PlansManager({ category, osTypeFilter, showLocationFilter, filterType }: Props) {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -105,15 +114,15 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
   );
   const [isSaleEnabled, setIsSaleEnabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string>('All');
-  const [availableVpsLocations, setAvailableVpsLocations] = useState<string[]>([]);
+  const [selectedFilterValue, setSelectedFilterValue] = useState<string>('All');
+  const [availableFilterOptions, setAvailableFilterOptions] = useState<string[]>([]);
 
   useEffect(() => {
     fetchPlans();
-    if (showLocationFilter && category === 'VPS') {
-      fetchAvailableVpsLocations();
+    if (filterType) {
+      fetchAvailableFilterOptions();
     }
-  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedLocationFilter, showLocationFilter]);
+  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedFilterValue, filterType]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -123,24 +132,49 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
     }
   }, [editingPlan]);
 
-  async function fetchAvailableVpsLocations() {
+  async function fetchAvailableFilterOptions() {
     try {
-      const { data, error } = await supabase
-        .from('hosting_plans')
-        .select('location')
-        .eq('category', 'VPS')
-        .eq('visible', true)
-        .not('location', 'is', null)
-        .distinct('location');
-
-      if (error) {
-        console.error('Error fetching available VPS locations:', error);
-        return;
+      let query;
+      
+      if (filterType === 'location') {
+        // Fetch distinct locations for city-based filtering
+        query = supabase
+          .from('hosting_plans')
+          .select('location')
+          .eq('category', 'VPS')
+          .eq('visible', true)
+          .not('location', 'is', null)
+          .distinct('location');
+      } else if (filterType === 'flag_icon') {
+        // Fetch distinct flag_icons for country-based filtering
+        query = supabase
+          .from('hosting_plans')
+          .select('flag_icon')
+          .eq('category', 'VPS')
+          .eq('visible', true)
+          .not('flag_icon', 'is', null)
+          .distinct('flag_icon');
       }
-      const locations = data.map(item => item.location).sort();
-      setAvailableVpsLocations(['All', ...locations]);
+
+      if (query) {
+        const { data, error } = await query;
+
+        if (error) {
+          console.error(`Error fetching available ${filterType} options:`, error);
+          return;
+        }
+
+        let options;
+        if (filterType === 'location') {
+          options = data.map(item => item.location).sort();
+        } else if (filterType === 'flag_icon') {
+          options = data.map(item => item.flag_icon).sort();
+        }
+
+        setAvailableFilterOptions(['All', ...options]);
+      }
     } catch (error) {
-      console.error('Error fetching available VPS locations:', error);
+      console.error(`Error fetching available ${filterType} options:`, error);
     }
   }
 
@@ -166,14 +200,15 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
         query = query.eq('location', selectedLocation);
       }
 
-      // Only filter by region if not showing location filter
-      if (category === 'VPS' && selectedRegion && !osTypeFilter && !showLocationFilter) {
-        query = query.eq('region', selectedRegion);
+      // Apply filter based on filterType and selectedFilterValue
+      if (filterType === 'location' && selectedFilterValue !== 'All') {
+        query = query.eq('location', selectedFilterValue);
+      } else if (filterType === 'flag_icon' && selectedFilterValue !== 'All') {
+        query = query.eq('flag_icon', selectedFilterValue);
       }
-
-      // New: Add location filter for VPS if showLocationFilter is true
-      if (category === 'VPS' && showLocationFilter && selectedLocationFilter !== 'All') {
-        query = query.eq('location', selectedLocationFilter);
+      // Only filter by region if not showing location filter and not using filterType
+      else if (category === 'VPS' && selectedRegion && !osTypeFilter && !filterType) {
+        query = query.eq('region', selectedRegion);
       }
 
       const { data, error } = await query;
@@ -296,6 +331,14 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
     }
   }
 
+  // Helper function to render filter label
+  function renderFilterLabel(value: string): string {
+    if (filterType === 'flag_icon') {
+      return flagEmojiToCountryName[value] || value;
+    }
+    return value;
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -348,7 +391,7 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
               ))}
             </div>
           )}
-          {category === 'VPS' && !osTypeFilter && !showLocationFilter && (
+          {category === 'VPS' && !osTypeFilter && !filterType && (
             <div className="flex flex-wrap gap-2">
               {VPS_REGIONS.map((region) => (
                 <button
@@ -365,15 +408,18 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
               ))}
             </div>
           )}
-          {category === 'VPS' && showLocationFilter && (
+          {filterType && (
             <div className="flex flex-wrap gap-2">
               <select
-                value={selectedLocationFilter}
-                onChange={(e) => setSelectedLocationFilter(e.target.value)}
+                value={selectedFilterValue}
+                onChange={(e) => setSelectedFilterValue(e.target.value)}
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
               >
-                {availableVpsLocations.map((loc) => (
-                  <option key={loc} value={loc}>{loc}</option>
+                {availableFilterOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option === 'All' ? 'All' : renderFilterLabel(option)}
+                    {filterType === 'flag_icon' && option !== 'All' ? ` ${option}` : ''}
+                  </option>
                 ))}
               </select>
             </div>
@@ -797,22 +843,22 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
                     {category === 'VPS' && (
                       <>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Region</th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Type</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Region</th>
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Plan Type</th>
                         {!osTypeFilter && (
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OS Type</th>
+                          <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">OS Type</th>
                         )}
                       </>
                     )}
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specs</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sale</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Specs</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Location</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Sale</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
