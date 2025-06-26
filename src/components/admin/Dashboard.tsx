@@ -14,7 +14,7 @@ export default function Dashboard({ session }) {
 
   const menuItems = [
     { id: 'vps', label: 'VPS by City', icon: 'fas fa-server' },
-    { id: 'cloud-vps', label: 'VPS by Country', icon: 'fas fa-cloud' },
+    { id: 'cloud-vps', label: 'Cloud VPS', icon: 'fas fa-cloud' },
     { id: 'linux-vps', label: 'Linux VPS Plans', icon: 'fab fa-linux' },
     { id: 'windows-vps', label: 'Windows VPS Plans', icon: 'fab fa-windows' },
     { id: 'rdp', label: 'RDP Plans', icon: 'fas fa-desktop' },
