@@ -239,109 +239,6 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
     }
   }
 
-  async function deletePlan(id: string) {
-    if (!confirm('Are you sure you want to delete this plan?')) return;
-
-    try {
-      const { error } = await supabase
-        .from('hosting_plans')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-      
-      toast.success('Plan deleted successfully');
-      fetchPlans();
-    } catch (error) {
-      console.error('Error deleting plan:', error);
-      toast.error(`Failed to delete plan: ${error.message}`);
-    }
-  }
-
-  async function savePlan(plan: Partial<Plan>) {
-    try {
-      setIsSubmitting(true);
-      
-      let orderUrl = plan.order_url || '';
-      if (!orderUrl.startsWith('/') && !orderUrl.startsWith('http://') && !orderUrl.startsWith('https://')) {
-        orderUrl = `https://${orderUrl}`;
-      }
-
-      if (plan.sale_enabled) {
-        if (!plan.sale_price_monthly) {
-          throw new Error('Monthly sale price is required when sale is enabled');
-        }
-        if (category !== 'DEDICATED' && !plan.sale_price_yearly) {
-          throw new Error('Yearly sale price is required when sale is enabled for non-dedicated plans');
-        }
-        if (plan.sale_price_monthly >= plan.price_monthly!) {
-          throw new Error('Monthly sale price must be lower than regular monthly price');
-        }
-        if (category !== 'DEDICATED' && plan.sale_price_yearly && plan.price_yearly && plan.sale_price_yearly >= plan.price_yearly) {
-          throw new Error('Yearly sale price must be lower than regular yearly price');
-        }
-      }
-
-      const planData = {
-        ...plan,
-        order_url: orderUrl,
-        category,
-        subcategory: category === 'DEDICATED' ? selectedSubcategory : null,
-        region: category === 'VPS' ? (plan.region || selectedRegion) : null,
-        location: category === 'RDP' ? selectedLocation : plan.location,
-        available_locations: category === 'RDP' ? RDP_LOCATIONS : null,
-        os_type: osTypeFilter || plan.os_type || null,
-        price_yearly: category === 'DEDICATED' ? (plan.price_monthly! * 12) : (plan.price_yearly || null),
-        sale_price_monthly: plan.sale_enabled ? plan.sale_price_monthly : null,
-        sale_price_yearly: plan.sale_enabled && category !== 'DEDICATED' ? plan.sale_price_yearly : null,
-        sale_badge_text: plan.sale_enabled ? plan.sale_badge_text : null
-      };
-
-      let error;
-      if (editingPlan?.id) {
-        console.log('Updating plan:', editingPlan.id, planData);
-        const { error: updateError } = await supabase
-          .from('hosting_plans')
-          .update(planData)
-          .eq('id', editingPlan.id);
-        error = updateError;
-      } else {
-        console.log('Creating plan:', planData);
-        const { error: insertError } = await supabase
-          .from('hosting_plans')
-          .insert([planData]);
-        error = insertError;
-      }
-
-      if (error) {
-        console.error('Supabase save error:', error);
-        throw error;
-      }
-      
-      toast.success(`Plan ${editingPlan?.id ? 'updated' : 'created'} successfully`);
-      setIsEditing(false);
-      setEditingPlan(null);
-      fetchPlans();
-    } catch (error) {
-      console.error('Error saving plan:', error);
-      toast.error(error.message || 'Failed to save plan');
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  function handleEdit(plan: Plan) {
-    setEditingPlan(plan);
-    setIsEditing(true);
-    setIsSaleEnabled(plan.sale_enabled);
-    if (category === 'DEDICATED') {
-      setSelectedSubcategory(plan.subcategory || 'VALUE');
-    }
-    if (category === 'VPS') {
-      setSelectedRegion(plan.region || 'North America');
-    }
-  }
-
   // Helper function to render filter label
   function renderFilterLabel(value: string): string {
     if (filterType === 'flag_icon') {
@@ -984,4 +881,107 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
       )}
     </div>
   );
+
+  async function deletePlan(id: string) {
+    if (!confirm('Are you sure you want to delete this plan?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('hosting_plans')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      toast.success('Plan deleted successfully');
+      fetchPlans();
+    } catch (error) {
+      console.error('Error deleting plan:', error);
+      toast.error(`Failed to delete plan: ${error.message}`);
+    }
+  }
+
+  async function savePlan(plan: Partial<Plan>) {
+    try {
+      setIsSubmitting(true);
+      
+      let orderUrl = plan.order_url || '';
+      if (!orderUrl.startsWith('/') && !orderUrl.startsWith('http://') && !orderUrl.startsWith('https://')) {
+        orderUrl = `https://${orderUrl}`;
+      }
+
+      if (plan.sale_enabled) {
+        if (!plan.sale_price_monthly) {
+          throw new Error('Monthly sale price is required when sale is enabled');
+        }
+        if (category !== 'DEDICATED' && !plan.sale_price_yearly) {
+          throw new Error('Yearly sale price is required when sale is enabled for non-dedicated plans');
+        }
+        if (plan.sale_price_monthly >= plan.price_monthly!) {
+          throw new Error('Monthly sale price must be lower than regular monthly price');
+        }
+        if (category !== 'DEDICATED' && plan.sale_price_yearly && plan.price_yearly && plan.sale_price_yearly >= plan.price_yearly) {
+          throw new Error('Yearly sale price must be lower than regular yearly price');
+        }
+      }
+
+      const planData = {
+        ...plan,
+        order_url: orderUrl,
+        category,
+        subcategory: category === 'DEDICATED' ? selectedSubcategory : null,
+        region: category === 'VPS' ? (plan.region || selectedRegion) : null,
+        location: category === 'RDP' ? selectedLocation : plan.location,
+        available_locations: category === 'RDP' ? RDP_LOCATIONS : null,
+        os_type: osTypeFilter || plan.os_type || null,
+        price_yearly: category === 'DEDICATED' ? (plan.price_monthly! * 12) : (plan.price_yearly || null),
+        sale_price_monthly: plan.sale_enabled ? plan.sale_price_monthly : null,
+        sale_price_yearly: plan.sale_enabled && category !== 'DEDICATED' ? plan.sale_price_yearly : null,
+        sale_badge_text: plan.sale_enabled ? plan.sale_badge_text : null
+      };
+
+      let error;
+      if (editingPlan?.id) {
+        console.log('Updating plan:', editingPlan.id, planData);
+        const { error: updateError } = await supabase
+          .from('hosting_plans')
+          .update(planData)
+          .eq('id', editingPlan.id);
+        error = updateError;
+      } else {
+        console.log('Creating plan:', planData);
+        const { error: insertError } = await supabase
+          .from('hosting_plans')
+          .insert([planData]);
+        error = insertError;
+      }
+
+      if (error) {
+        console.error('Supabase save error:', error);
+        throw error;
+      }
+      
+      toast.success(`Plan ${editingPlan?.id ? 'updated' : 'created'} successfully`);
+      setIsEditing(false);
+      setEditingPlan(null);
+      fetchPlans();
+    } catch (error) {
+      console.error('Error saving plan:', error);
+      toast.error(error.message || 'Failed to save plan');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  function handleEdit(plan: Plan) {
+    setEditingPlan(plan);
+    setIsEditing(true);
+    setIsSaleEnabled(plan.sale_enabled);
+    if (category === 'DEDICATED') {
+      setSelectedSubcategory(plan.subcategory || 'VALUE');
+    }
+    if (category === 'VPS') {
+      setSelectedRegion(plan.region || 'North America');
+    }
+  }
 }
