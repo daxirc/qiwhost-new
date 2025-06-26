@@ -1,0 +1,211 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import PricingTable from '../../../components/PricingTable.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import FeaturesSection from '../../../components/FeaturesSection.astro';
+import { supabase } from '../../../lib/supabase';
+import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
+
+// Country name to flag emoji mapping
+const countryNameToFlagEmoji = {
+  'Germany': '🇩🇪',
+  'Finland': '🇫🇮',
+  'USA': '🇺🇸',
+  'UK': '🇬🇧',
+  'Singapore': '🇸🇬',
+  'Japan': '🇯🇵',
+  'India': '🇮🇳',
+  'Australia': '🇦🇺'
+};
+
+export async function getStaticPaths() {
+  // Define the countries we want to generate pages for
+  const countries = [
+    { slug: 'germany', name: 'Germany', flagEmoji: '🇩🇪', region: 'Europe' },
+    { slug: 'finland', name: 'Finland', flagEmoji: '🇫🇮', region: 'Europe' },
+    { slug: 'usa', name: 'USA', flagEmoji: '🇺🇸', region: 'North America' },
+    { slug: 'uk', name: 'UK', flagEmoji: '🇬🇧', region: 'Europe' },
+    { slug: 'singapore', name: 'Singapore', flagEmoji: '🇸🇬', region: 'Southeast Asia' },
+    { slug: 'japan', name: 'Japan', flagEmoji: '🇯🇵', region: 'East Asia' },
+    { slug: 'india', name: 'India', flagEmoji: '🇮🇳', region: 'South Asia' },
+    { slug: 'australia', name: 'Australia', flagEmoji: '🇦🇺', region: 'Oceania' }
+  ];
+
+  return countries.map(country => ({
+    params: { countrySlug: country.slug },
+    props: { 
+      countryName: country.name,
+      flagEmoji: country.flagEmoji,
+      region: country.region
+    }
+  }));
+}
+
+const { countrySlug } = Astro.params;
+const { countryName, flagEmoji, region } = Astro.props;
+
+// Get translations for current locale
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
+// Fetch VPS plans for this specific country
+const { data: countryPlans, error } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .filter('flag_icon', 'eq', flagEmoji)
+  .order('sort_order', { ascending: true });
+
+if (error) {
+  console.error('Error fetching country plans:', error);
+}
+
+// Convert database plans to pricing table format
+const plans = countryPlans?.map(plan => ({
+  name: `${plan.plan_type || plan.name}`,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    '24/7 Support',
+    'SSD Storage'
+  ],
+  ctaText: t.pricing.ctaText,
+  ctaLink: plan.order_url,
+  popular: plan.plan_type === 'Standard',
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
+})) || [];
+
+// Get the first plan's page_description if available
+const pageDescription = countryPlans?.length > 0 ? countryPlans[0].page_description : '';
+
+// Features data with translations
+const features = [
+  {
+    title: t.vpsLocations.features.ssdStorage.title,
+    description: t.vpsLocations.features.ssdStorage.description,
+    icon: "fas fa-bolt"
+  },
+  {
+    title: t.vpsLocations.features.dedicatedResources.title,
+    description: t.vpsLocations.features.dedicatedResources.description,
+    icon: "fas fa-microchip"
+  },
+  {
+    title: t.vpsLocations.features.rootAccess.title,
+    description: t.vpsLocations.features.rootAccess.description,
+    icon: "fas fa-terminal"
+  },
+  {
+    title: t.vpsLocations.features.uptime.title,
+    description: t.vpsLocations.features.uptime.description,
+    icon: "fas fa-chart-line"
+  },
+  {
+    title: t.vpsLocations.features.ddosProtection.title,
+    description: t.vpsLocations.features.ddosProtection.description,
+    icon: "fas fa-shield-alt"
+  },
+  {
+    title: t.vpsLocations.features.support.title,
+    description: t.vpsLocations.features.support.description,
+    icon: "fas fa-headset"
+  }
+];
+
+const flagImageUrl = getFlagImageUrl(flagEmoji);
+
+// Create translated strings with country name replacement
+const heroTitle = `${countryName} VPS Hosting`;
+const heroSubtitle = pageDescription || `Hochleistungs-VPS-Hosting in ${countryName} mit dedizierten Ressourcen und Infrastruktur auf Unternehmensebene.`;
+const whyChooseTitle = `Warum ${countryName} VPS Hosting wählen?`;
+const whyChooseDescription = pageDescription || `Erleben Sie Premium-VPS-Hosting in ${countryName} mit modernster Infrastruktur, garantierten Ressourcen und außergewöhnlicher Leistung. Unsere ${countryName} Rechenzentren bieten optimale Konnektivität und Zuverlässigkeit für Ihre Anwendungen.`;
+const pricingTitle = `${countryName} VPS Pläne`;
+const ctaTitle = `Bereit mit ${countryName} VPS zu starten?`;
+const locationInfo = `Standort: ${countryName}, ${region}`;
+---
+
+<Layout 
+  title={`${countryName} VPS Hosting - Hochleistungs-Cloud-Server`}
+  description={`Premium-VPS-Hosting in ${countryName} mit dedizierten Ressourcen, vollem Root-Zugriff und 99,9% Betriebszeit. ${pageDescription}`}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={heroTitle}
+    subtitle={heroSubtitle}
+    ctaText="Pläne anzeigen"
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Location Info -->
+  <section class="py-8 bg-white border-b">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div class="flex items-center">
+          <i class="fas fa-map-marker-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{locationInfo}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tachometer-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.lowLatency}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
+          <span class="font-semibold">{t.vpsLocations.locationInfo.enterpriseSecurity}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Description Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          {whyChooseTitle}
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          {whyChooseDescription}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section id="pricing" class="py-16 md:py-24 bg-gray-50">
+    <PricingTable
+      title={pricingTitle}
+      description={t.vpsLocations.pricing.description}
+      plans={plans}
+    />
+  </section>
+
+  <!-- Features Section -->
+  <FeaturesSection
+    title={t.vpsLocations.features.title}
+    subtitle={t.vpsLocations.features.subtitle}
+    features={features}
+  />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={ctaTitle}
+    subtitle={t.vpsLocations.cta.subtitle}
+    ctaText="Jetzt bestellen"
+    ctaLink="https://portal.qiwhost.com/login"
+  />
+</Layout>
