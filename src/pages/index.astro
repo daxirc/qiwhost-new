@@ -8,10 +8,51 @@ import ServerManagement from '../components/ServerManagement.astro';
 import FAQ from '../components/FAQ.astro';
 import CTABanner from '../components/CTABanner.astro';
 import { getTranslations, getCurrentLocale } from '../i18n/utils';
+import { supabase } from '../lib/supabase';
 
 // Get translations for current locale (default to English)
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
+
+// Fetch Linux VPS plans from database
+const { data: linuxPlans, error: linuxError } = await supabase
+  .from('hosting_plans')
+  .select('*')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .eq('os_type', 'Linux')
+  .order('sort_order', { ascending: true })
+  .limit(3);
+
+if (linuxError) {
+  console.error('Error fetching Linux plans:', linuxError);
+}
+
+// Convert database plans to pricing table format
+const plans = linuxPlans?.map(plan => ({
+  name: plan.name,
+  price: {
+    monthly: `$${plan.price_monthly}`,
+    yearly: `$${plan.price_yearly}`
+  },
+  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  features: [
+    plan.cpu,
+    plan.ram,
+    plan.storage,
+    plan.bandwidth,
+    'Full Root Access',
+    '24/7 Support'
+  ],
+  ctaText: t.pricing.ctaText,
+  ctaLink: plan.order_url,
+  popular: plan.plan_type === 'Standard',
+  sale_enabled: plan.sale_enabled,
+  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
+  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
+  sale_badge_text: plan.sale_badge_text,
+  osType: plan.os_type
+})) || [];
 
 // Features data with translations
 const features = [
@@ -44,44 +85,6 @@ const features = [
     title: t.services.globalNetwork.title,
     description: t.services.globalNetwork.description,
     icon: "fas fa-globe"
-  }
-];
-
-// Pricing plans data with translations
-const plans = [
-  {
-    name: t.pricing.starterVps.name,
-    price: {
-      monthly: "$9.99",
-      yearly: "$7.99"
-    },
-    description: t.pricing.starterVps.description,
-    features: t.pricing.starterVps.features,
-    ctaText: t.pricing.ctaText,
-    ctaLink: "https://portal.qiwhost.com/login"
-  },
-  {
-    name: t.pricing.businessVps.name,
-    price: {
-      monthly: "$19.99",
-      yearly: "$15.99"
-    },
-    description: t.pricing.businessVps.description,
-    features: t.pricing.businessVps.features,
-    ctaText: t.pricing.ctaText,
-    ctaLink: "https://portal.qiwhost.com/login",
-    popular: true
-  },
-  {
-    name: t.pricing.enterpriseVps.name,
-    price: {
-      monthly: "$39.99",
-      yearly: "$31.99"
-    },
-    description: t.pricing.enterpriseVps.description,
-    features: t.pricing.enterpriseVps.features,
-    ctaText: t.pricing.ctaText,
-    ctaLink: "https://portal.qiwhost.com/login"
   }
 ];
 
