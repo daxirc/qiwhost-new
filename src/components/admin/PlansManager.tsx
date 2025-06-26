@@ -91,6 +91,7 @@ interface Props {
   osTypeFilter?: string;
   showLocationFilter?: boolean;
   filterType?: 'location' | 'flag_icon';
+  allowedFlagIcons?: string[];
 }
 
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
@@ -98,7 +99,7 @@ const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
 const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America', 'Oceania'];
 const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
-export default function PlansManager({ category, osTypeFilter, showLocationFilter, filterType }: Props) {
+export default function PlansManager({ category, osTypeFilter, showLocationFilter, filterType, allowedFlagIcons }: Props) {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -112,17 +113,17 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
   const [selectedRegion, setSelectedRegion] = useState<string>(
     category === 'VPS' ? 'North America' : ''
   );
+  const [selectedFilterValue, setSelectedFilterValue] = useState<string>('All');
+  const [availableFilterOptions, setAvailableFilterOptions] = useState<string[]>(['All']);
   const [isSaleEnabled, setIsSaleEnabled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedFilterValue, setSelectedFilterValue] = useState<string>('All');
-  const [availableFilterOptions, setAvailableFilterOptions] = useState<string[]>([]);
 
   useEffect(() => {
     fetchPlans();
     if (filterType) {
       fetchAvailableFilterOptions();
     }
-  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedFilterValue, filterType]);
+  }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedFilterValue, filterType, allowedFlagIcons]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -146,14 +147,20 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
           .not('location', 'is', null)
           .distinct('location');
       } else if (filterType === 'flag_icon') {
-        // Fetch distinct flag_icons for country-based filtering
-        query = supabase
-          .from('hosting_plans')
-          .select('flag_icon')
-          .eq('category', 'VPS')
-          .eq('visible', true)
-          .not('flag_icon', 'is', null)
-          .distinct('flag_icon');
+        if (allowedFlagIcons && allowedFlagIcons.length > 0) {
+          // Use the predefined list of allowed flag icons
+          setAvailableFilterOptions(['All', ...allowedFlagIcons]);
+          return;
+        } else {
+          // Fetch distinct flag_icons for country-based filtering
+          query = supabase
+            .from('hosting_plans')
+            .select('flag_icon')
+            .eq('category', 'VPS')
+            .eq('visible', true)
+            .not('flag_icon', 'is', null)
+            .distinct('flag_icon');
+        }
       }
 
       if (query) {
@@ -205,6 +212,10 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
         query = query.eq('location', selectedFilterValue);
       } else if (filterType === 'flag_icon' && selectedFilterValue !== 'All') {
         query = query.eq('flag_icon', selectedFilterValue);
+      } 
+      // Filter by allowed flag icons if provided
+      else if (filterType === 'flag_icon' && allowedFlagIcons && allowedFlagIcons.length > 0) {
+        query = query.in('flag_icon', allowedFlagIcons);
       }
       // Only filter by region if not showing location filter and not using filterType
       else if (category === 'VPS' && selectedRegion && !osTypeFilter && !filterType) {

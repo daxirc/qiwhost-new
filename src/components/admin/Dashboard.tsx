@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlansManager from './PlansManager.tsx';
 import LogoManager from './LogoManager';
 import BlogPostsManager from './BlogPostsManager';
@@ -132,7 +132,11 @@ export default function Dashboard({ session }) {
             ) : activeTab === 'blog' ? (
               <BlogPostsManager />
             ) : activeTab === 'cloud-vps' ? (
-              <PlansManager category="VPS" showLocationFilter={true} />
+              <PlansManager 
+                category="VPS" 
+                filterType="flag_icon" 
+                allowedFlagIcons={['🇺🇸', '🇬🇧', '🇩🇪', '🇫🇮', '🇸🇬', '🇯🇵', '🇮🇳', '🇦🇺']} 
+              />
             ) : activeTab === 'vps' ? (
               <PlansManager category="VPS" filterType="location" />
             ) : (
