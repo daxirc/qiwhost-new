@@ -1,6 +1,10 @@
 ---
 // Footer component
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getCurrentLocale } from '../i18n/utils';
+
 const currentYear = new Date().getFullYear();
+const currentLocale = getCurrentLocale(Astro.currentLocale);
 ---
 
 <footer class="bg-gray-900 text-white py-12">
@@ -34,7 +38,7 @@ const currentYear = new Date().getFullYear();
         </div>
         
         <!-- TrustBox widget - Review Collector -->
-        <div class="trustpilot-widget mt-4 -ml-4" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="5e6f82b94936170001c0cb84" data-style-height="52px" data-style-width="100%">
+        <div class="trustpilot-widget mt-4 ml-[-4]" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="5e6f82b94936170001c0cb84" data-style-height="52px" data-style-width="100%">
         </div>
         <!-- End TrustBox widget -->
       </div>
@@ -47,6 +51,18 @@ const currentYear = new Date().getFullYear();
             <a href="/vps" class="text-gray-400 hover:text-white transition-colors flex items-center group">
               <i class="fas fa-server w-5 text-primary-400 group-hover:text-white"></i>
               <span>VPS Hosting</span>
+            </a>
+          </li>
+          <li>
+            <a href={getRelativeLocaleUrl(currentLocale, '/vps/linux')} class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fab fa-linux w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Linux VPS</span>
+            </a>
+          </li>
+          <li>
+            <a href={getRelativeLocaleUrl(currentLocale, '/vps/windows')} class="text-gray-400 hover:text-white transition-colors flex items-center group">
+              <i class="fab fa-windows w-5 text-primary-400 group-hover:text-white"></i>
+              <span>Windows VPS</span>
             </a>
           </li>
           <li>
