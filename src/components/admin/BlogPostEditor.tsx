@@ -214,9 +214,9 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
               height: 500,
               menubar: 'file edit view insert format tools table help',
               plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table paste code help wordcount'
+                'advlist,autolink,lists,link,image,charmap,print,preview,anchor',
+                'searchreplace,visualblocks,code,fullscreen',
+                'insertdatetime,media,table,paste,code,help,wordcount'
               ],
               toolbar: 'undo redo | formatselect | ' +
                 'bold italic underline | h1 h2 h3 | bullist numlist | ' +
