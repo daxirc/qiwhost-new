@@ -230,6 +230,10 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
                 blockquote { margin: 1em 40px; border-left: 4px solid #e5e7eb; padding-left: 16px; }
                 code { font-family: monospace; background-color: #f3f4f6; padding: 0.2em 0.4em; border-radius: 0.25em; }
               `,
+              // Fix for URL handling - prevent adding /blog/ prefix to links
+              relative_urls: false,
+              remove_script_host: false,
+              convert_urls: false,
               images_upload_handler: function (blobInfo, progress) {
                 return new Promise((resolve, reject) => {
                   // For now, we'll reject direct uploads and require URLs
