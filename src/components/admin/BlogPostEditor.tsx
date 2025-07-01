@@ -234,6 +234,7 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
               relative_urls: false,
               remove_script_host: false,
               convert_urls: false,
+              document_base_url: 'https://qiwhost.com/',
               images_upload_handler: function (blobInfo, progress) {
                 return new Promise((resolve, reject) => {
                   // For now, we'll reject direct uploads and require URLs
