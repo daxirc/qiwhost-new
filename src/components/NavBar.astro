@@ -508,7 +508,7 @@ const currentLocale = Astro.currentLocale || 'en';
     });
 
     // Fix for desktop location submenus
-    const regionDivs = document.querySelectorAll('.group/region');
+    const regionDivs = document.querySelectorAll('.group\\/region');
     regionDivs.forEach(div => {
       div.addEventListener('mouseenter', () => {
         const submenu = div.querySelector('div.absolute');
