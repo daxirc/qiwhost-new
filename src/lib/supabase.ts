@@ -33,5 +33,5 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// ✅ Removed test query to avoid RLS/session errors
-// If needed, test inside an authenticated context (e.g., after login)
+// Do not run test queries here - they can cause RLS errors
+// Only run queries after authentication is established
