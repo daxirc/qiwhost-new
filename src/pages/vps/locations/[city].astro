@@ -204,30 +204,6 @@ const locationInfo = t.vpsLocations.locationInfo.location.replace('{cityName}', 
           {whyChooseDescription}
         </p>
       </div>
-    </div>
-  </section>
-
-  <!-- Pricing Table -->
-  <section id="pricing" class="py-16 md:py-24 bg-gray-50">
-    <PricingTable
-      title={pricingTitle}
-      description={t.vpsLocations.pricing.description}
-      plans={plans}
-    />
-  </section>
-
-  <!-- Features Section -->
-  <section class="py-16 md:py-24">
-    <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t.vpsLocations.features.title}</h2>
-        <p class="text-xl text-gray-600">{t.vpsLocations.features.subtitle}</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map(feature => (
-            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
               <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
                 <i class={`${feature.icon} text-2xl`}></i>
               </div>
