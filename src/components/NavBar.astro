@@ -237,7 +237,7 @@ const currentLocale = Astro.currentLocale || 'en';
               <div class="bg-white rounded-lg shadow-xl ring-1 ring-gray-200">
                 <div class="py-2">
                   {Object.keys(locationsByRegion).map(region => (
-                    <div class="group/region relative hover:bg-gray-50">
+                    <div class="group/region relative">
                       <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
                         <span class="font-medium">{region}</span>
                         <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -245,7 +245,7 @@ const currentLocale = Astro.currentLocale || 'en';
                         </svg>
                       </div>
                       <!-- Cities submenu for this region -->
-                      <div class="absolute left-full top-0 w-56 bg-white rounded-lg opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-xl ring-1 ring-gray-200 ml-1 z-10">
+                      <div class="absolute left-full top-0 w-56 bg-white rounded-lg opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-xl ring-1 ring-gray-200 ml-1">
                         <div class="py-2 max-h-80 overflow-y-auto">
                           {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
                             locationsByRegion[region].map(location => (
@@ -466,7 +466,7 @@ const currentLocale = Astro.currentLocale || 'en';
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </summary>
-              <div class="ml-4 mt-1 space-y-1 max-h-60 overflow-y-auto">
+              <div class="ml-4 mt-1 space-y-1">
                 {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
                   locationsByRegion[region].map(location => (
                     <a 
@@ -505,26 +505,6 @@ const currentLocale = Astro.currentLocale || 'en';
     
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('mobile-menu-open');
-    });
-
-    // Fix for desktop location submenus
-    const regionDivs = document.querySelectorAll('.group\\/region');
-    regionDivs.forEach(div => {
-      div.addEventListener('mouseenter', () => {
-        const submenu = div.querySelector('div.absolute');
-        if (submenu) {
-          submenu.classList.add('opacity-100', 'visible');
-          submenu.classList.remove('opacity-0', 'invisible');
-        }
-      });
-      
-      div.addEventListener('mouseleave', () => {
-        const submenu = div.querySelector('div.absolute');
-        if (submenu) {
-          submenu.classList.remove('opacity-100', 'visible');
-          submenu.classList.add('opacity-0', 'invisible');
-        }
-      });
     });
   });
 </script>
