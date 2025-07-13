@@ -162,9 +162,7 @@ const plans = processedPlans.map(plan => ({
     plan.ram,
     plan.storage,
     plan.bandwidth
-    // Additional features now come from plan_features array
-    ...(plan.plan_features || [])
-  ctaText: t.pricing.ctaText,
+    ...(plan.plan_features || ['Full Root Access', '24/7 Support', 'SSD Storage'])
   ctaLink: plan.order_url,
   popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
@@ -219,6 +217,15 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
 
 const flagImageUrl = getFlagImageUrl(flagIcon);
 
+// Get city-specific features from the first plan
+const citySpecificFeatures = cityPlans?.length > 0 && cityPlans[0].city_features 
+  ? cityPlans[0].city_features.map((feature, index) => ({
+      title: feature,
+      description: cityFeatures[index % cityFeatures.length]?.description || "Premium feature for optimal performance.",
+      icon: cityFeatures[index % cityFeatures.length]?.icon || "fas fa-star"
+    }))
+  : cityFeatures;
+
 // Create translated strings with city name replacement
 const heroTitle = t.vpsLocations.hero.title.replace('{cityName}', cityName);
 const heroSubtitle = pageDescription || t.vpsLocations.hero.subtitle.replace('{cityName}', cityName);
@@ -268,6 +275,30 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
         <div class="flex items-center">
           <i class="fas fa-shield-alt text-primary-500 text-2xl mr-2"></i>
           <span class="font-semibold">{t.vpsLocations.locationInfo.enterpriseSecurity}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- City-Specific Features -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cityName} Datacenter Features</h2>
+        <p class="text-xl text-gray-600">Our {cityName} datacenter provides enterprise-grade infrastructure for your applications</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {citySpecificFeatures.map(feature => (
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
+                <i class={`${feature.icon} text-2xl`}></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
