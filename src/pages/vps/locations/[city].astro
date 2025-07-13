@@ -13,9 +13,8 @@ export async function getStaticPaths() {
     .select('location, region, flag_icon, page_description')
     .eq('category', 'VPS')
     .eq('visible', true)
-    .not('region', 'is', null)
-    .not('location', 'is', null);
-
+    .not('region', 'is', null) // Ensure region is not null
+    .not('location', 'is', null); // Ensure location is not null
   if (error) {
     console.error('Error fetching VPS locations:', error);
     return [];
@@ -214,18 +213,6 @@ const locationInfo = t.vpsLocations.locationInfo.location.replace('{cityName}', 
               </div>
               <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
               <p class="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Banner -->
-  <CTABanner
-    title={ctaTitle}
-    subtitle={t.vpsLocations.cta.subtitle}
-    ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />
 </Layout>

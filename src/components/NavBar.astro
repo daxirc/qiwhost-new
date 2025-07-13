@@ -9,19 +9,28 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch VPS locations for the dropdown
+// Define the countries that have dedicated VPS pages and should NOT be generated here
+const cloudVpsCountries = ['USA', 'UK', 'Germany', 'Finland', 'Singapore', 'Japan', 'India', 'Australia'];
+
+// Fetch all VPS locations for the dropdown, excluding those with dedicated country pages
 const { data: vpsLocations, error } = await supabase
   .from('hosting_plans')
   .select('region, location, flag_icon, category')
+  .eq('category', 'VPS') // Only fetch VPS plans
+  .eq('visible', true) // Only fetch visible plans
+  .not('region', 'is', null) // Ensure region is not null
+  .not('location', 'is', null) // Ensure location is not null
   .order('region', { ascending: true })
   .order('location', { ascending: true });
 
-console.log('Fetched VPS Locations:', vpsLocations);
 
 // Define countries that should be excluded from the locations dropdown
 // Filter out countries that have dedicated pages
 // Make sure we have locations data before filtering
-const filteredLocations = vpsLocations && vpsLocations.length > 0
-  ? vpsLocations.filter(location => location.category === 'VPS') : [];
+// The previous logic was filtering out cloudVpsCountries, but now we want all locations
+// The filtering for cloudVpsCountries is removed from the supabase query above.
+// Now, we just group all fetched VPS locations by region.
+const filteredLocations = vpsLocations || [];
 // Group locations by region
 const locationsByRegion = {};
 if (filteredLocations && !error) {
@@ -42,9 +51,6 @@ if (filteredLocations && !error) {
     }
   });
 }
-
-console.log('Filtered Locations:', filteredLocations);
-console.log('Grouped Locations by Region:', locationsByRegion);
 
 function slugify(text) {
   return text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
@@ -80,29 +86,6 @@ const currentLocale = Astro.currentLocale || 'en';
             <span class="font-semibold">Domains</span>
           </a>
 
-          <!-- Web Hosting Dropdown -->
-          <div class="relative group">
-            <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
-              <i class="fas fa-cloud mr-1.5"></i>
-              <span class="font-semibold">Web Hosting</span>
-              <svg class="h-4 w-4 ml-1 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
-              <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingShared)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <i class="fas fa-share-alt mr-2 text-primary-500"></i>
-                  Shared Hosting
-                </a>
-                <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingWordpress)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
-                  <i class="fab fa-wordpress mr-2 text-primary-500"></i>
-                  WordPress Hosting
-                </a>
-              </div>
-            </div>
-          </div>
-
           <!-- VPS Dropdown -->
           <div class="relative group">
             <button class="flex items-center px-2 py-2 text-gray-700 hover:text-primary-600 font-medium text-sm transition-all">
@@ -114,7 +97,7 @@ const currentLocale = Astro.currentLocale || 'en';
             </button>
             <div class="absolute left-0 mt-1 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0">
               <div class="bg-white rounded-lg shadow-lg ring-1 ring-gray-200 p-2">
-                <a href={getRelativeLocaleUrl(currentLocale, t.paths.vps)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg">
+                <a href={getRelativeLocaleUrl(currentLocale, t.paths.vps)} class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-medium">
                   <i class="fas fa-server mr-2 text-primary-500"></i>
                   VPS Overview
                 </a>
@@ -126,7 +109,6 @@ const currentLocale = Astro.currentLocale || 'en';
                   <i class="fab fa-linux mr-2 text-primary-500"></i>
                   Linux VPS
                 </a>
-
               </div>
             </div>
           </div>
@@ -275,22 +257,6 @@ const currentLocale = Astro.currentLocale || 'en';
         <i class="fas fa-globe mr-2 text-primary-500"></i>
         Domains
       </a>
-
-      <details class="group">
-        <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
-          <div class="flex items-center">
-            <i class="fas fa-cloud mr-2 text-primary-500"></i>
-            <span class="font-medium">Web Hosting</span>
-          </div>
-          <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </summary>
-        <div class="ml-6 mt-2 space-y-2">
-          <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingShared)} class="block text-sm text-gray-700 hover:underline">Shared Hosting</a>
-          <a href={getRelativeLocaleUrl(currentLocale, t.paths.webHostingWordpress)} class="block text-sm text-gray-700 hover:underline">WordPress Hosting</a>
-        </div>
-      </details>
 
       <details class="group">
         <summary class="flex items-center justify-between cursor-pointer py-2 text-gray-700 hover:text-primary-600">
