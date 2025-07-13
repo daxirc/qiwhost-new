@@ -6,39 +6,19 @@ import CTABanner from '../../../components/CTABanner.astro';
 import { supabase } from '../../../lib/supabase';
 import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
 
-// Features data for city-specific VPS features
-const cityFeatures = [
-  {
-    title: "Low Latency Network",
-    description: "Optimized network infrastructure for minimal latency and maximum throughput.",
-    icon: "fas fa-network-wired"
-  },
-  {
-    title: "Enterprise-grade Infrastructure",
-    description: "State-of-the-art data centers with redundant power, cooling, and network systems.",
-    icon: "fas fa-building"
-  },
-  {
-    title: "Multiple Datacenter Options",
-    description: "Choose from multiple data centers within the region for optimal performance.",
-    icon: "fas fa-server"
-  },
-  {
-    title: "Tier-1 Network Providers",
-    description: "Direct connections to premium network providers for reliable connectivity.",
-    icon: "fas fa-globe"
-  },
-  {
-    title: "Redundant Power Systems",
-    description: "Multiple power sources and backup generators ensure continuous operation.",
-    icon: "fas fa-plug"
-  },
-  {
-    title: "Advanced Cooling Systems",
-    description: "Precision cooling systems maintain optimal operating temperatures for hardware.",
-    icon: "fas fa-snowflake"
-  }
-];
+// Default city feature descriptions and icons (used when database doesn't provide them)
+const cityFeatureDefaults = {
+  "Low Latency Network": { description: "Optimized network infrastructure for minimal latency and maximum throughput.", icon: "fas fa-network-wired" },
+  "Enterprise-grade Infrastructure": { description: "State-of-the-art data centers with redundant power, cooling, and network systems.", icon: "fas fa-building" },
+  "Multiple Datacenter Options": { description: "Choose from multiple data centers within the region for optimal performance.", icon: "fas fa-server" },
+  "Tier-1 Network Providers": { description: "Direct connections to premium network providers for reliable connectivity.", icon: "fas fa-globe" },
+  "Redundant Power Systems": { description: "Multiple power sources and backup generators ensure continuous operation.", icon: "fas fa-plug" },
+  "Advanced Cooling Systems": { description: "Precision cooling systems maintain optimal operating temperatures for hardware.", icon: "fas fa-snowflake" },
+  "GDPR Compliant": { description: "Infrastructure and processes designed to meet GDPR requirements.", icon: "fas fa-shield-alt" },
+  "Green Energy Powered": { description: "Datacenter powered by renewable energy sources.", icon: "fas fa-leaf" },
+  "24/7 On-site Security": { description: "Round-the-clock physical security and monitoring.", icon: "fas fa-user-shield" },
+  "Low Latency Asia Access": { description: "Optimized routing for minimal latency across Asia.", icon: "fas fa-tachometer-alt" }
+};
 
 // Country name to flag emoji mapping
 const countryNameToFlagEmoji = {
@@ -111,7 +91,7 @@ const t = getTranslations(locale);
 // Fetch VPS plans for this specific city
 const { data: cityPlans, error } = await supabase
   .from('hosting_plans')
-  .select('*, plan_features, city_features')
+  .select('*')
   .eq('category', 'VPS')
   .eq('location', cityName)
   .eq('visible', true)
@@ -119,20 +99,6 @@ const { data: cityPlans, error } = await supabase
 
 if (error) {
   console.error('Error fetching city plans:', error);
-}
-
-// Ensure we have at least 3 plans (Basic, Standard, Pro)
-let processedPlans = cityPlans || [];
-
-// Sort plans by plan_type to ensure consistent order
-processedPlans.sort((a, b) => {
-  const planOrder = { 'Basic': 1, 'Standard': 2, 'Pro': 3 };
-  return (planOrder[a.plan_type] || 99) - (planOrder[b.plan_type] || 99);
-});
-
-// Limit to 3 plans for display
-if (processedPlans.length > 3) {
-  processedPlans = processedPlans.slice(0, 3);
 }
 
 // Ensure we have at least 3 plans (Basic, Standard, Pro)
@@ -161,8 +127,9 @@ const plans = processedPlans.map(plan => ({
     plan.cpu,
     plan.ram,
     plan.storage,
-    plan.bandwidth
+    plan.bandwidth,
     ...(plan.plan_features || ['Full Root Access', '24/7 Support', 'SSD Storage'])
+  ],
   ctaLink: plan.order_url,
   popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
@@ -206,25 +173,18 @@ const features = [
   }
 ];
 
-// Get city-specific features from the first plan (they should be the same for all plans in this city)
-const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city_features 
-  ? processedPlans[0].city_features.map((feature, index) => ({
-      title: feature,
-      description: cityFeatures[index]?.description || "Premium feature for optimal performance.",
-      icon: cityFeatures[index]?.icon || "fas fa-star"
-    }))
-  : cityFeatures;
-
-const flagImageUrl = getFlagImageUrl(flagIcon);
-
 // Get city-specific features from the first plan
-const citySpecificFeatures = cityPlans?.length > 0 && cityPlans[0].city_features 
-  ? cityPlans[0].city_features.map((feature, index) => ({
+const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city_features 
+  ? processedPlans[0].city_features.map(feature => ({
       title: feature,
-      description: cityFeatures[index % cityFeatures.length]?.description || "Premium feature for optimal performance.",
-      icon: cityFeatures[index % cityFeatures.length]?.icon || "fas fa-star"
+      description: cityFeatureDefaults[feature]?.description || "Premium feature for optimal performance.",
+      icon: cityFeatureDefaults[feature]?.icon || "fas fa-star"
     }))
-  : cityFeatures;
+  : Object.entries(cityFeatureDefaults).slice(0, 6).map(([title, { description, icon }]) => ({
+      title,
+      description,
+      icon
+    }));
 
 // Create translated strings with city name replacement
 const heroTitle = t.vpsLocations.hero.title.replace('{cityName}', cityName);
@@ -237,14 +197,7 @@ const pricingTitle = t.vpsLocations.pricing.title.replace('{cityName}', cityName
 const ctaTitle = t.vpsLocations.cta.title.replace('{cityName}', cityName);
 const locationInfo = t.vpsLocations.locationInfo.location.replace('{cityName}', cityName).replace('{region}', region);
 
-// Get city-specific features from the first plan (they should be the same for all plans in this city)
-const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city_features 
-  ? processedPlans[0].city_features.map((feature, index) => ({
-      title: feature,
-      description: cityFeatures[index]?.description || "Premium feature for optimal performance.",
-      icon: cityFeatures[index]?.icon || "fas fa-star"
-    }))
-  : cityFeatures;
+const flagImageUrl = getFlagImageUrl(flagIcon);
 ---
 
 <Layout 
@@ -280,55 +233,6 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
     </div>
   </section>
 
-  <!-- City-Specific Features -->
-  <section class="py-16 md:py-24">
-    <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cityName} Datacenter Features</h2>
-        <p class="text-xl text-gray-600">Our {cityName} datacenter provides enterprise-grade infrastructure for your applications</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {citySpecificFeatures.map(feature => (
-            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
-              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <i class={`${feature.icon} text-2xl`}></i>
-              </div>
-              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p class="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- City-Specific Features -->
-  <section class="py-16 md:py-24">
-    <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cityName} Datacenter Features</h2>
-        <p class="text-xl text-gray-600">Our {cityName} datacenter provides enterprise-grade infrastructure for your applications</p>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {citySpecificFeatures.map(feature => (
-            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
-              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <i class={`${feature.icon} text-2xl`}></i>
-              </div>
-              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p class="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-        </h2>
-        <p class="text-lg text-gray-700 leading-relaxed">
   <!-- Description Section -->
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container mx-auto px-4">
@@ -356,7 +260,7 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
   <!-- City-Specific Features -->
   <section class="py-16 md:py-24">
     <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-12">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cityName} Datacenter Features</h2>
         <p class="text-xl text-gray-600">Our {cityName} datacenter provides enterprise-grade infrastructure for your applications</p>
       </div>
@@ -376,8 +280,12 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
       </div>
     </div>
   </section>
-        </h2>
-        <p class="text-lg text-gray-700 leading-relaxed">
+  
+  <!-- CTA Banner -->
+  <CTABanner
+    title={ctaTitle}
+    subtitle={t.vpsLocations.cta.subtitle}
+    ctaText="Order Now"
     ctaLink="https://portal.qiwhost.com/login"
   />
 </Layout>
