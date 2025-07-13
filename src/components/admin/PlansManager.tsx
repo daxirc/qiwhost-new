@@ -70,6 +70,9 @@ interface Plan {
   plan_type?: string | null;
   plan_features?: string[] | null;
   city_features?: string[] | null;
+  plan_type?: string | null;
+  plan_features?: string[] | null;
+  city_features?: string[] | null;
   ram: string;
   cpu: string;
   storage: string;
@@ -99,6 +102,7 @@ interface Props {
 const DEDICATED_CATEGORIES = ['VALUE', 'CUSTOM', 'GPU'];
 const RDP_LOCATIONS = ['USA', 'Singapore', 'Germany', 'Finland', 'UK'];
 const VPS_REGIONS = ['North America', 'Europe', 'Southeast Asia', 'East Asia', 'Middle East', 'Africa', 'South Asia', 'South America', 'Oceania'];
+const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 const PLAN_TYPES = ['Basic', 'Standard', 'Pro'];
 
 export default function PlansManager({ category, osTypeFilter, showLocationFilter, filterType, allowedFlagIcons }: Props) {
@@ -134,6 +138,22 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
     'Redundant Power Systems',
     'Advanced Cooling Systems'
   ]);
+  const [planFeatures, setPlanFeatures] = useState<string[]>([
+    'Full Root Access',
+    'SSD Storage',
+    'DDoS Protection',
+    '24/7 Support',
+    'Instant Provisioning',
+    '99.9% Uptime Guarantee'
+  ]);
+  const [cityFeatures, setCityFeatures] = useState<string[]>([
+    'Low Latency Network',
+    'Enterprise-grade Infrastructure',
+    'Multiple Datacenter Options',
+    'Tier-1 Network Providers',
+    'Redundant Power Systems',
+    'Advanced Cooling Systems'
+  ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -142,6 +162,36 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
       fetchAvailableFilterOptions();
     }
   }, [category, osTypeFilter, selectedSubcategory, selectedLocation, selectedRegion, selectedFilterValue, filterType, allowedFlagIcons]);
+
+  useEffect(() => {
+    if (editingPlan) {
+      setIsSaleEnabled(editingPlan.sale_enabled);
+      if (editingPlan.plan_features) {
+        setPlanFeatures(editingPlan.plan_features);
+      }
+      if (editingPlan.city_features) {
+        setCityFeatures(editingPlan.city_features);
+      }
+    } else {
+      setIsSaleEnabled(false);
+      setPlanFeatures([
+        'Full Root Access',
+        'SSD Storage',
+        'DDoS Protection',
+        '24/7 Support',
+        'Instant Provisioning',
+        '99.9% Uptime Guarantee'
+      ]);
+      setCityFeatures([
+        'Low Latency Network',
+        'Enterprise-grade Infrastructure',
+        'Multiple Datacenter Options',
+        'Tier-1 Network Providers',
+        'Redundant Power Systems',
+        'Advanced Cooling Systems'
+      ]);
+    }
+  }, [editingPlan]);
 
   useEffect(() => {
     if (editingPlan) {
@@ -465,6 +515,7 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
                       name="region"
                       defaultValue={editingPlan?.region || selectedRegion}
                       required
+                      required
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {VPS_REGIONS.map((region) => (
@@ -479,9 +530,23 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
                       name="flag_icon"
                       defaultValue={editingPlan?.flag_icon || ''}
                       required
+                      required
                       placeholder="🇺🇸"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Plan Type *</label>
+                    <select
+                      name="plan_type"
+                      defaultValue={editingPlan?.plan_type || 'Basic'}
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      {PLAN_TYPES.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Plan Type *</label>
@@ -818,6 +883,90 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
                 </div>
               </div>
             )}
+            
+            {/* Plan Features */}
+            <div className="col-span-2 mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Plan Features</label>
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {planFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center">
+                      <input
+                        type="text"
+                        value={feature}
+                        onChange={(e) => {
+                          const newFeatures = [...planFeatures];
+                          newFeatures[index] = e.target.value;
+                          setPlanFeatures(newFeatures);
+                        }}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newFeatures = planFeatures.filter((_, i) => i !== index);
+                          setPlanFeatures(newFeatures);
+                        }}
+                        className="ml-2 text-red-500 hover:text-red-700"
+                      >
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPlanFeatures([...planFeatures, ''])}
+                  className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+                >
+                  <i className="fas fa-plus mr-2"></i>
+                  Add Feature
+                </button>
+              </div>
+            </div>
+
+            {/* City Features (only for VPS) */}
+            {category === 'VPS' && (
+              <div className="col-span-2 mt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">City-Specific Features</label>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {cityFeatures.map((feature, index) => (
+                      <div key={index} className="flex items-center">
+                        <input
+                          type="text"
+                          value={feature}
+                          onChange={(e) => {
+                            const newFeatures = [...cityFeatures];
+                            newFeatures[index] = e.target.value;
+                            setCityFeatures(newFeatures);
+                          }}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFeatures = cityFeatures.filter((_, i) => i !== index);
+                            setCityFeatures(newFeatures);
+                          }}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCityFeatures([...cityFeatures, ''])}
+                    className="mt-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+                  >
+                    <i className="fas fa-plus mr-2"></i>
+                    Add City Feature
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="mt-8 flex justify-end space-x-4">
               <button
@@ -949,6 +1098,11 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
                              <span className="text-xs text-gray-500">Features: {plan.plan_features.length}</span>
                            </div>
                          )}
+                         {plan.plan_features && plan.plan_features.length > 0 && (
+                           <div className="mt-2">
+                             <span className="text-xs text-gray-500">Features: {plan.plan_features.length}</span>
+                           </div>
+                         )}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">{plan.location}</td>
@@ -1059,6 +1213,8 @@ export default function PlansManager({ category, osTypeFilter, showLocationFilte
       const planData = {
         ...plan,
         order_url: orderUrl,
+        plan_features: planFeatures,
+        city_features: category === 'VPS' ? cityFeatures : null,
         category,
         subcategory: category === 'DEDICATED' ? selectedSubcategory : null,
         region: category === 'VPS' ? (plan.region || selectedRegion) : null,

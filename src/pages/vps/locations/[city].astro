@@ -135,6 +135,20 @@ if (processedPlans.length > 3) {
   processedPlans = processedPlans.slice(0, 3);
 }
 
+// Ensure we have at least 3 plans (Basic, Standard, Pro)
+let processedPlans = cityPlans || [];
+
+// Sort plans by plan_type to ensure consistent order
+processedPlans.sort((a, b) => {
+  const planOrder = { 'Basic': 1, 'Standard': 2, 'Pro': 3 };
+  return (planOrder[a.plan_type] || 99) - (planOrder[b.plan_type] || 99);
+});
+
+// Limit to 3 plans for display
+if (processedPlans.length > 3) {
+  processedPlans = processedPlans.slice(0, 3);
+}
+
 // Convert database plans to pricing table format
 const plans = processedPlans.map(plan => ({
   name: `${plan.plan_type || plan.name}`,
@@ -150,7 +164,6 @@ const plans = processedPlans.map(plan => ({
     plan.bandwidth
     // Additional features now come from plan_features array
     ...(plan.plan_features || [])
-  ],
   ctaText: t.pricing.ctaText,
   ctaLink: plan.order_url,
   popular: plan.plan_type === 'Standard',
@@ -194,6 +207,15 @@ const features = [
     icon: "fas fa-headset"
   }
 ];
+
+// Get city-specific features from the first plan (they should be the same for all plans in this city)
+const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city_features 
+  ? processedPlans[0].city_features.map((feature, index) => ({
+      title: feature,
+      description: cityFeatures[index]?.description || "Premium feature for optimal performance.",
+      icon: cityFeatures[index]?.icon || "fas fa-star"
+    }))
+  : cityFeatures;
 
 const flagImageUrl = getFlagImageUrl(flagIcon);
 
@@ -251,6 +273,31 @@ const citySpecificFeatures = processedPlans.length > 0 && processedPlans[0].city
     </div>
   </section>
 
+  <!-- City-Specific Features -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cityName} Datacenter Features</h2>
+        <p class="text-xl text-gray-600">Our {cityName} datacenter provides enterprise-grade infrastructure for your applications</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {citySpecificFeatures.map(feature => (
+            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+              <div class="bg-primary-100 text-primary-600 rounded-full w-14 h-14 flex items-center justify-center mb-4">
+                <i class={`${feature.icon} text-2xl`}></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-3">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+        </h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
   <!-- Description Section -->
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container mx-auto px-4">
