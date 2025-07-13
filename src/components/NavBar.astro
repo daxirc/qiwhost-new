@@ -8,45 +8,49 @@ import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../i18n/util
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
-// Fetch VPS locations for the dropdown
-// Define the countries that have dedicated VPS pages and should NOT be generated here
-const cloudVpsCountries = ['USA', 'UK', 'Germany', 'Finland', 'Singapore', 'Japan', 'India', 'Australia'];
+// Define countries that have dedicated VPS pages
+const dedicatedVpsCountries = [
+  { name: 'USA', slug: 'usa', flag: '🇺🇸' },
+  { name: 'UK', slug: 'uk', flag: '🇬🇧' },
+  { name: 'Germany', slug: 'germany', flag: '🇩🇪' },
+  { name: 'Finland', slug: 'finland', flag: '🇫🇮' },
+  { name: 'Singapore', slug: 'singapore', flag: '🇸🇬' },
+  { name: 'Japan', slug: 'japan', flag: '🇯🇵' },
+  { name: 'India', slug: 'india', flag: '🇮🇳' },
+  { name: 'Australia', slug: 'australia', flag: '🇦🇺' }
+];
 
 // Fetch all VPS locations for the dropdown, excluding those with dedicated country pages
-const { data: vpsLocations, error } = await supabase
+const { data: allVpsLocations, error } = await supabase
   .from('hosting_plans')
-  .select('region, location, flag_icon, category')
-  .eq('category', 'VPS') // Only fetch VPS plans
-  .eq('visible', true) // Only fetch visible plans
-  .not('region', 'is', null) // Ensure region is not null
-  .not('location', 'is', null) // Ensure location is not null
+  .select('region, location, flag_icon')
+  .eq('category', 'VPS')
+  .eq('visible', true)
+  .not('region', 'is', null)
+  .not('location', 'is', null)
   .order('region', { ascending: true })
   .order('location', { ascending: true });
 
-
-// Define countries that should be excluded from the locations dropdown
-// Filter out countries that have dedicated pages
-// Make sure we have locations data before filtering
-// The previous logic was filtering out cloudVpsCountries, but now we want all locations
-// The filtering for cloudVpsCountries is removed from the supabase query above.
-// Now, we just group all fetched VPS locations by region.
-const filteredLocations = vpsLocations || [];
 // Group locations by region
 const locationsByRegion = {};
-if (filteredLocations && !error) {
-  filteredLocations.forEach(location => {
+if (allVpsLocations && !error) {
+  const locationsToDisplay = allVpsLocations.filter(location => {
+    // Exclude locations that have dedicated country pages
+    return !dedicatedVpsCountries.some(country => country.name === location.location);
+  });
+
+  locationsToDisplay.forEach(location => {
+    const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
     if (!locationsByRegion[location.region]) {
       locationsByRegion[location.region] = [];
     }
-    // Avoid duplicates
-    const exists = locationsByRegion[location.region].find(
-      loc => loc.location === location.location
-    );
+    // Avoid duplicates in the menu
+    const exists = locationsByRegion[location.region].some(item => item.slug === slug);
     if (!exists) {
       locationsByRegion[location.region].push({
         location: location.location,
         flag_icon: location.flag_icon,
-        slug: location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')
+        slug: slug
       });
     }
   });

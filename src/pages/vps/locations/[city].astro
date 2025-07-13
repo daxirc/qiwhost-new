@@ -6,6 +6,18 @@ import CTABanner from '../../../components/CTABanner.astro';
 import { supabase } from '../../../lib/supabase';
 import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
 
+// Country name to flag emoji mapping
+const countryNameToFlagEmoji = {
+  'Germany': '🇩🇪',
+  'Finland': '🇫🇮',
+  'USA': '🇺🇸',
+  'UK': '🇬🇧',
+  'Singapore': '🇸🇬',
+  'Japan': '🇯🇵',
+  'India': '🇮🇳',
+  'Australia': '🇦🇺'
+};
+
 export async function getStaticPaths() {
   // Fetch all VPS locations to generate static paths
   const { data: locations, error } = await supabase
@@ -13,17 +25,25 @@ export async function getStaticPaths() {
     .select('location, region, flag_icon, page_description')
     .eq('category', 'VPS')
     .eq('visible', true)
-    .not('region', 'is', null) // Ensure region is not null
-    .not('location', 'is', null); // Ensure location is not null
+    .not('region', 'is', null)
+    .not('location', 'is', null)
+    .order('region', { ascending: true })
+    .order('location', { ascending: true });
   if (error) {
     console.error('Error fetching VPS locations:', error);
     return [];
   }
 
-  // Remove duplicates and create paths, excluding cloud VPS countries
+  // Define countries that have dedicated VPS pages and should NOT be generated here
+  const cloudVpsCountries = ['USA', 'UK', 'Germany', 'Finland', 'Singapore', 'Japan', 'India', 'Australia'];
+
+  // Remove duplicates and create paths, excluding locations covered by dedicated country pages
   const uniqueLocations = locations.reduce((acc, location) => {
     const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    if (!acc.find(l => l.slug === slug)) {
+    // Check if this location's country is in the cloudVpsCountries list
+    const isCloudVpsCountry = cloudVpsCountries.includes(location.location);
+
+    if (!isCloudVpsCountry && !acc.find(l => l.slug === slug)) {
       acc.push({
         slug,
         location: location.location,
