@@ -33,5 +33,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Do not run test queries here - they can cause RLS errors
-// Only run queries after authentication is established
+// Test connection
+supabase.from('hosting_plans').select('count', { count: 'exact', head: true })
+  .then(({ count, error }) => {
+    if (error) {
+      console.error('Supabase connection test failed:', error);
+    } else {
+      console.log('Supabase connected successfully. Plans count:', count);
+    }
+  });
