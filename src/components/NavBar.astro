@@ -22,10 +22,13 @@ const { data: vpsLocations, error } = await supabase
 console.log('Fetched VPS Locations:', vpsLocations);
 
 // Define countries that should be excluded from the locations dropdown
-const cloudVpsCountries = ['Germany', 'Finland', 'USA', 'UK', 'Singapore', 'Japan', 'India', 'Australia'];
+const cloudVpsCountries = ['Germany', 'Finland', 'USA', 'UK', 'Singapore', 'Japan', 'India', 'Australia', 'France'];
 
 // Filter out countries that have dedicated pages
-const filteredLocations = vpsLocations?.filter(location => !cloudVpsCountries.includes(location.location)) || [];
+// Make sure we have locations data before filtering
+const filteredLocations = vpsLocations && vpsLocations.length > 0 
+  ? vpsLocations.filter(location => !cloudVpsCountries.includes(location.location)) 
+  : [];
 
 // Group locations by region
 const locationsByRegion = {};
@@ -48,6 +51,7 @@ if (filteredLocations && !error) {
   });
 }
 
+console.log('Filtered Locations:', filteredLocations);
 console.log('Grouped Locations by Region:', locationsByRegion);
 
 function slugify(text) {
@@ -239,7 +243,7 @@ const currentLocale = Astro.currentLocale || 'en';
                   {Object.keys(locationsByRegion).map(region => (
                     <div class="group/region relative">
                       <div class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer transition-colors">
-                        <span class="font-medium">{region}</span>
+                        <span class="font-medium">{region || 'Other Regions'}</span>
                         <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
@@ -247,7 +251,7 @@ const currentLocale = Astro.currentLocale || 'en';
                       <!-- Cities submenu for this region -->
                       <div class="absolute left-full top-0 w-56 bg-white rounded-lg opacity-0 invisible group-hover/region:opacity-100 group-hover/region:visible transition-all duration-200 shadow-xl ring-1 ring-gray-200 ml-1">
                         <div class="py-2 max-h-80 overflow-y-auto">
-                          {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
+                          {locationsByRegion[region] && locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
                             locationsByRegion[region].map(location => (
                               <a 
                                 href={getRelativeLocaleUrl(currentLocale, `/vps/locations/${location.slug}`)}
@@ -461,13 +465,13 @@ const currentLocale = Astro.currentLocale || 'en';
           {Object.keys(locationsByRegion).map(region => (
             <details class="group/region">
               <summary class="flex items-center justify-between cursor-pointer py-1 text-sm text-gray-600 hover:text-primary-600">
-                <span class="font-medium">{region}</span>
+                <span class="font-medium">{region || 'Other Regions'}</span>
                 <svg class="w-3 h-3 transition-transform group-open/region:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7 7" />
                 </svg>
               </summary>
               <div class="ml-4 mt-1 space-y-1">
-                {locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
+                {locationsByRegion[region] && locationsByRegion[region] && locationsByRegion[region].length > 0 ? (
                   locationsByRegion[region].map(location => (
                     <a 
                       href={getRelativeLocaleUrl(currentLocale, `/vps/locations/${location.slug}`)}
