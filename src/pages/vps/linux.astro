@@ -18,6 +18,7 @@ const { data: linuxPlans, error } = await supabase
   .eq('category', 'VPS')
   .eq('visible', true)
   .eq('os_type', 'Linux')
+  .eq('is_linux_featured', true)
   .order('sort_order', { ascending: true });
 
 if (error) {
