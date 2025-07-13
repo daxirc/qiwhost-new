@@ -70,41 +70,81 @@ const countryNameToFlagEmoji = {
 };
 
 export async function getStaticPaths() {
-  // Fetch all VPS locations to generate static paths
-  const { data: locations, error } = await supabase
-    .from('hosting_plans')
-    .select('location, region, flag_icon, page_description')
-    .eq('category', 'VPS')
-    .eq('visible', true)
-    .not('region', 'is', null)
-    .not('location', 'is', null)
-    .order('region', { ascending: true })
-    .order('location', { ascending: true });
-  if (error) {
-    console.error('Error fetching VPS locations:', error);
-    return [];
-  }
-
+  // Define all locations with their regions and flag emojis
+  const allLocations = [
+    // Africa
+    { location: 'Cairo', region: 'Africa', flag_icon: '🇪🇬' },
+    { location: 'Johannesburg', region: 'Africa', flag_icon: '🇿🇦' },
+    
+    // East Asia
+    { location: 'Hong Kong', region: 'East Asia', flag_icon: '🇭🇰' },
+    { location: 'Seoul', region: 'East Asia', flag_icon: '🇰🇷' },
+    { location: 'Taipei', region: 'East Asia', flag_icon: '🇹🇼' },
+    { location: 'Tokyo', region: 'East Asia', flag_icon: '🇯🇵' },
+    
+    // Europe
+    { location: 'Athens', region: 'Europe', flag_icon: '🇬🇷' },
+    { location: 'Frankfurt', region: 'Europe', flag_icon: '🇩🇪' },
+    { location: 'London', region: 'Europe', flag_icon: '🇬🇧' },
+    { location: 'Marseille', region: 'Europe', flag_icon: '🇫🇷' },
+    { location: 'Moscow', region: 'Europe', flag_icon: '🇷🇺' },
+    { location: 'Sofia', region: 'Europe', flag_icon: '🇧🇬' },
+    
+    // Middle East
+    { location: 'Baghdad', region: 'Middle East', flag_icon: '🇮🇶' },
+    { location: 'Bahrain', region: 'Middle East', flag_icon: '🇧🇭' },
+    { location: 'Doha', region: 'Middle East', flag_icon: '🇶🇦' },
+    { location: 'Dubai', region: 'Middle East', flag_icon: '🇦🇪' },
+    { location: 'Istanbul', region: 'Middle East', flag_icon: '🇹🇷' },
+    { location: 'Jeddah', region: 'Middle East', flag_icon: '🇸🇦' },
+    { location: 'Kuwait City', region: 'Middle East', flag_icon: '🇰🇼' },
+    { location: 'Muscat', region: 'Middle East', flag_icon: '🇴🇲' },
+    { location: 'Riyadh', region: 'Middle East', flag_icon: '🇸🇦' },
+    
+    // North America
+    { location: 'Mexico City', region: 'North America', flag_icon: '🇲🇽' },
+    { location: 'Silicon Valley', region: 'North America', flag_icon: '🇺🇸' },
+    { location: 'Washington', region: 'North America', flag_icon: '🇺🇸' },
+    
+    // Oceania
+    { location: 'Sydney', region: 'Oceania', flag_icon: '🇦🇺' },
+    
+    // South America
+    { location: 'Bogota', region: 'South America', flag_icon: '🇨🇴' },
+    { location: 'Buenos Aires', region: 'South America', flag_icon: '🇦🇷' },
+    { location: 'Santiago', region: 'South America', flag_icon: '🇨🇱' },
+    { location: 'São Paulo', region: 'South America', flag_icon: '🇧🇷' },
+    
+    // South Asia
+    { location: 'Dhaka', region: 'South Asia', flag_icon: '🇧🇩' },
+    { location: 'Karachi', region: 'South Asia', flag_icon: '🇵🇰' },
+    { location: 'Kathmandu', region: 'South Asia', flag_icon: '🇳🇵' },
+    { location: 'Mumbai', region: 'South Asia', flag_icon: '🇮🇳' },
+    
+    // Southeast Asia
+    { location: 'Bangkok', region: 'Southeast Asia', flag_icon: '🇹🇭' },
+    { location: 'Hanoi', region: 'Southeast Asia', flag_icon: '🇻🇳' },
+    { location: 'Ho Chi Minh City', region: 'Southeast Asia', flag_icon: '🇻🇳' },
+    { location: 'Jakarta', region: 'Southeast Asia', flag_icon: '🇮🇩' },
+    { location: 'Kuala Lumpur', region: 'Southeast Asia', flag_icon: '🇲🇾' },
+    { location: 'Manila', region: 'Southeast Asia', flag_icon: '🇵🇭' },
+    { location: 'Phnom Penh', region: 'Southeast Asia', flag_icon: '🇰🇭' },
+    { location: 'Yangon', region: 'Southeast Asia', flag_icon: '🇲🇲' }
+  ];
+  
   // Define countries that have dedicated VPS pages and should NOT be generated here
   const cloudVpsCountries = ['USA', 'UK', 'Germany', 'Finland', 'Singapore', 'Japan', 'India', 'Australia'];
-
-  // Remove duplicates and create paths, excluding locations covered by dedicated country pages
-  const uniqueLocations = locations.reduce((acc, location) => {
-    const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    // Check if this location's country is in the cloudVpsCountries list
-    const isCloudVpsCountry = cloudVpsCountries.includes(location.location);
-
-    if (!isCloudVpsCountry && !acc.find(l => l.slug === slug)) {
-      acc.push({
-        slug,
-        location: location.location,
-        region: location.region,
-        flag_icon: location.flag_icon,
-        page_description: location.page_description
-      });
-    }
-    return acc;
-  }, []);
+  
+  // Create paths for each location, excluding those covered by dedicated country pages
+  const uniqueLocations = allLocations.filter(location => 
+    !cloudVpsCountries.includes(location.location)
+  ).map(location => ({
+    slug: location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
+    location: location.location,
+    region: location.region,
+    flag_icon: location.flag_icon,
+    page_description: ""
+  }));
 
   // Generate paths for each location
   return uniqueLocations.map(location => ({
