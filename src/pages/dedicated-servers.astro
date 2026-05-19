@@ -4,46 +4,105 @@ import Hero from '../components/Hero.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
 import PricingTable from '../components/PricingTable.astro';
 import CTABanner from '../components/CTABanner.astro';
-import { fetchDedicatedPlans } from '../lib/api';
 import { getTranslations, getCurrentLocale } from '../i18n/utils';
 
 // Get translations for current locale
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
-// Fetch plans from VPS API at build time
-const plans = await fetchDedicatedPlans();
-
-// Convert plans to pricing table format
-function formatPlans(plans) {
-  return plans.map(plan => ({
-    name: plan.name,
-    price: {
-      monthly: `$${plan.price_monthly}`
-    },
-    description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
-    features: [
-      plan.cpu,
-      plan.ram,
-      plan.storage,
-      plan.bandwidth,
-      plan.location,
-      'Full Root Access',
-      '24/7 Support'
-    ],
+// Static plans to avoid API dependency
+const valueServers = [
+  {
+    name: "Intel Xeon E3-1230v6",
+    price: { monthly: "$49.99" },
+    description: "4 Cores @ 3.50GHz, 16GB RAM, 2x 480GB SSD",
+    features: ["4 Cores @ 3.50GHz", "16GB DDR4 ECC RAM", "2x 480GB SSD", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
     ctaText: t.pricing.ctaText,
-    ctaLink: plan.order_url,
-    sale_enabled: plan.sale_enabled,
-    sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-    sale_badge_text: plan.sale_badge_text,
-    osType: plan.os_type
-  }));
-}
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  },
+  {
+    name: "Intel Xeon E-2274G",
+    price: { monthly: "$79.99" },
+    description: "4 Cores @ 4.00GHz, 32GB RAM, 2x 960GB NVMe",
+    features: ["4 Cores @ 4.00GHz", "32GB DDR4 ECC RAM", "2x 960GB NVMe", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows",
+    popular: true
+  },
+  {
+    name: "AMD Ryzen 5 3600",
+    price: { monthly: "$89.99" },
+    description: "6 Cores @ 3.60GHz, 64GB RAM, 2x 1TB NVMe",
+    features: ["6 Cores @ 3.60GHz", "64GB DDR4 RAM", "2x 1TB NVMe", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  }
+];
 
-// Group plans by subcategory
-const valueServers = formatPlans(plans?.filter(plan => plan.subcategory === 'VALUE') || []);
-const customServers = formatPlans(plans?.filter(plan => plan.subcategory === 'CUSTOM') || []);
-const gpuServers = formatPlans(plans?.filter(plan => plan.subcategory === 'GPU') || []);
+const customServers = [
+  {
+    name: "Intel Xeon Silver 4210",
+    price: { monthly: "$149.99" },
+    description: "10 Cores @ 2.20GHz, 128GB RAM, 2x 2TB NVMe",
+    features: ["10 Cores @ 2.20GHz", "128GB DDR4 ECC RAM", "2x 2TB NVMe", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  },
+  {
+    name: "AMD EPYC 7302P",
+    price: { monthly: "$199.99" },
+    description: "16 Cores @ 3.00GHz, 256GB RAM, 2x 2TB NVMe",
+    features: ["16 Cores @ 3.00GHz", "256GB DDR4 ECC RAM", "2x 2TB NVMe", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows",
+    popular: true
+  },
+  {
+    name: "Dual Intel Xeon Gold 6230",
+    price: { monthly: "$299.99" },
+    description: "40 Cores @ 2.10GHz, 512GB RAM, 4x 2TB NVMe",
+    features: ["40 Cores @ 2.10GHz", "512GB DDR4 ECC RAM", "4x 2TB NVMe", "1Gbps Unmetered", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  }
+];
+
+const gpuServers = [
+  {
+    name: "GPU RTX 4000",
+    price: { monthly: "$249.99" },
+    description: "Intel Xeon E-2274G, 64GB RAM, RTX 4000",
+    features: ["4 Cores @ 4.00GHz", "64GB DDR4 ECC RAM", "2x 960GB NVMe", "NVIDIA RTX 4000", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  },
+  {
+    name: "GPU RTX A4000",
+    price: { monthly: "$349.99" },
+    description: "AMD Ryzen 9 5950X, 128GB RAM, RTX A4000",
+    features: ["16 Cores @ 3.40GHz", "128GB DDR4 RAM", "2x 2TB NVMe", "NVIDIA RTX A4000", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows",
+    popular: true
+  },
+  {
+    name: "GPU 2x RTX A4000",
+    price: { monthly: "$549.99" },
+    description: "AMD EPYC 7302P, 256GB RAM, 2x RTX A4000",
+    features: ["16 Cores @ 3.00GHz", "256GB DDR4 ECC RAM", "4x 2TB NVMe", "Dual NVIDIA RTX A4000", "USA/EU", "Full Root Access", "24/7 Support"],
+    ctaText: t.pricing.ctaText,
+    ctaLink: "https://portal.qiwhost.com/login",
+    osType: "Linux / Windows"
+  }
+];
 
 // Features data with translations
 const features = [
