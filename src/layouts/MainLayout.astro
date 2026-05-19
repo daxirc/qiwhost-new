@@ -139,8 +139,25 @@ const hreflangUrls = supportedLocales.map(locale => {
 
     <!-- Allow pages to inject their own head elements -->
     <slot name="head" />
+    <!-- Prevent FOUC with transitions during page load -->
+    <style>
+      .preload * {
+        transition: none !important;
+      }
+    </style>
+    <script>
+      // Remove preload class to re-enable transitions once everything is parsed
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          document.body.classList.remove('preload');
+        }, 150);
+      });
+      window.addEventListener('load', () => {
+        document.body.classList.remove('preload');
+      });
+    </script>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="preload min-h-screen flex flex-col">
     <div class="fixed w-full top-0 z-50">
       <!-- Blue Top Bar -->
       <div class="bg-blue-600 text-white py-2">
