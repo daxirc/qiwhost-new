@@ -1,0 +1,83 @@
+---
+interface PricingPlan {
+  name: string;
+  description: string;
+  price: string;
+  features: string[];
+  ctaText: string;
+  ctaLink: string;
+  popular?: boolean;
+}
+
+interface Props {
+  plans: PricingPlan[];
+}
+
+const { plans } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+  {plans.map((plan) => {
+    const isPopular = plan.popular;
+    const priceParts = plan.price.split('.');
+    const dollars = priceParts[0];
+    const cents = priceParts[1] || '00';
+    
+    return (
+      <div class={`relative rounded-2xl overflow-hidden border ${isPopular ? 'bg-[#0f52ba] border-[#0f52ba] shadow-xl transform lg:-translate-y-2 z-10' : 'bg-[#fafbfe] border-gray-100 shadow-sm'} transition-all duration-300 flex flex-col`}>
+        
+        <div class="p-6 md:p-8 flex-grow flex flex-col">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class={`text-xl font-bold ${isPopular ? 'text-white' : 'text-[#1e293b]'}`}>{plan.name}</h3>
+            {isPopular && (
+              <span class="px-3 py-1 border border-white/30 text-white text-[10px] font-bold rounded-md uppercase tracking-wide">
+                POPULAR
+              </span>
+            )}
+          </div>
+          
+          <div class="mb-6">
+            <div class="flex items-start">
+              <span class={`text-[2.5rem] lg:text-[3rem] font-black leading-none tracking-tight ${isPopular ? 'text-white' : 'text-[#0f2c59]'}`}>${dollars}</span>
+              <div class="flex flex-col justify-start pt-1 ml-1">
+                <span class={`text-lg font-bold leading-none ${isPopular ? 'text-white' : 'text-[#0f2c59]'}`}>.{cents}</span>
+                <span class={`text-xs font-medium leading-none mt-1 ${isPopular ? 'text-blue-100' : 'text-slate-500'}`}>monthly</span>
+              </div>
+            </div>
+          </div>
+          
+          <p class={`text-sm font-medium mb-4 ${isPopular ? 'text-blue-100' : 'text-slate-600'}`}>
+            {plan.description}
+          </p>
+          
+          <ul class="space-y-3 mb-8 flex-grow">
+            {plan.features.map(feature => (
+              <li class="flex items-start">
+                <svg class={`w-4 h-4 flex-shrink-0 mr-2 mt-0.5 ${isPopular ? 'text-white opacity-90' : 'text-[#4375ff]'}`} viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class={`text-sm ${isPopular ? 'text-white' : 'text-slate-700'}`}>{feature}</span>
+              </li>
+            ))}
+          </ul>
+          
+          <div class="mt-auto pt-2">
+            <a 
+              href={plan.ctaLink} 
+              class={`w-full flex items-center justify-center px-6 py-3 rounded-lg font-bold text-[15px] transition-colors border-2 ${
+                isPopular 
+                  ? 'bg-transparent border-white text-white hover:bg-white hover:text-[#0f52ba]' 
+                  : 'bg-transparent border-[#0f52ba] text-[#0f52ba] hover:bg-[#0f52ba] hover:text-white'
+              }`}
+            >
+              {plan.ctaText}
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>

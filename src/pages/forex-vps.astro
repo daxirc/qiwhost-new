@@ -2,71 +2,76 @@
 import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
-import PricingTable from '../components/PricingTable.astro';
+import ForexPricingTable from '../components/ForexPricingTable.astro';
 import FAQ from '../components/FAQ.astro';
 import CTABanner from '../components/CTABanner.astro';
 
 // Plans
 const forexPlans = [
   {
-    name: "Starter Forex VPS",
-    price: {
-      monthly: "$9.99",
-      yearly: "$8.99"
-    },
-    description: "Perfect for beginners running a single MT4/MT5 terminal.",
+    name: "Starter",
+    description: "Ideal For 1-2 Terminals",
+    price: "11.99",
     features: [
-      "1 vCPU Core",
-      "2 GB RAM",
-      "40 GB NVMe SSD",
-      "Unmetered Bandwidth",
-      "Windows Server Included",
-      "1 Dedicated IP"
-    ],
-    ctaText: "Choose Starter",
-    ctaLink: "https://portal.qiwhost.com/login",
-    popular: false,
-    osType: "Windows"
-  },
-  {
-    name: "Pro Forex VPS",
-    price: {
-      monthly: "$19.99",
-      yearly: "$17.99"
-    },
-    description: "Ideal for professional traders running multiple expert advisors.",
-    features: [
-      "2 vCPU Cores",
+      "2 vCore CPU",
       "4 GB RAM",
-      "60 GB NVMe SSD",
-      "Unmetered Bandwidth",
-      "Windows Server Included",
-      "1 Dedicated IP"
+      "40 GB SSD Storage",
+      "20 TB Bandwidth",
+      "Windows Server (OS)",
+      "Install Any Application and Program",
+      "Multiple VPS Locations"
     ],
-    ctaText: "Choose Pro",
-    ctaLink: "https://portal.qiwhost.com/login",
-    popular: true,
-    osType: "Windows"
+    ctaText: "Launch Now",
+    ctaLink: "https://portal.qiwhost.com/cart.php?a=add&pid=163"
   },
   {
-    name: "Elite Forex VPS",
-    price: {
-      monthly: "$39.99",
-      yearly: "$35.99"
-    },
-    description: "Maximum performance for intensive automated trading setups.",
+    name: "Pro",
+    description: "Ideal For 3-4 Terminals",
+    price: "22.99",
     features: [
-      "4 vCPU Cores",
+      "4 vCore CPU",
       "8 GB RAM",
-      "100 GB NVMe SSD",
-      "Unmetered Bandwidth",
-      "Windows Server Included",
-      "1 Dedicated IP"
+      "80 GB SSD Storage",
+      "20 TB Bandwidth",
+      "Windows Server (OS)",
+      "Install Any Application and Program",
+      "Multiple VPS Locations"
     ],
-    ctaText: "Choose Elite",
-    ctaLink: "https://portal.qiwhost.com/login",
-    popular: false,
-    osType: "Windows"
+    ctaText: "Launch Now",
+    ctaLink: "https://portal.qiwhost.com/cart.php?a=add&pid=164"
+  },
+  {
+    name: "Elite",
+    description: "Ideal For 4-6 Terminals",
+    price: "39.99",
+    features: [
+      "8 vCore CPU",
+      "16 GB RAM",
+      "160 GB SSD Storage",
+      "20 TB Bandwidth",
+      "Windows Server (OS)",
+      "Install Any Application and Program",
+      "Multiple VPS Locations"
+    ],
+    ctaText: "Launch Now",
+    ctaLink: "https://portal.qiwhost.com/cart.php?a=add&pid=165",
+    popular: true
+  },
+  {
+    name: "Advanced",
+    description: "Ideal For 6+ Terminals",
+    price: "69.99",
+    features: [
+      "16 vCore CPU",
+      "32 GB RAM",
+      "320 GB SSD Storage",
+      "20 TB Bandwidth",
+      "Windows Server (OS)",
+      "Install Any Application and Program",
+      "Multiple VPS Locations"
+    ],
+    ctaText: "Launch Now",
+    ctaLink: "https://portal.qiwhost.com/cart.php?a=add&pid=166"
   }
 ];
 
@@ -209,12 +214,14 @@ const forexFaqs = [
   />
 
   <!-- Pricing -->
-  <section id="pricing" class="bg-gray-50">
-    <PricingTable
-      title="Choose Your Forex VPS Plan"
-      description="Scalable resources to support any trading strategy, from a single terminal to complex multi-bot setups."
-      plans={forexPlans}
-    />
+  <section id="pricing" class="py-16 md:py-24 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Choose Your Forex VPS Plan</h2>
+        <p class="text-xl text-gray-600">Scalable resources to support any trading strategy, from a single terminal to complex multi-bot setups.</p>
+      </div>
+      <ForexPricingTable plans={forexPlans} />
+    </div>
   </section>
 
   <!-- FAQ -->
