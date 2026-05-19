@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
+import { getCurrentLocale } from '../i18n/utils';
+const locale = getCurrentLocale(Astro.currentLocale);
 
 const sections = [
   {

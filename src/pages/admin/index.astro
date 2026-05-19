@@ -1,17 +1,9 @@
 ---
 import Layout from '../../layouts/MainLayout.astro';
 import AdminPanel from '../../components/admin/AdminPanel';
-
-// Add noindex meta tag
-const noIndex = true;
 ---
 
-<Layout title="Admin Panel">
-  <!-- Add noindex meta tag -->
-  {noIndex && (
-    <meta name="robots" content="noindex, nofollow" slot="head" />
-  )}
-  
+<Layout title="Admin Panel" noIndex={true}>
   <div id="admin-root">
     <AdminPanel client:load />
   </div>

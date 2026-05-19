@@ -51,7 +51,11 @@ export const flagEmojiToCountryCode = {
   '🇨🇱': 'cl',
   '🇨🇴': 'co',
   '🇮🇳': 'in',
-  '🇦🇺': 'au'
+  '🇦🇺': 'au',
+  '🇪🇨': 'ec',
+  '🇵🇪': 'pe',
+  '🇨🇦': 'ca',
+  '🇷🇴': 'ro'
 };
 
 /**

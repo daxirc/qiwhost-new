@@ -1,0 +1,117 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import { getCurrentLocale } from '../../i18n/utils';
+const locale = getCurrentLocale(Astro.currentLocale);
+
+const sections = [
+  {
+    title: "Non-Refundable Services",
+    content: `All QIW HOST services are provided on a non-refundable basis. Once payment has been processed for any of our hosting services, including but not limited to:
+    - Virtual Private Servers (VPS)
+    - Dedicated Servers
+    - Private RDP Solutions
+    - Domain registrations
+    - SSL certificates
+    - Additional services and add-ons
+
+    No refunds will be issued under any circumstances.`
+  },
+  {
+    title: "Service Cancellation",
+    content: `While our services are non-refundable, you may cancel your service at any time to prevent future billing cycles. Cancellation requests must be submitted through:
+    - Your client area dashboard
+    - Support ticket system
+    - Email to support@qiwhost.com
+
+    Upon cancellation, your service will remain active until the end of your current billing period.`
+  },
+  {
+    title: "Service Credits",
+    content: `In exceptional circumstances where service availability falls below our guaranteed uptime levels, we may issue service credits at our sole discretion. Service credits are not cash refunds and can only be applied toward future services with QIW HOST.
+
+    Service credits:
+    - Cannot be transferred to other accounts
+    - Cannot be converted to cash
+    - Expire if not used within 12 months
+    - Are subject to our Service Level Agreement terms`
+  },
+  {
+    title: "Billing Disputes",
+    content: `If you believe there has been an error in billing, please contact our support team immediately. We will investigate all legitimate billing disputes and make corrections where appropriate. However, this does not constitute a refund policy and any adjustments are made at our discretion.`
+  },
+  {
+    title: "Chargebacks and Disputes",
+    content: `Initiating a chargeback or payment dispute for services that have been delivered will result in immediate suspension of all services and termination of your account. We reserve the right to pursue collection of any disputed amounts through appropriate legal channels.`
+  },
+  {
+    title: "Service Modifications",
+    content: `We reserve the right to modify our services, pricing, and terms at any time. Changes to existing services do not entitle customers to refunds for previously paid periods.`
+  },
+  {
+    title: "Account Termination",
+    content: `If your account is terminated due to violation of our Terms of Service or Acceptable Use Policy, no refunds will be issued for any remaining service period or unused credits.`
+  },
+  {
+    title: "Contact Information",
+    content: `If you have questions about this refund policy or need assistance with your services, please contact our support team:
+
+    Email: support@qiwhost.com
+    Support Portal: Available through your client area
+    Live Chat: Available 24/7 on our website
+
+    Our team is here to help ensure you get the most value from our services.`
+  }
+];
+---
+
+<Layout 
+  title="Refund Policy" 
+  description="QIW HOST refund policy - All services are provided on a non-refundable basis."
+>
+  <Hero
+    title="Refund Policy"
+    subtitle="Last updated: March 1, 2025"
+    backgroundClass="bg-gradient-to-r from-gray-800 to-gray-900"
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="prose prose-lg">
+          <div class="bg-red-50 border-l-4 border-red-500 p-6 mb-12">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-lg font-medium text-red-800 mb-2">Important Notice</h3>
+                <p class="text-red-700">
+                  <strong>All QIW HOST services are NON-REFUNDABLE.</strong> Please carefully review our service offerings and terms before making a purchase. By proceeding with payment, you acknowledge and agree to our no-refund policy.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {sections.map(section => (
+            <div class="mb-12">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+              <div class="text-gray-600 space-y-4">
+                {section.content.split('\n').map(paragraph => (
+                  <p>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+            <p class="text-gray-600">
+              Effective Date: March 1, 2025<br>
+              Last Modified: March 1, 2025
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

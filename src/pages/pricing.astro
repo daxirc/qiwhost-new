@@ -3,6 +3,11 @@ import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 import FAQ from '../components/FAQ.astro';
 import CTABanner from '../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const pp = t.pricingPage;
 
 // VPS plans
 const vpsPlans = [
@@ -216,16 +221,16 @@ const faqs = [
 ---
 
 <Layout 
-  title="Pricing" 
-  description="Transparent pricing for QIW HOST cloud hosting solutions. Choose from VPS, dedicated servers, and private RDP plans."
+  title={pp.meta.title} 
+  description={pp.meta.description}
 >
   <!-- Add noindex meta tag -->
   <meta name="robots" content="noindex, nofollow" slot="head" />
 
   <!-- Hero Section -->
   <Hero
-    title="Simple, Transparent Pricing"
-    subtitle="Choose the plan that works best for your business needs. No hidden fees or long-term contracts."
+    title={pp.hero.title}
+    subtitle={pp.hero.subtitle}
     backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
   />
 
@@ -245,7 +250,7 @@ const faqs = [
   <section id="vps-plans" class="py-16">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">VPS Hosting Plans</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.vps.title}</h2>
         <p class="text-xl text-gray-600">Powerful virtual private servers with dedicated resources and full root access.</p>
       </div>
       
@@ -299,7 +304,7 @@ const faqs = [
   <section id="dedicated-plans" class="py-16 bg-gray-50">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Dedicated Server Plans</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.dedicated.title}</h2>
         <p class="text-xl text-gray-600">Powerful physical servers with exclusive resources for maximum performance.</p>
       </div>
       
@@ -353,7 +358,7 @@ const faqs = [
   <section id="rdp-plans" class="py-16">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Private RDP Plans</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.rdp.title}</h2>
         <p class="text-xl text-gray-600">Secure remote desktop solutions with full administrator access.</p>
       </div>
       
@@ -408,9 +413,9 @@ const faqs = [
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Need a Custom Solution?"
-    subtitle="Contact our team for personalized hosting plans tailored to your specific requirements."
-    ctaText="Contact Us"
+    title={pp.customCta.title}
+    subtitle={pp.customCta.subtitle}
+    ctaText={pp.customCta.ctaText}
     ctaLink="/contact"
   />
 </Layout>

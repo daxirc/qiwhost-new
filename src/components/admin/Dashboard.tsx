@@ -3,21 +3,17 @@ import PlansManager from './PlansManager.tsx';
 import LogoManager from './LogoManager';
 import BlogPostsManager from './BlogPostsManager';
 import { Toaster } from 'react-hot-toast';
-import { supabase } from '../../lib/supabase';
+// Sign out handled locally
 
 export default function Dashboard({ session }) {
-  const [activeTab, setActiveTab] = useState('vps');
+  const [activeTab, setActiveTab] = useState('dedicated');
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    localStorage.removeItem('admin_session');
+    window.location.reload();
   };
 
   const menuItems = [
-    { id: 'vps', label: 'VPS by City', icon: 'fas fa-server' },
-    { id: 'cloud-vps', label: 'Cloud VPS', icon: 'fas fa-cloud' },
-    { id: 'linux-vps', label: 'Linux VPS Plans', icon: 'fab fa-linux', description: 'Manage plans shown on the Linux VPS page' },
-    { id: 'windows-vps', label: 'Windows VPS Plans', icon: 'fab fa-windows' },
-    { id: 'rdp', label: 'RDP Plans', icon: 'fas fa-desktop' },
     { id: 'dedicated', label: 'Dedicated Servers', icon: 'fas fa-hdd' },
     { id: 'logo', label: 'Site Logo', icon: 'fas fa-image' },
     { id: 'blog', label: 'Blog Posts', icon: 'fas fa-blog' },
@@ -104,11 +100,7 @@ export default function Dashboard({ session }) {
                     ? 'Manage your site branding' 
                     : activeTab === 'blog'
                     ? 'Manage your blog posts and content'
-                    : activeTab === 'cloud-vps'
-                    ? 'Manage your VPS plans by country'
-                    : activeTab === 'vps'
-                    ? 'Manage your VPS plans by city'
-                    : 'Manage your hosting plans and pricing'}
+                    : 'Manage your dedicated server plans and pricing'}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
@@ -125,22 +117,10 @@ export default function Dashboard({ session }) {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             {activeTab === 'logo' ? (
               <LogoManager />
-            ) : activeTab === 'linux-vps' ? (
-              <PlansManager category="VPS" osTypeFilter="Linux" isLinuxFeatured={true} />
-            ) : activeTab === 'windows-vps' ? (
-              <PlansManager category="VPS" osTypeFilter="Windows" />
             ) : activeTab === 'blog' ? (
               <BlogPostsManager />
-            ) : activeTab === 'cloud-vps' ? (
-              <PlansManager 
-                category="VPS" 
-                filterType="flag_icon" 
-                allowedFlagIcons={['🇺🇸', '🇬🇧', '🇩🇪', '🇫🇮', '🇸🇬', '🇯🇵', '🇮🇳', '🇦🇺']} 
-              />
-            ) : activeTab === 'vps' ? (
-              <PlansManager category="VPS" filterType="location" />
             ) : (
-              <PlansManager category={activeTab.toUpperCase()} />
+              <PlansManager category="DEDICATED" />
             )}
           </div>
         </div>

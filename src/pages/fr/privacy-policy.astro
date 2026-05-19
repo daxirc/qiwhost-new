@@ -1,0 +1,117 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import { getCurrentLocale } from '../../i18n/utils';
+const locale = getCurrentLocale(Astro.currentLocale);
+
+const sections = [
+  {
+    title: "Information We Collect",
+    content: `We collect information that you provide directly to us, including when you:
+    - Create an account
+    - Place an order
+    - Contact our support team
+    - Subscribe to our newsletter
+    - Respond to surveys or communications
+
+    We automatically collect certain information about your device when you use our services, including:
+    - IP address
+    - Browser type
+    - Operating system
+    - Device information
+    - Usage data`
+  },
+  {
+    title: "How We Use Your Information",
+    content: `We use the information we collect to:
+    - Provide and maintain our services
+    - Process your transactions
+    - Send you technical notices and support messages
+    - Respond to your comments and questions
+    - Prevent fraud and abuse
+    - Comply with legal obligations`
+  },
+  {
+    title: "Information Sharing",
+    content: `We do not sell or rent your personal information to third parties. We may share your information with:
+    - Service providers who assist in our operations
+    - Law enforcement when required by law
+    - Third parties in connection with a business transfer
+    - With your consent or at your direction`
+  },
+  {
+    title: "Data Security",
+    content: `We implement appropriate technical and organizational measures to protect your personal information, including:
+    - Encryption of sensitive data
+    - Regular security assessments
+    - Access controls
+    - Secure data storage
+    - Regular backups`
+  },
+  {
+    title: "Your Rights",
+    content: `You have the right to:
+    - Access your personal information
+    - Correct inaccurate information
+    - Request deletion of your information
+    - Object to processing of your information
+    - Withdraw consent
+    - Data portability`
+  },
+  {
+    title: "Cookies",
+    content: `We use cookies and similar technologies to:
+    - Maintain your session
+    - Remember your preferences
+    - Analyze how you use our services
+    - Improve our services
+    - Provide targeted advertising`
+  },
+  {
+    title: "Updates to This Policy",
+    content: "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the effective date."
+  },
+  {
+    title: "Contact Us",
+    content: "If you have any questions about this Privacy Policy, please contact us at privacy@qiwhost.com"
+  }
+];
+---
+
+<Layout title="Privacy Policy">
+  <Hero
+    title="Privacy Policy"
+    subtitle="Last updated: March 1, 2025"
+    backgroundClass="bg-gradient-to-r from-gray-800 to-gray-900"
+  />
+
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="prose prose-lg">
+          <p class="text-xl text-gray-600 mb-12">
+            At QIW HOST, we take your privacy seriously. This Privacy Policy describes how we collect, use, and handle your personal information when you use our services.
+          </p>
+
+          {sections.map(section => (
+            <div class="mb-12">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+              <div class="text-gray-600 space-y-4">
+                {section.content.split('\n').map(paragraph => (
+                  <p>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div class="mt-12 p-6 bg-gray-50 rounded-lg">
+            <p class="text-gray-600">
+              Effective Date: March 1, 2025<br>
+              Last Modified: March 1, 2025
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

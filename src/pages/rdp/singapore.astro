@@ -3,7 +3,7 @@ import Layout from '../../layouts/MainLayout.astro';
 import Hero from '../../components/Hero.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { supabase } from '../../lib/supabase';
+import { getRdpBySlug } from '../../data/plans';
 import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
 // Get translations for current locale
@@ -20,25 +20,15 @@ function getFlagImageUrl(flagEmoji) {
   return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
 }
 
-// Fetch plans from database
-const { data: rdpPlans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'RDP')
-  .eq('visible', true)
-  .eq('location', 'Singapore')
-  .order('sort_order', { ascending: true });
-
-if (error) {
-  console.error('Error fetching plans:', error);
-}
+// Get hardcoded RDP plans
+const rdpPlans = getRdpBySlug('singapore-rdp')?.plans || [];
 
 // Convert database plans to pricing table format
-const plans = rdpPlans?.map(plan => ({
+const plans = rdpPlans.map(plan => ({
   name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${plan.priceAnnually}`
   },
   description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
   features: [
@@ -46,17 +36,13 @@ const plans = rdpPlans?.map(plan => ({
     plan.ram,
     plan.storage,
     plan.bandwidth,
-    plan.os_type || 'Windows Server 2022',
+    'Windows Server 2022' || 'Windows Server 2022',
     'Singapore Location',
     '24/7 Support'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaLink: plan.cartUrl,
+  osType: 'Windows Server 2022'
 })) || [];
 
 // Country-specific information

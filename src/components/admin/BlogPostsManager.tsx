@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+// Uses /api/blog endpoint
 import toast from 'react-hot-toast';
 import BlogPostEditor from './BlogPostEditor';
 import { format } from 'date-fns';
@@ -34,16 +34,9 @@ export default function BlogPostsManager() {
   async function fetchPosts() {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching posts:', error);
-        throw error;
-      }
-      
+      const res = await fetch('/api/blog');
+      if (!res.ok) throw new Error('Failed to fetch posts');
+      const data = await res.json();
       console.log('Fetched posts:', data);
       setPosts(data || []);
     } catch (error) {
@@ -58,12 +51,12 @@ export default function BlogPostsManager() {
     if (!confirm('Are you sure you want to delete this post?')) return;
 
     try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
+      const res = await fetch('/api/blog', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Failed to delete post');
       
       toast.success('Post deleted successfully');
       fetchPosts();
@@ -76,15 +69,16 @@ export default function BlogPostsManager() {
   async function togglePostStatus(post: BlogPost) {
     try {
       const newStatus = post.status === 'published' ? 'draft' : 'published';
-      const { error } = await supabase
-        .from('blog_posts')
-        .update({ 
+      const res = await fetch('/api/blog', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: post.id,
           status: newStatus,
-          published_at: newStatus === 'published' ? new Date().toISOString() : post.published_at
-        })
-        .eq('id', post.id);
-
-      if (error) throw error;
+          published_at: newStatus === 'published' ? new Date().toISOString() : post.published_at,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to update post status');
       
       toast.success(`Post ${newStatus === 'published' ? 'published' : 'unpublished'} successfully`);
       fetchPosts();

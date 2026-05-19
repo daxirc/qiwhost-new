@@ -2,6 +2,11 @@
 import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTABanner from '../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const ap = t.aboutPage;
 
 // Timeline data
 const timelineEvents = [
@@ -89,13 +94,13 @@ const partners = [
 ---
 
 <Layout 
-  title="About Us" 
-  description="Learn about QIW HOST, our mission, vision, and the team behind our reliable hosting solutions."
+  title={ap.meta.title} 
+  description={ap.meta.description}
 >
   <!-- Hero Section -->
   <Hero
-    title="About QIW HOST"
-    subtitle="Founded in 2017, we've been delivering reliable hosting solutions for businesses worldwide."
+    title={ap.hero.title}
+    subtitle={ap.hero.subtitle}
     backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
   />
 
@@ -104,7 +109,7 @@ const partners = [
     <div class="container">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">{ap.mission.title}</h2>
           <p class="text-lg text-gray-700 mb-6">
             At QIW HOST, our mission is to provide businesses of all sizes with reliable, high-performance hosting solutions that enable growth and success in the digital world.
           </p>
@@ -114,7 +119,7 @@ const partners = [
         </div>
         
         <div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Vision</h2>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">{ap.vision.title}</h2>
           <p class="text-lg text-gray-700 mb-6">
             We envision a future where every business has access to enterprise-grade hosting infrastructure that is secure, scalable, and affordable.
           </p>
@@ -130,8 +135,8 @@ const partners = [
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
-        <p class="text-xl text-gray-600">A look back at how QIW HOST has evolved over the years.</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.journey.title}</h2>
+        <p class="text-xl text-gray-600">{ap.journey.subtitle}</p>
       </div>
       
       <div class="max-w-4xl mx-auto">
@@ -164,8 +169,8 @@ const partners = [
   <section class="py-16 md:py-24">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-        <p class="text-xl text-gray-600">The dedicated professionals behind QIW HOST's success.</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.team.title}</h2>
+        <p class="text-xl text-gray-600">{ap.team.subtitle}</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -189,8 +194,8 @@ const partners = [
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Partners</h2>
-        <p class="text-xl text-gray-600">We collaborate with leading technology companies to deliver the best solutions.</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.partners.title}</h2>
+        <p class="text-xl text-gray-600">{ap.partners.subtitle}</p>
       </div>
       
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
@@ -205,9 +210,9 @@ const partners = [
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Join Thousands of Satisfied Customers"
-    subtitle="Experience the QIW HOST difference today."
-    ctaText="Get Started"
+    title={ap.cta.title}
+    subtitle={ap.cta.subtitle}
+    ctaText={ap.cta.ctaText}
     ctaLink="/pricing"
   />
 </Layout>

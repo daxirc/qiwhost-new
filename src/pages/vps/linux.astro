@@ -4,7 +4,7 @@ import Hero from '../../components/Hero.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import FeaturesSection from '../../components/FeaturesSection.astro';
-import { supabase } from '../../lib/supabase';
+import { getFeaturedVpsPlans } from '../../data/plans';
 import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
 // Get translations for current locale
@@ -12,25 +12,14 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch plans from database
-const { data: linuxPlans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('visible', true)
-  .eq('os_type', 'Linux')
-  .eq('is_linux_featured', true)
-  .order('sort_order', { ascending: true });
-
-if (error) {
-  console.error('Error fetching plans:', error);
-}
+const linuxPlans = getFeaturedVpsPlans();
 
 // Convert database plans to pricing table format
 const plans = linuxPlans?.map(plan => ({
   name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${plan.priceAnnually}`
   },
   description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
   features: [
@@ -43,12 +32,8 @@ const plans = linuxPlans?.map(plan => ({
     '24/7 Support'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaLink: plan.cartUrl,
+  osType: 'Linux'
 })) || [];
 
 // Features data with translations

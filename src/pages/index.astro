@@ -8,34 +8,23 @@ import ServerManagement from '../components/ServerManagement.astro';
 import FAQ from '../components/FAQ.astro';
 import CTABanner from '../components/CTABanner.astro';
 import { getTranslations, getCurrentLocale } from '../i18n/utils';
-import { supabase } from '../lib/supabase';
+import { getFeaturedVpsPlans } from '../data/plans';
 
 // Get translations for current locale (default to English)
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
-// Fetch Linux VPS plans from database
-const { data: linuxPlans, error: linuxError } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('visible', true)
-  .eq('os_type', 'Linux')
-  .order('sort_order', { ascending: true })
-  .limit(3);
+// Get featured VPS plans (hardcoded)
+const featuredPlans = getFeaturedVpsPlans();
 
-if (linuxError) {
-  console.error('Error fetching Linux plans:', linuxError);
-}
-
-// Convert database plans to pricing table format
-const plans = linuxPlans?.map(plan => ({
+// Convert to pricing table format
+const plans = featuredPlans.map(plan => ({
   name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${(plan.priceAnnually / 12).toFixed(2)}`
   },
-  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  description: `${plan.cpu}, ${plan.ram}, ${plan.storage}`,
   features: [
     plan.cpu,
     plan.ram,
@@ -45,14 +34,11 @@ const plans = linuxPlans?.map(plan => ({
     '24/7 Support'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
-  popular: plan.plan_type === 'Standard',
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaLink: plan.cartUrl,
+  popular: plan.tier === 'Professional',
+  osType: 'Linux'
 })) || [];
+
 
 // Features data with translations
 const features = [

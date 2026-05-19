@@ -1,0 +1,348 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const cp = t.contactPage;
+
+// Flag emoji to country code mapping
+const flagEmojiToCountryCode = {
+  '🇺🇸': 'us',
+  '🇵🇰': 'pk',
+  '🇮🇳': 'in',
+  '🇬🇧': 'gb'
+};
+
+function getFlagImageUrl(flagEmoji) {
+  const countryCode = flagEmojiToCountryCode[flagEmoji];
+  return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
+}
+
+// Office locations
+const offices = [
+  {
+    country: "USA",
+    flag: "🇺🇸",
+    countryCode: "us",
+    title: "United States Office",
+    address: "828 Lane Allen Rd, Lexington, KY 40504, United States",
+    email: "support@qiwhost.com",
+    phone: "+1 (346) 558-1572",
+    hours: "Monday - Friday: 9:00 AM - 6:00 PM EST",
+    isMain: true
+  },
+  {
+    country: "Pakistan",
+    flag: "🇵🇰",
+    countryCode: "pk",
+    title: "Pakistan Office",
+    address: "House No 42/c Block A Housing Scheme Yazman, Yazman Mandi, 63210",
+    email: "support@qiwhost.com",
+    phone: "+1 (346) 558-1572",
+    hours: "Monday - Friday: 9:00 AM - 6:00 PM PKT",
+    isMain: false
+  },
+  {
+    country: "India",
+    flag: "🇮🇳",
+    countryCode: "in",
+    title: "India Office",
+    address: "163, Hill Rd, Bandra West, Mumbai, Maharashtra 400050, India",
+    email: "support@qiwhost.com",
+    phone: "+1 (346) 558-1572",
+    hours: "Monday - Friday: 9:00 AM - 6:00 PM IST",
+    isMain: false
+  },
+  {
+    country: "UK",
+    flag: "🇬🇧",
+    countryCode: "gb",
+    title: "United Kingdom Office",
+    address: "61 Malvern Road, London E11 3DJ, United Kingdom",
+    email: "support@qiwhost.com",
+    phone: "+1 (346) 558-1572",
+    hours: "Monday - Friday: 9:00 AM - 6:00 PM GMT",
+    isMain: false
+  }
+];
+
+// General contact information
+const contactInfo = {
+  email: "support@qiwhost.com",
+  phone: "+1 (346) 558-1572",
+  generalHours: "24/7 Support Available"
+};
+---
+
+<Layout 
+  title={cp.meta.title} 
+  description={cp.meta.description}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={cp.hero.title}
+    subtitle={cp.hero.subtitle}
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Contact Section -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Contact Info -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-xl shadow-md p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">{cp.getInTouch}</h2>
+            
+            <div class="space-y-6">
+              <div class="flex items-start">
+                <div class="bg-primary-100 rounded-full p-3 mr-4">
+                  <i class="fas fa-envelope text-primary-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-1">{cp.email}</h3>
+                  <a href={`mailto:${contactInfo.email}`} class="text-gray-600 hover:text-primary-600 transition-colors">
+                    {contactInfo.email}
+                  </a>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="bg-primary-100 rounded-full p-3 mr-4">
+                  <i class="fas fa-phone-alt text-primary-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-1">{cp.phone}</h3>
+                  <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} class="text-gray-600 hover:text-primary-600 transition-colors">
+                    {contactInfo.phone}
+                  </a>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <div class="bg-primary-100 rounded-full p-3 mr-4">
+                  <i class="fas fa-clock text-primary-600"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold mb-1">{cp.supportHours}</h3>
+                  <p class="text-gray-600">
+                    {contactInfo.generalHours}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Social Media Links -->
+            <div class="mt-8">
+              <h3 class="text-lg font-semibold mb-4">{cp.connectWithUs}</h3>
+              <div class="flex space-x-4">
+                <a href="#" class="bg-primary-100 text-primary-600 hover:bg-primary-200 p-3 rounded-full transition-colors">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="bg-primary-100 text-primary-600 hover:bg-primary-200 p-3 rounded-full transition-colors">
+                  <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="bg-primary-100 text-primary-600 hover:bg-primary-200 p-3 rounded-full transition-colors">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="bg-primary-100 text-primary-600 hover:bg-primary-200 p-3 rounded-full transition-colors">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-xl shadow-md p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">{cp.sendMessage}</h2>
+            
+            <form id="contactForm" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="firstName" class="block text-gray-700 font-medium mb-2">{cp.firstName}</label>
+                  <input 
+                    type="text" 
+                    id="firstName" 
+                    name="firstName" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label for="lastName" class="block text-gray-700 font-medium mb-2">{cp.lastName}</label>
+                  <input 
+                    type="text" 
+                    id="lastName" 
+                    name="lastName" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label for="email" class="block text-gray-700 font-medium mb-2">{cp.emailAddress}</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label for="subject" class="block text-gray-700 font-medium mb-2">{cp.subject}</label>
+                <input 
+                  type="text" 
+                  id="subject" 
+                  name="subject" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label for="message" class="block text-gray-700 font-medium mb-2">{cp.message}</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  rows="5" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  required
+                ></textarea>
+              </div>
+              
+              <div>
+                <button 
+                  type="submit" 
+                  class="w-full bg-primary-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  {cp.sendButton}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Office Locations -->
+  <section class="py-16 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cp.offices.title}</h2>
+        <p class="text-xl text-gray-600">{cp.offices.subtitle}</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {offices.map(office => (
+          <div class={`bg-white rounded-xl shadow-md p-8 relative ${office.isMain ? 'ring-2 ring-primary-500' : ''}`}>
+            {office.isMain && (
+              <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <span class="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Main Office
+                </span>
+              </div>
+            )}
+            
+            <div class="text-center mb-6">
+              <div class="mb-3">
+                <img 
+                  src={getFlagImageUrl(office.flag)} 
+                  width="30" 
+                  alt={`${office.country} Flag`} 
+                  class="flag-icon mx-auto"
+                />
+              </div>
+              <h3 class="text-xl font-bold text-gray-900">{office.title}</h3>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <i class="fas fa-map-marker-alt text-primary-600 mt-1 mr-3"></i>
+                <p class="text-gray-600 text-sm leading-relaxed">{office.address}</p>
+              </div>
+              
+              <div class="flex items-center">
+                <i class="fas fa-envelope text-primary-600 mr-3"></i>
+                <a href={`mailto:${office.email}`} class="text-gray-600 hover:text-primary-600 transition-colors text-sm">
+                  {office.email}
+                </a>
+              </div>
+              
+              <div class="flex items-center">
+                <i class="fas fa-phone text-primary-600 mr-3"></i>
+                <a href={`tel:${office.phone.replace(/\D/g, '')}`} class="text-gray-600 hover:text-primary-600 transition-colors text-sm">
+                  {office.phone}
+                </a>
+              </div>
+              
+              <div class="flex items-start">
+                <i class="fas fa-clock text-primary-600 mt-1 mr-3"></i>
+                <p class="text-gray-600 text-sm">{office.hours}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="py-16">
+    <div class="container">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md p-4">
+          <div class="aspect-w-16 aspect-h-9">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3048.4!2d-84.4733!3d38.0336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x884244e7c6c6c6c6%3A0x1234567890abcdef!2s828%20Lane%20Allen%20Rd%2C%20Lexington%2C%20KY%2040504%2C%20USA!5e0!3m2!1sen!2s!4v1679568203420!5m2!1sen!2s" 
+              width="100%" 
+              height="450" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade"
+              class="rounded-lg"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Here you would typically send the form data to your backend
+      // For demo purposes, we'll just show a success message
+      
+      const formData = new FormData(contactForm);
+      const formValues = Object.fromEntries(formData.entries());
+      
+      // Replace form with success message
+      contactForm.innerHTML = `
+        <div class="text-center py-8">
+          <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-6">
+            <i class="fas fa-check-circle text-4xl mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Message Sent Successfully!</h3>
+            <p>Thank you for contacting us, ${formValues.firstName}. We'll get back to you shortly.</p>
+          </div>
+          <button onclick="location.reload()" class="bg-primary-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors">
+            Send Another Message
+          </button>
+        </div>
+      `;
+    });
+  });
+</script>

@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
 import Hero from '../components/Hero.astro';
+import { getTranslations, getCurrentLocale } from '../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const cp = t.contactPage;
 
 // Flag emoji to country code mapping
 const flagEmojiToCountryCode = {
@@ -24,7 +29,7 @@ const offices = [
     title: "United States Office",
     address: "828 Lane Allen Rd, Lexington, KY 40504, United States",
     email: "support@qiwhost.com",
-    phone: "+1 (234) 567-890",
+    phone: "+1 (346) 558-1572",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM EST",
     isMain: true
   },
@@ -35,7 +40,7 @@ const offices = [
     title: "Pakistan Office",
     address: "House No 42/c Block A Housing Scheme Yazman, Yazman Mandi, 63210",
     email: "support@qiwhost.com",
-    phone: "+92 (XXX) XXX-XXXX",
+    phone: "+1 (346) 558-1572",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM PKT",
     isMain: false
   },
@@ -46,7 +51,7 @@ const offices = [
     title: "India Office",
     address: "163, Hill Rd, Bandra West, Mumbai, Maharashtra 400050, India",
     email: "support@qiwhost.com",
-    phone: "+91 (XXX) XXX-XXXX",
+    phone: "+1 (346) 558-1572",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM IST",
     isMain: false
   },
@@ -57,7 +62,7 @@ const offices = [
     title: "United Kingdom Office",
     address: "61 Malvern Road, London E11 3DJ, United Kingdom",
     email: "support@qiwhost.com",
-    phone: "+44 (XXX) XXX-XXXX",
+    phone: "+1 (346) 558-1572",
     hours: "Monday - Friday: 9:00 AM - 6:00 PM GMT",
     isMain: false
   }
@@ -66,19 +71,19 @@ const offices = [
 // General contact information
 const contactInfo = {
   email: "support@qiwhost.com",
-  phone: "+1 (234) 567-890",
+  phone: "+1 (346) 558-1572",
   generalHours: "24/7 Support Available"
 };
 ---
 
 <Layout 
-  title="Contact Us" 
-  description="Get in touch with the QIW HOST team for sales inquiries, technical support, or general questions. We have offices in USA, Pakistan, India, and UK."
+  title={cp.meta.title} 
+  description={cp.meta.description}
 >
   <!-- Hero Section -->
   <Hero
-    title="Contact Us"
-    subtitle="Have questions? We're here to help. Reach out to our team for assistance."
+    title={cp.hero.title}
+    subtitle={cp.hero.subtitle}
     backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
   />
 
@@ -89,7 +94,7 @@ const contactInfo = {
         <!-- Contact Info -->
         <div class="lg:col-span-1">
           <div class="bg-white rounded-xl shadow-md p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">{cp.getInTouch}</h2>
             
             <div class="space-y-6">
               <div class="flex items-start">
@@ -97,7 +102,7 @@ const contactInfo = {
                   <i class="fas fa-envelope text-primary-600"></i>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold mb-1">Email</h3>
+                  <h3 class="text-lg font-semibold mb-1">{cp.email}</h3>
                   <a href={`mailto:${contactInfo.email}`} class="text-gray-600 hover:text-primary-600 transition-colors">
                     {contactInfo.email}
                   </a>
@@ -109,7 +114,7 @@ const contactInfo = {
                   <i class="fas fa-phone-alt text-primary-600"></i>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold mb-1">Phone</h3>
+                  <h3 class="text-lg font-semibold mb-1">{cp.phone}</h3>
                   <a href={`tel:${contactInfo.phone.replace(/\D/g, '')}`} class="text-gray-600 hover:text-primary-600 transition-colors">
                     {contactInfo.phone}
                   </a>
@@ -121,7 +126,7 @@ const contactInfo = {
                   <i class="fas fa-clock text-primary-600"></i>
                 </div>
                 <div>
-                  <h3 class="text-lg font-semibold mb-1">Support Hours</h3>
+                  <h3 class="text-lg font-semibold mb-1">{cp.supportHours}</h3>
                   <p class="text-gray-600">
                     {contactInfo.generalHours}
                   </p>
@@ -131,7 +136,7 @@ const contactInfo = {
             
             <!-- Social Media Links -->
             <div class="mt-8">
-              <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+              <h3 class="text-lg font-semibold mb-4">{cp.connectWithUs}</h3>
               <div class="flex space-x-4">
                 <a href="#" class="bg-primary-100 text-primary-600 hover:bg-primary-200 p-3 rounded-full transition-colors">
                   <i class="fab fa-facebook-f"></i>
@@ -153,12 +158,12 @@ const contactInfo = {
         <!-- Contact Form -->
         <div class="lg:col-span-2">
           <div class="bg-white rounded-xl shadow-md p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">{cp.sendMessage}</h2>
             
             <form id="contactForm" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label for="firstName" class="block text-gray-700 font-medium mb-2">First Name</label>
+                  <label for="firstName" class="block text-gray-700 font-medium mb-2">{cp.firstName}</label>
                   <input 
                     type="text" 
                     id="firstName" 
@@ -169,7 +174,7 @@ const contactInfo = {
                 </div>
                 
                 <div>
-                  <label for="lastName" class="block text-gray-700 font-medium mb-2">Last Name</label>
+                  <label for="lastName" class="block text-gray-700 font-medium mb-2">{cp.lastName}</label>
                   <input 
                     type="text" 
                     id="lastName" 
@@ -181,7 +186,7 @@ const contactInfo = {
               </div>
               
               <div>
-                <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                <label for="email" class="block text-gray-700 font-medium mb-2">{cp.emailAddress}</label>
                 <input 
                   type="email" 
                   id="email" 
@@ -192,7 +197,7 @@ const contactInfo = {
               </div>
               
               <div>
-                <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                <label for="subject" class="block text-gray-700 font-medium mb-2">{cp.subject}</label>
                 <input 
                   type="text" 
                   id="subject" 
@@ -203,7 +208,7 @@ const contactInfo = {
               </div>
               
               <div>
-                <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                <label for="message" class="block text-gray-700 font-medium mb-2">{cp.message}</label>
                 <textarea 
                   id="message" 
                   name="message" 
@@ -218,7 +223,7 @@ const contactInfo = {
                   type="submit" 
                   class="w-full bg-primary-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors"
                 >
-                  Send Message
+                  {cp.sendButton}
                 </button>
               </div>
             </form>
@@ -232,8 +237,8 @@ const contactInfo = {
   <section class="py-16 bg-gray-50">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Global Offices</h2>
-        <p class="text-xl text-gray-600">We have offices around the world to serve you better</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{cp.offices.title}</h2>
+        <p class="text-xl text-gray-600">{cp.offices.subtitle}</p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

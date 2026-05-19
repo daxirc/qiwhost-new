@@ -4,7 +4,7 @@ import Hero from '../../../components/Hero.astro';
 import BlogCard from '../../../components/BlogCard.astro';
 import BlogSidebar from '../../../components/BlogSidebar.astro';
 import CTABanner from '../../../components/CTABanner.astro';
-import { supabase } from '../../../lib/supabase';
+import { getBlogPosts } from '../../../lib/db';
 
 export function getStaticPaths() {
   // Define categories within getStaticPaths to ensure they're in scope
@@ -27,15 +27,7 @@ const { categoryName } = Astro.props;
 
 // For now, just fetch all published posts
 // In the future, this would filter by category
-const { data: posts, error } = await supabase
-  .from('blog_posts')
-  .select('*')
-  .eq('status', 'published')
-  .order('published_at', { ascending: false });
-
-if (error) {
-  console.error('Error fetching blog posts:', error);
-}
+const posts = await getBlogPosts({ status: 'published', orderBy: 'published_at' });
 
 // Simulate category filtering (this would be replaced with actual filtering when categories are implemented)
 const filteredPosts = posts || [];

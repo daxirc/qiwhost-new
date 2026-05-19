@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+// Auth handled via API endpoint
 import { toast, Toaster } from 'react-hot-toast';
 import Dashboard from './Dashboard';
 
@@ -13,37 +13,16 @@ export default function AdminPanel() {
   const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
-    // Check if supabase is properly initialized
-    if (!supabase) {
-      setError('Supabase client not initialized');
-      setLoading(false);
-      return;
-    }
-
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error('Error getting session:', error);
-        setError(error.message);
-      } else {
-        setSession(session);
+    // Check for existing session in localStorage
+    const savedSession = localStorage.getItem('admin_session');
+    if (savedSession) {
+      try {
+        setSession(JSON.parse(savedSession));
+      } catch (e) {
+        localStorage.removeItem('admin_session');
       }
-      setLoading(false);
-    }).catch((err) => {
-      console.error('Error in getSession:', err);
-      setError(err.message);
-      setLoading(false);
-    });
-
-    // Listen for auth state changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setError(null);
-    });
-
-    return () => subscription.unsubscribe();
+    }
+    setLoading(false);
   }, []);
 
   const handleSignIn = async (event) => {
@@ -56,15 +35,19 @@ export default function AdminPanel() {
     const password = formData.get('password');
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+      const data = await res.json();
 
-      if (error) {
-        throw error;
+      if (!res.ok) {
+        throw new Error(data.error || 'Invalid credentials');
       }
 
+      localStorage.setItem('admin_session', JSON.stringify(data.session));
+      setSession(data.session);
       toast.success('Successfully signed in!');
     } catch (error) {
       console.error('Sign in error:', error);
@@ -81,15 +64,7 @@ export default function AdminPanel() {
     setError(null);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: `${window.location.origin}/admin/reset-password`,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      toast.success('Password reset email sent! Check your inbox.');
+      toast.success('Please contact your administrator to reset your password.');
       setShowResetPassword(false);
       setResetEmail('');
     } catch (error) {

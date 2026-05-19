@@ -5,35 +5,24 @@ import FeaturesSection from '../../components/FeaturesSection.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
 import LocationCard from '../../components/LocationCard.astro';
-import { supabase } from '../../lib/supabase';
+import { vpsLocations, getFeaturedVpsPlans, getBackgroundImage } from '../../data/plans';
 import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
 // Get translations for current locale
 const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
-// Fetch only Linux VPS plans (3 plans)
-const { data: linuxPlans, error: linuxError } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('visible', true)
-  .eq('os_type', 'Linux')
-  .order('sort_order', { ascending: true })
-  .limit(3);
+// Get featured VPS plans (hardcoded)
+const featuredPlans = getFeaturedVpsPlans();
 
-if (linuxError) {
-  console.error('Error fetching Linux plans:', linuxError);
-}
-
-// Convert database plans to pricing table format
-const plans = linuxPlans?.map(plan => ({
+// Convert to pricing table format
+const plans = featuredPlans.map(plan => ({
   name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${(plan.priceAnnually / 12).toFixed(2)}`
   },
-  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  description: `${plan.cpu}, ${plan.ram}, ${plan.storage}`,
   features: [
     plan.cpu,
     plan.ram,
@@ -43,94 +32,21 @@ const plans = linuxPlans?.map(plan => ({
     'Full Root Access'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
-  popular: plan.plan_type === 'Standard',
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaLink: plan.cartUrl,
+  popular: plan.tier === 'Professional',
+  osType: 'Linux'
 })) || [];
 
-// Fetch all unique VPS locations for the location cards
-const { data: vpsLocations, error: locationsError } = await supabase
-  .from('hosting_plans')
-  .select('region, location, flag_icon, page_description')
-  .eq('category', 'VPS')
-  .eq('visible', true)
-  .not('region', 'is', null)
-  .not('location', 'is', null)
-  .order('region', { ascending: true })
-  .order('location', { ascending: true });
+// Build unique locations for location cards from hardcoded data
+const uniqueLocations = vpsLocations.map(location => ({
+  locationName: location.city,
+  regionName: location.region,
+  flagIcon: location.flag,
+  slug: location.slug,
+  description: location.tagline,
+  backgroundImageUrl: getBackgroundImage(location.city)
+}));
 
-if (locationsError) {
-  console.error('Error fetching VPS locations:', locationsError);
-}
-
-// Background image mapping for each location with Cloudinary optimization
-const locationBackgrounds = {
-  'Silicon Valley': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539039/Silicon_Valley_sxjcjj.png',
-  'Moscow': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539040/Moscow_u5zvnl.png',
-  'Frankfurt': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539039/Frankfurt_av8tht.png',
-  'Jeddah': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539038/Jeddah_ze1wej.jpg',
-  'Washington': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539037/Washington_btanro.png',
-  'Athens': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539033/Athens_iiy7zu.png',
-  'Bahrain': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539032/Bahrain_ewepu0.jpg',
-  'Sofia': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539029/Sofia_nyezgc.png',
-  'London': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539029/London_ngfcmz.png',
-  'Doha': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539028/Doha_so056c.png',
-  'Tokyo': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539027/Tokyo_nvz70e.jpg',
-  'Bangkok': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539026/Bangkok_oo0cgx.jpg',
-  'Hanoi': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539024/Hanoi_qqfl1y.jpg',
-  'Phnom Penh': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539022/Phnom_Penh_l8dqtd.jpg',
-  'Ho Chi Minh': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539020/Ho_Chi_Minh_rpgk3a.jpg',
-  'Marseille': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539020/Marseille_uojjzm.png',
-  'Manila': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539020/Manila_ke9u0g.jpg',
-  'Johannesburg': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539018/Johannesburg_xlvrch.png',
-  'Taipei': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539017/Taipei_fjfx42.jpg',
-  'Hong Kong': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539017/Hong_Kong_sujbn0.jpg',
-  'Istanbul': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539016/Istanbul_qwuebu.jpg',
-  'Kuwait City': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539015/Kuwait_City_krkgsn.png',
-  'Dubai': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539014/Dubai_mxvpm8.jpg',
-  'Seoul': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539014/Seoul_xolino.jpg',
-  'Riyadh': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539013/Riyadh_jcswfj.jpg',
-  'Muscat': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539012/Muscat_q2sddt.jpg',
-  'Yangon': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539010/Yangon_vh2avc.jpg',
-  'Kathmandu': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539010/Kathmandu_qvab9r.jpg',
-  'Baghdad': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539009/Baghdad_j0k3ut.png',
-  'Dhaka': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539008/Dhaka_nhwgws.jpg',
-  'Singapore': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539006/Singapore_f2a8al.jpg',
-  'Kuala Lumpur': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539005/Kuala_Lumpur_cyodnq.jpg',
-  'Jakarta': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539003/Jakarta_s3ucyo.jpg',
-  'Buenos Aires': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750539002/Buenos_Aires_vn8nvr.jpg',
-  'Cairo': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750538998/Cairo_zpzfsq.jpg',
-  'Bogota': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750538997/Bogota_c8b38a.jpg',
-  'Karachi': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750538996/Karachi_idwjzk.png',
-  'Santiago': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750538995/Santiago_m1uy5r.jpg',
-  'Sao Paulo': 'https://res.cloudinary.com/dojj0miva/image/upload/f_auto,q_auto/v1750538994/Sao_Paulo_mvmaue.jpg',
-  'Mexico City': 'https://images.pexels.com/photos/1386444/pexels-photo-1386444.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-};
-
-// Default fallback image with optimization
-const defaultBackgroundImage = 'https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2';
-
-// Remove duplicates and create unique locations with background images
-const uniqueLocations = vpsLocations?.reduce((acc, location) => {
-  const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-  const exists = acc.find(l => l.slug === slug);
-  if (!exists) {
-    const backgroundImageUrl = locationBackgrounds[location.location] || defaultBackgroundImage;
-    acc.push({
-      locationName: location.location,
-      regionName: location.region,
-      flagIcon: location.flag_icon,
-      slug,
-      description: location.page_description,
-      backgroundImageUrl
-    });
-  }
-  return acc;
-}, []) || [];
 
 // Features data with translations
 const features = [

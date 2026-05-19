@@ -3,38 +3,17 @@ import Layout from '../../../../layouts/MainLayout.astro';
 import Hero from '../../../../components/Hero.astro';
 import PricingTable from '../../../../components/PricingTable.astro';
 import CTABanner from '../../../../components/CTABanner.astro';
-import { supabase } from '../../../../lib/supabase';
+import { vpsLocations, getLocationByCity } from '../../../../data/plans';
 import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../../i18n/utils';
 
 export async function getStaticPaths() {
-  // Fetch all VPS locations to generate static paths
-  const { data: locations, error } = await supabase
-    .from('hosting_plans')
-    .select('location, region, flag_icon, page_description')
-    .eq('category', 'VPS')
-    .eq('visible', true)
-    .not('region', 'is', null)
-    .not('location', 'is', null);
-
-  if (error) {
-    console.error('Error fetching VPS locations:', error);
-    return [];
-  }
-
-  // Remove duplicates and create paths
-  const uniqueLocations = locations.reduce((acc, location) => {
-    const slug = location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    if (!acc.find(l => l.slug === slug)) {
-      acc.push({
-        slug,
-        location: location.location,
-        region: location.region,
-        flag_icon: location.flag_icon,
-        page_description: location.page_description
-      });
-    }
-    return acc;
-  }, []);
+  const uniqueLocations = vpsLocations.map(l => ({
+    slug: l.slug,
+    location: l.city,
+    region: l.region,
+    flag_icon: l.flag,
+    page_description: l.tagline || ''
+  }));
 
   // Generate paths for each location and locale
   const paths = [];
@@ -77,26 +56,17 @@ const locale = getCurrentLocale(urlLocale);
 const t = getTranslations(locale);
 
 // Fetch VPS plans for this specific city
-const { data: cityPlans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('location', cityName)
-  .eq('visible', true)
-  .order('sort_order', { ascending: true });
+const cityLocation = getLocationByCity(cityName);
+const cityPlans = cityLocation?.plans || [];
 
-if (error) {
-  console.error('Error fetching city plans:', error);
-}
-
-// Convert database plans to pricing table format
+// Convert plans to pricing table format
 const plans = cityPlans?.map(plan => ({
-  name: `${plan.plan_type || plan.name}`,
+  name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${(plan.priceAnnually / 12).toFixed(2)}`
   },
-  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  description: `${plan.cpu}, ${plan.ram}, ${plan.storage}`,
   features: [
     plan.cpu,
     plan.ram,
@@ -104,16 +74,11 @@ const plans = cityPlans?.map(plan => ({
     plan.bandwidth,
     'Full Root Access',
     '24/7 Support',
-    'SSD Storage'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
-  popular: plan.plan_type === 'Standard',
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaLink: plan.cartUrl,
+  popular: plan.tier === 'Professional',
+  osType: 'Linux'
 })) || [];
 
 // Features data with translations

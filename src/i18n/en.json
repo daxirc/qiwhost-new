@@ -467,5 +467,292 @@
         "subtitle": "Premium Remote Desktop Protocol servers with dedicated resources and full administrator access."
       }
     }
+  },
+  "sharedHosting": {
+    "meta": {
+      "title": "Shared Web Hosting — Fast, Secure & Affordable | QIW HOST",
+      "description": "Reliable shared hosting with NVMe SSD, free SSL, CyberPanel, and 24/7 support. Plans start at $2.99/mo."
+    },
+    "hero": {
+      "title": "Shared Web Hosting",
+      "subtitle": "Blazing-fast NVMe SSD hosting with CyberPanel, free SSL & one-click WordPress. Start your website in minutes.",
+      "ctaText": "See Plans"
+    },
+    "trustBar": {
+      "uptime": "99.9% Uptime SLA",
+      "ssl": "Free SSL Included",
+      "panel": "CyberPanel Included",
+      "support": "24/7 Support",
+      "moneyBack": "30-Day Money Back"
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "No hidden fees. Cancel anytime. All plans include free SSL & CyberPanel.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlySave": "Save 33%",
+      "billedAnnually": "Billed annually",
+      "whatsIncluded": "What's included:",
+      "getStarted": "Get Started",
+      "mostPopular": "Most Popular"
+    },
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "tagline": "Perfect for personal sites & blogs"
+      },
+      "business": {
+        "name": "Business",
+        "tagline": "Ideal for growing businesses"
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Maximum power for agencies & stores"
+      }
+    },
+    "features": {
+      "title": "Everything You Need to Succeed Online",
+      "subtitle": "Enterprise-grade infrastructure at shared hosting prices.",
+      "nvme": { "title": "NVMe SSD Storage", "desc": "Lightning-fast NVMe solid-state drives for blazing page loads and snappy database queries." },
+      "ssl": { "title": "Free SSL Certificates", "desc": "Every domain gets a free Let's Encrypt SSL — auto-renewed, zero config." },
+      "panel": { "title": "CyberPanel", "desc": "A modern, lightweight control panel to manage files, emails, databases, and DNS — all in one place." },
+      "wordpress": { "title": "One-Click WordPress", "desc": "Launch a WordPress site in seconds with the built-in installer — 400+ apps available." },
+      "ddos": { "title": "DDoS Protection", "desc": "Enterprise-grade DDoS mitigation keeps your sites online during volumetric attacks." },
+      "support": { "title": "24/7 Expert Support", "desc": "Real humans, real fast — our support team is available around the clock via live chat & tickets." },
+      "backups": { "title": "Automated Backups", "desc": "Daily (or weekly) backups with one-click restore so you never lose a byte." },
+      "litespeed": { "title": "LiteSpeed Web Server", "desc": "Up to 12x faster than Apache — built-in caching and HTTP/3 support for peak performance." }
+    },
+    "techStack": {
+      "title": "Powered by Modern Technology",
+      "subtitle": "All the languages, frameworks, and tools your projects need."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": { "q": "What is shared hosting?", "a": "Shared hosting means your website shares server resources (CPU, RAM, disk) with other sites on the same server. It's the most affordable option and is perfect for personal sites, blogs, portfolios, and small business websites." },
+      "q2": { "q": "Can I install WordPress?", "a": "Absolutely! All plans include the Softaculous one-click installer, which lets you install WordPress (and 400+ other apps) in under 60 seconds — no technical skills required." },
+      "q3": { "q": "Is SSL included for free?", "a": "Yes. Every plan includes a free Let's Encrypt SSL certificate that's automatically issued and renewed. Your visitors will see the secure padlock icon from day one." },
+      "q4": { "q": "Can I upgrade my plan later?", "a": "Of course. You can upgrade (or downgrade) at any time from your client area. The price difference is prorated automatically — no downtime, no data loss." },
+      "q5": { "q": "Do you offer a money-back guarantee?", "a": "Yes! We offer a 30-day money-back guarantee on all shared hosting plans. If you're not satisfied, we'll issue a full refund — no questions asked." }
+    },
+    "cta": {
+      "title": "Ready to Launch Your Website?",
+      "subtitle": "Get started with shared hosting today. Plans start at just $2.99/mo.",
+      "ctaText": "Get Started Now"
+    }
+  },
+  "wordpressHosting": {
+    "meta": {
+      "title": "WordPress Hosting",
+      "description": "Managed WordPress hosting with automatic updates, enhanced security, and expert support."
+    },
+    "hero": {
+      "title": "Managed WordPress Hosting",
+      "subtitle": "Powerful, secure, and optimized hosting specifically designed for WordPress websites with expert management."
+    },
+    "comingSoon": {
+      "title": "WordPress Hosting Plans Coming Soon!",
+      "description": "We're developing the ultimate WordPress hosting experience with managed updates, enhanced security, and performance optimization. Get ready for hassle-free WordPress hosting!",
+      "notifyPlaceholder": "Enter your email",
+      "notifyButton": "Notify Me",
+      "notifySubtext": "Be among the first to experience our managed WordPress hosting!"
+    },
+    "features": {
+      "title": "WordPress-Focused Features",
+      "subtitle": "Everything you need for a fast, secure, and well-maintained WordPress website",
+      "optimized": { "title": "Optimized for WordPress", "desc": "Server configurations specifically tuned for WordPress performance." },
+      "updates": { "title": "Automatic Updates", "desc": "Keep WordPress core, themes, and plugins updated automatically." },
+      "security": { "title": "Enhanced Security", "desc": "Advanced security measures to protect against WordPress threats." },
+      "staging": { "title": "Staging Environment", "desc": "Test changes safely with one-click staging environments." },
+      "toolkit": { "title": "WordPress Toolkit", "desc": "Powerful tools for managing multiple WordPress installations." },
+      "support": { "title": "Expert Support", "desc": "WordPress specialists available 24/7 to help with any issues." }
+    },
+    "benefits": {
+      "title": "Why Choose Managed WordPress?",
+      "subtitle": "Focus on your content while we handle the technical details",
+      "maintenance": { "title": "Hands-Free Maintenance", "desc": "Automatic updates, backups, and security monitoring so you can focus on creating content." },
+      "performance": { "title": "Lightning Fast Performance", "desc": "Optimized servers and caching specifically configured for WordPress speed." },
+      "enhancedSecurity": { "title": "Enhanced Security", "desc": "Advanced security measures and monitoring to protect against WordPress-specific threats." },
+      "expertSupport": { "title": "Expert WordPress Support", "desc": "Get help from WordPress specialists who understand the platform inside and out." },
+      "stagingEnv": { "title": "Staging Environments", "desc": "Test changes safely before pushing them live with one-click staging." },
+      "scalable": { "title": "Scalable Solutions", "desc": "Easily scale your hosting as your WordPress site grows in traffic and complexity." }
+    },
+    "cta": {
+      "title": "Need WordPress Hosting Now?",
+      "subtitle": "Install WordPress on our VPS hosting for full control and flexibility.",
+      "ctaText": "View VPS Plans"
+    },
+    "successMessage": {
+      "title": "Thank You!",
+      "text": "We'll notify you when WordPress hosting is available."
+    }
+  },
+  "aboutPage": {
+    "meta": {
+      "title": "About Us",
+      "description": "Learn about QIW HOST, our mission, vision, and the team behind our reliable hosting solutions."
+    },
+    "hero": {
+      "title": "About QIW HOST",
+      "subtitle": "Founded in 2017, we've been delivering reliable hosting solutions for businesses worldwide."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "p1": "At QIW HOST, our mission is to provide businesses of all sizes with reliable, high-performance hosting solutions that enable growth and success in the digital world.",
+      "p2": "We strive to deliver exceptional service, technical expertise, and cutting-edge infrastructure that our clients can depend on, allowing them to focus on their core business objectives."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "p1": "We envision a future where every business has access to enterprise-grade hosting infrastructure that is secure, scalable, and affordable.",
+      "p2": "QIW HOST aims to be the trusted partner for businesses navigating the complex world of cloud hosting, setting the industry standard for reliability, security, and customer satisfaction."
+    },
+    "journey": {
+      "title": "Our Journey",
+      "subtitle": "A look back at how QIW HOST has evolved over the years."
+    },
+    "team": {
+      "title": "Meet Our Team",
+      "subtitle": "The dedicated professionals behind QIW HOST's success."
+    },
+    "partners": {
+      "title": "Our Partners",
+      "subtitle": "We collaborate with leading technology companies to deliver the best solutions."
+    },
+    "cta": {
+      "title": "Join Thousands of Satisfied Customers",
+      "subtitle": "Experience the QIW HOST difference today.",
+      "ctaText": "Get Started"
+    },
+    "timeline": {
+      "2017": { "title": "Company Founded", "desc": "QIW HOST was established with a vision to provide reliable and affordable hosting solutions." },
+      "2018": { "title": "VPS Services Launch", "desc": "Launched our first VPS hosting services with a focus on performance and reliability." },
+      "2019": { "title": "Expanded to Dedicated Servers", "desc": "Added dedicated server options to our portfolio to meet growing customer demands." },
+      "2020": { "title": "Private RDP Solutions", "desc": "Introduced secure Private RDP solutions for remote work and business continuity." },
+      "2022": { "title": "Global Expansion", "desc": "Expanded our infrastructure to multiple data centers worldwide for better global coverage." },
+      "2023": { "title": "Next-Gen Infrastructure", "desc": "Upgraded to next-generation hardware and networking technologies across all services." }
+    }
+  },
+  "contactPage": {
+    "meta": {
+      "title": "Contact Us",
+      "description": "Get in touch with the QIW HOST team for sales inquiries, technical support, or general questions."
+    },
+    "hero": {
+      "title": "Contact Us",
+      "subtitle": "Have questions? We're here to help. Reach out to our team for assistance."
+    },
+    "getInTouch": "Get In Touch",
+    "email": "Email",
+    "phone": "Phone",
+    "supportHours": "Support Hours",
+    "connectWithUs": "Connect With Us",
+    "sendMessage": "Send Us a Message",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email Address",
+    "subject": "Subject",
+    "message": "Message",
+    "sendButton": "Send Message",
+    "offices": {
+      "title": "Our Global Offices",
+      "subtitle": "We have offices around the world to serve you better",
+      "mainOffice": "Main Office"
+    },
+    "success": {
+      "title": "Message Sent Successfully!",
+      "text": "Thank you for contacting us, {name}. We'll get back to you shortly.",
+      "sendAnother": "Send Another Message"
+    }
+  },
+  "pricingPage": {
+    "meta": {
+      "title": "Pricing",
+      "description": "Transparent pricing for QIW HOST cloud hosting solutions."
+    },
+    "hero": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that works best for your business needs. No hidden fees or long-term contracts."
+    },
+    "monthly": "Monthly",
+    "yearly": "Yearly (Save 20%)",
+    "mostPopular": "Most Popular",
+    "billedAnnually": "Billed annually",
+    "perMonth": "/month",
+    "vps": {
+      "title": "VPS Hosting Plans",
+      "subtitle": "Powerful virtual private servers with dedicated resources and full root access.",
+      "learnMore": "Learn more about our VPS hosting"
+    },
+    "dedicated": {
+      "title": "Dedicated Server Plans",
+      "subtitle": "Powerful physical servers with exclusive resources for maximum performance.",
+      "learnMore": "Learn more about our dedicated servers"
+    },
+    "rdp": {
+      "title": "Private RDP Plans",
+      "subtitle": "Secure remote desktop solutions with full administrator access.",
+      "learnMore": "Learn more about our Private RDP solutions"
+    },
+    "orderNow": "Order Now",
+    "faq": {
+      "q1": { "q": "What payment methods do you accept?", "a": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and cryptocurrency payments (Bitcoin, Ethereum)." },
+      "q2": { "q": "Can I upgrade my plan later?", "a": "Yes, you can easily upgrade your plan at any time through our client area. The price difference will be prorated for the remainder of your billing cycle." },
+      "q3": { "q": "Do you offer a money-back guarantee?", "a": "Yes, we offer a 7-day money-back guarantee for all our VPS and Private RDP plans. Dedicated servers have a 3-day money-back guarantee due to their customized nature." },
+      "q4": { "q": "What is the difference between monthly and yearly billing?", "a": "Yearly billing provides a 20% discount compared to monthly billing. You can choose your preferred billing cycle during checkout." },
+      "q5": { "q": "Are there any setup fees?", "a": "No, we don't charge any setup fees for our standard services. What you see in our pricing is what you pay." }
+    },
+    "customCta": {
+      "title": "Need a Custom Solution?",
+      "subtitle": "Contact our team for personalized hosting plans tailored to your specific requirements.",
+      "ctaText": "Contact Us"
+    }
+  },
+  "domainsPage": {
+    "meta": {
+      "title": "Domain Registration",
+      "description": "Register your perfect domain name with QIW HOST. Competitive pricing, free DNS management, and 24/7 support."
+    },
+    "notice": "We are currently not offering domain registration, please wait for an update.",
+    "search": {
+      "title": "Search for Your Domain",
+      "subtitle": "Enter your desired domain name and check availability instantly",
+      "domainLabel": "Domain Name",
+      "placeholder": "yourdomain",
+      "extensionLabel": "Extension",
+      "searchButton": "Search",
+      "popularExtensions": "Popular extensions:"
+    },
+    "features": {
+      "dns": { "title": "Free DNS Management", "desc": "Complete DNS control with our easy-to-use management interface." },
+      "privacy": { "title": "Domain Privacy Protection", "desc": "Keep your personal information private with WHOIS protection." },
+      "transfer": { "title": "Easy Domain Transfer", "desc": "Transfer your existing domains to us with our simple process." },
+      "support": { "title": "24/7 Support", "desc": "Expert support available around the clock for all domain issues." },
+      "autoRenew": { "title": "Auto-Renewal", "desc": "Never lose your domain with automatic renewal options." },
+      "bulk": { "title": "Bulk Management", "desc": "Manage multiple domains efficiently from one dashboard." }
+    },
+    "pricingTable": {
+      "title": "Domain Pricing",
+      "subtitle": "Transparent pricing for all popular domain extensions",
+      "extension": "Extension",
+      "registration": "Registration",
+      "renewal": "Renewal",
+      "transferCol": "Transfer",
+      "action": "Action",
+      "firstYear": "1st year",
+      "perYear": "per year",
+      "plusYear": "+ 1 year",
+      "register": "Register"
+    },
+    "pricingNotes": {
+      "title": "Pricing Information",
+      "note1": "All prices are in USD and include ICANN fees where applicable",
+      "note2": "Domain privacy protection available for additional $9.99/year",
+      "note3": "Bulk discounts available for 10+ domains",
+      "note4": "Free DNS management included with all domains"
+    },
+    "cta": {
+      "title": "Ready to Register Your Domain?",
+      "subtitle": "Get started with your perfect domain name today and build your online presence.",
+      "ctaText": "Search Domains"
+    }
   }
 }

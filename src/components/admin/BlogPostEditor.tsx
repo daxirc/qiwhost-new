@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+// Uses /api/blog endpoint
 import toast from 'react-hot-toast';
 import { Editor } from '@tinymce/tinymce-react';
 
@@ -71,24 +71,16 @@ export default function BlogPostEditor({ post, onSave, onCancel }: BlogPostEdito
         seo_description: seoDescription || null
       };
 
-      let error;
-      if (post?.id) {
-        // Update existing post
-        const { error: updateError } = await supabase
-          .from('blog_posts')
-          .update(postData)
-          .eq('id', post.id);
-        error = updateError;
-      } else {
-        // Create new post
-        const { error: insertError } = await supabase
-          .from('blog_posts')
-          .insert([postData]);
-        error = insertError;
-      }
-
-      if (error) {
-        throw error;
+      const method = post?.id ? 'PUT' : 'POST';
+      const body = post?.id ? { id: post.id, ...postData } : postData;
+      const res = await fetch('/api/blog', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error || 'Failed to save post');
       }
 
       toast.success(`Post ${post?.id ? 'updated' : 'created'} successfully`);

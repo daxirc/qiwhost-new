@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+// Uses /api/assets endpoint
 import toast from 'react-hot-toast';
 
 interface Asset {
@@ -21,17 +21,9 @@ export default function LogoManager() {
   async function fetchLogos() {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('site_assets')
-        .select('*')
-        .eq('type', 'logo')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching logos:', error);
-        throw error;
-      }
-      
+      const res = await fetch('/api/assets?type=logo');
+      if (!res.ok) throw new Error('Failed to fetch logos');
+      const data = await res.json();
       console.log('Fetched logos:', data);
       setLogos(data || []);
     } catch (error) {
@@ -62,20 +54,17 @@ export default function LogoManager() {
       setUploading(true);
       
       // For demo purposes, we'll use a placeholder URL
-      // In a real implementation, you would upload to Supabase Storage
+      // In a real implementation, you would upload to cloud storage
       const fileName = `logo-${Date.now()}-${file.name}`;
       const filePath = `/uploads/${fileName}`;
       
       // Insert logo record
-      const { error } = await supabase
-        .from('site_assets')
-        .insert([{
-          type: 'logo',
-          file_path: filePath,
-          active: false
-        }]);
-
-      if (error) throw error;
+      const res = await fetch('/api/assets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'logo', file_path: filePath, active: false }),
+      });
+      if (!res.ok) throw new Error('Failed to upload logo');
 
       toast.success('Logo uploaded successfully');
       fetchLogos();
@@ -91,19 +80,13 @@ export default function LogoManager() {
 
   async function setActiveLogo(logoId: string) {
     try {
-      // First, set all logos to inactive
-      await supabase
-        .from('site_assets')
-        .update({ active: false })
-        .eq('type', 'logo');
-
-      // Then set the selected logo to active
-      const { error } = await supabase
-        .from('site_assets')
-        .update({ active: true })
-        .eq('id', logoId);
-
-      if (error) throw error;
+      // Set active logo via API (handles deactivating others)
+      const res = await fetch('/api/assets', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: logoId, type: 'logo' }),
+      });
+      if (!res.ok) throw new Error('Failed to update active logo');
 
       toast.success('Active logo updated');
       fetchLogos();
@@ -117,12 +100,12 @@ export default function LogoManager() {
     if (!confirm('Are you sure you want to delete this logo?')) return;
 
     try {
-      const { error } = await supabase
-        .from('site_assets')
-        .delete()
-        .eq('id', logoId);
-
-      if (error) throw error;
+      const res = await fetch('/api/assets', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: logoId }),
+      });
+      if (!res.ok) throw new Error('Failed to delete logo');
 
       toast.success('Logo deleted successfully');
       fetchLogos();

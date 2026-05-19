@@ -26,114 +26,64 @@ interface Props {
 
 const { title, description, plans, category } = Astro.props;
 
-// Helper function to calculate total yearly price
 function calculateYearlyTotal(monthlyPrice: string): string {
   const numericPrice = parseFloat(monthlyPrice.replace('$', ''));
-  const yearlyTotal = numericPrice * 12;
-  return `$${yearlyTotal.toFixed(2)}`;
+  return `$${(numericPrice * 12).toFixed(2)}`;
 }
 ---
 
-<section class="py-16 md:py-24">
+<section class="pricing-section py-16 md:py-24">
   <div class="container">
-    <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
-      {description && <p class="text-xl text-gray-600">{description}</p>}
+    <div class="text-center max-w-3xl mx-auto mb-14">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">{title}</h2>
+      {description && <p class="text-lg text-gray-500 leading-relaxed">{description}</p>}
       
       {category !== 'DEDICATED' && (
-        <div class="flex items-center justify-center mt-8">
-          <span class="text-lg font-medium text-gray-700 mr-3">Monthly</span>
-          <label for="pricing-toggle" class="relative inline-block w-14 h-7 cursor-pointer">
-            <input type="checkbox" id="pricing-toggle" class="sr-only peer">
-            <div class="w-14 h-7 bg-gray-200 rounded-full peer peer-checked:after:translate-x-7 peer-checked:bg-primary-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all"></div>
-          </label>
-          <span class="text-lg font-medium text-gray-700 ml-3">Yearly <span class="text-sm text-primary-600">Save 20%</span></span>
+        <div class="inline-flex items-center mt-8 bg-gray-100 rounded-full p-1">
+          <button id="btn-monthly" class="billing-toggle active px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+            Monthly
+          </button>
+          <button id="btn-yearly" class="billing-toggle px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+            Yearly
+          </button>
         </div>
       )}
     </div>
 
     {category === 'DEDICATED' ? (
-      <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+      <div class="overflow-x-auto bg-white rounded-2xl shadow-xl border border-gray-100">
         <table class="w-full border-collapse">
           <thead>
-            <tr class="bg-gray-50 border-b border-gray-200">
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 rounded-tl-xl">Name</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">CPU</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">RAM</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Storage</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Bandwidth</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Location</th>
-              <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Price</th>
-              <th class="px-6 py-4 rounded-tr-xl"></th>
+            <tr class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider rounded-tl-2xl">Name</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">CPU</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">RAM</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Storage</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Bandwidth</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Location</th>
+              <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Price</th>
+              <th class="px-6 py-4 rounded-tr-2xl"></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            {plans.map((plan, index) => (
-              <tr class="hover:bg-gray-50 transition-colors duration-150">
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="text-sm font-medium text-gray-900">{plan.name}</div>
-                    {plan.osType && (
-                      <div class="text-xs text-gray-500 mt-1">{plan.osType}</div>
-                    )}
-                  </div>
+            {plans.map((plan) => (
+              <tr class="hover:bg-blue-50/40 transition-colors duration-200">
+                <td class="px-6 py-5">
+                  <div class="font-semibold text-gray-900">{plan.name}</div>
+                  {plan.osType && <div class="text-xs text-gray-400 mt-0.5">{plan.osType}</div>}
                 </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <i class="fas fa-microchip text-primary-500 mr-2"></i>
-                    <span class="text-sm text-gray-900">{plan.features[0]}</span>
-                  </div>
+                <td class="px-6 py-5"><span class="text-sm text-gray-700">{plan.features[0]}</span></td>
+                <td class="px-6 py-5"><span class="text-sm text-gray-700">{plan.features[1]}</span></td>
+                <td class="px-6 py-5"><span class="text-sm text-gray-700">{plan.features[2]}</span></td>
+                <td class="px-6 py-5"><span class="text-sm text-gray-700">{plan.features[3]}</span></td>
+                <td class="px-6 py-5"><span class="text-sm text-gray-700">{plan.features[4]}</span></td>
+                <td class="px-6 py-5">
+                  <div class="text-lg font-bold text-gray-900">{plan.price.monthly}<span class="text-sm font-normal text-gray-400">/mo</span></div>
                 </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <i class="fas fa-memory text-primary-500 mr-2"></i>
-                    <span class="text-sm text-gray-900">{plan.features[1]}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <i class="fas fa-hdd text-primary-500 mr-2"></i>
-                    <span class="text-sm text-gray-900">{plan.features[2]}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <i class="fas fa-network-wired text-primary-500 mr-2"></i>
-                    <span class="text-sm text-gray-900">{plan.features[3]}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <i class="fas fa-map-marker-alt text-primary-500 mr-2"></i>
-                    <span class="text-sm text-gray-900">{plan.features[4]}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  {plan.sale_enabled ? (
-                    <div class="flex flex-col">
-                      <div class="text-lg font-bold text-primary-600">{plan.sale_price_monthly}</div>
-                      <div class="text-sm text-gray-500 line-through">{plan.price.monthly}</div>
-                    </div>
-                  ) : (
-                    <div class="text-lg font-bold text-gray-900">{plan.price.monthly}</div>
-                  )}
-                </td>
-                <td class="px-6 py-4 text-right">
-                  <div class="flex flex-col items-end gap-2">
-                    {plan.sale_enabled && (
-                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white shadow-sm">
-                        <i class="fas fa-tag mr-1"></i>
-                        {plan.sale_badge_text || 'SAVE!'}
-                      </span>
-                    )}
-                    <a
-                      href={plan.ctaLink}
-                      class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-gray-900 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
-                    >
-                      {plan.ctaText}
-                      <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                  </div>
+                <td class="px-6 py-5 text-right">
+                  <a href={plan.ctaLink} class="inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-xl text-white bg-primary-600 hover:bg-primary-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                    {plan.ctaText} <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                  </a>
                 </td>
               </tr>
             ))}
@@ -141,98 +91,374 @@ function calculateYearlyTotal(monthlyPrice: string): string {
         </table>
       </div>
     ) : (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {plans.map(plan => (
-          <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
-            {(plan.popular || plan.sale_enabled) && (
-              <div class={`${plan.sale_enabled ? 'bg-red-500' : 'bg-primary-500'} text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg`}>
-                {plan.sale_enabled ? (plan.sale_badge_text || 'On Sale!') : 'Most Popular'}
-              </div>
-            )}
-            <div class="p-8">
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-              {plan.osType && (
-                <div class="text-sm text-gray-500 mb-4 bg-gray-100 px-3 py-1 rounded-full inline-block">
-                  {plan.osType}
+      <div class="pricing-grid max-w-5xl mx-auto">
+        {plans.map((plan) => {
+          const isPro = plan.popular || plan.name?.toLowerCase().includes('professional');
+          const isEnt = plan.name?.toLowerCase().includes('enterprise');
+          return (
+            <div class={`pricing-card ${isPro ? 'is-popular' : ''}`}>
+              
+              {/* Popular ribbon */}
+              {isPro && (
+                <div class="popular-ribbon">
+                  <span>Most Popular</span>
                 </div>
               )}
-              <div class="pricing-amount mb-6">
-                <div class="monthly-price">
-                  {plan.sale_enabled ? (
-                    <div>
-                      <span class="text-4xl font-bold text-gray-900">{plan.sale_price_monthly}</span>
-                      <span class="text-gray-600">/month</span>
-                      <div class="text-sm mt-2">
-                        <span class="line-through text-gray-400">{plan.price.monthly}</span>
-                        <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
-                      <span class="text-gray-600">/month</span>
-                    </div>
-                  )}
+
+              <div class={`card-inner ${isPro ? 'dark-card' : 'light-card'}`}>
+                
+                {/* Plan name */}
+                <div class="card-header">
+                  <p class={`plan-label ${isPro ? 'text-blue-400' : 'text-primary-600'}`}>
+                    {plan.name?.includes('Basic') ? 'BASIC' : plan.name?.includes('Enterprise') ? 'ENTERPRISE' : 'PROFESSIONAL'}
+                  </p>
+                  <h3 class={`plan-name ${isPro ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
                 </div>
-                {category !== 'DEDICATED' && plan.price.yearly && (
-                  <div class="yearly-price hidden">
-                    {plan.sale_enabled && plan.sale_price_yearly ? (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.sale_price_yearly}</span>
-                        <span class="text-gray-600">/month</span>
-                        <div class="text-sm mt-2">
-                          <span class="line-through text-gray-400">{plan.price.yearly}</span>
-                          <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
+
+                {/* Price */}
+                <div class="price-block">
+                  <div class="pricing-amount">
+                    <div class="monthly-price">
+                      <div class="price-row">
+                        <span class={`price-currency ${isPro ? 'text-gray-400' : 'text-gray-400'}`}>$</span>
+                        <span class={`price-value ${isPro ? 'text-white' : 'text-gray-900'}`}>
+                          {plan.price.monthly.replace('$', '').split('.')[0]}
+                        </span>
+                        <div class="price-fraction">
+                          <span class={`${isPro ? 'text-gray-300' : 'text-gray-500'}`}>.{plan.price.monthly.replace('$', '').split('.')[1] || '00'}</span>
+                          <span class={`${isPro ? 'text-gray-400' : 'text-gray-400'}`}>/month</span>
                         </div>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually ({calculateYearlyTotal(plan.sale_price_yearly)})</p>
                       </div>
-                    ) : (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
-                        <span class="text-gray-600">/month</span>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually ({calculateYearlyTotal(plan.price.yearly)})</p>
+                    </div>
+                    {category !== 'DEDICATED' && plan.price.yearly && (
+                      <div class="yearly-price hidden">
+                        <div class="price-row">
+                          <span class={`price-currency ${isPro ? 'text-gray-400' : 'text-gray-400'}`}>$</span>
+                          <span class={`price-value ${isPro ? 'text-white' : 'text-gray-900'}`}>
+                            {plan.price.yearly.replace('$', '').split('.')[0]}
+                          </span>
+                          <div class="price-fraction">
+                            <span class={`${isPro ? 'text-gray-300' : 'text-gray-500'}`}>.{plan.price.yearly.replace('$', '').split('.')[1] || '00'}</span>
+                            <span class={`${isPro ? 'text-gray-400' : 'text-gray-400'}`}>/month</span>
+                          </div>
+                        </div>
+                        <p class={`text-xs mt-2 font-medium ${isPro ? 'text-blue-400' : 'text-primary-600'}`}>
+                          Billed annually ({calculateYearlyTotal(plan.price.yearly)})
+                        </p>
                       </div>
                     )}
                   </div>
-                )}
+                </div>
+
+                {/* Divider */}
+                <div class={`divider ${isPro ? 'border-white/10' : 'border-gray-100'}`}></div>
+
+                {/* Features */}
+                <div class="features-block">
+                  <p class={`features-title ${isPro ? 'text-gray-400' : 'text-gray-400'}`}>What's included:</p>
+                  <ul class="features-list">
+                    {plan.features.map(feature => (
+                      <li class="feature-item">
+                        <svg class={`feature-check ${isPro ? 'text-blue-400' : 'text-primary-500'}`} viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class={`${isPro ? 'text-gray-300' : 'text-gray-600'}`}>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* CTA */}
+                <div class="cta-block">
+                  <a href={plan.ctaLink} class={`cta-btn ${isPro ? 'cta-primary' : 'cta-outline'}`}>
+                    <span>{plan.ctaText || 'Order Now'}</span>
+                    <svg class="cta-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </a>
+                </div>
               </div>
-              <p class="text-gray-600 mb-6">{plan.description}</p>
-              <ul class="space-y-3 mb-8">
-                {plan.features.map(feature => (
-                  <li class="flex items-start">
-                    <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
-                    <span class="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular || plan.sale_enabled ? 'bg-primary-600 text-white hover:bg-gray-900' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
-                {plan.ctaText}
-              </a>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     )}
   </div>
 </section>
 
+<style>
+  /* ── Billing Toggle ── */
+  .billing-toggle {
+    color: #6b7280;
+    cursor: pointer;
+  }
+  .billing-toggle.active {
+    background: white;
+    color: #111827;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* ── Card Grid ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  @media (min-width: 768px) {
+    .pricing-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+  }
+
+  /* ── Card Base ── */
+  .pricing-card {
+    position: relative;
+    z-index: 1;
+  }
+  .pricing-card.is-popular {
+    z-index: 10;
+  }
+  @media (min-width: 768px) {
+    .pricing-card.is-popular {
+      transform: scaleY(1.03);
+    }
+  }
+
+  /* ── Popular Ribbon ── */
+  .popular-ribbon {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }
+  .popular-ribbon span {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: white;
+    background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8);
+    border-radius: 100px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  }
+
+  /* ── Card Inner ── */
+  .card-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.75rem;
+    border-radius: 1.25rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-inner:hover {
+    transform: translateY(-4px);
+  }
+
+  .light-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .light-card:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  }
+
+  .dark-card {
+    background: linear-gradient(165deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1);
+  }
+  .dark-card:hover {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.2), 0 0 40px rgba(59,130,246,0.06);
+  }
+
+  @media (min-width: 768px) {
+    .pricing-card:first-child .card-inner {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .pricing-card:last-child .card-inner {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .pricing-card.is-popular .card-inner {
+      border-radius: 1.25rem;
+    }
+  }
+
+  /* ── Header ── */
+  .card-header {
+    margin-bottom: 1.5rem;
+  }
+  .plan-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .plan-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  /* ── Price ── */
+  .price-block {
+    margin-bottom: 1.5rem;
+  }
+  .price-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .price-currency {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .price-value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .price-fraction {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    gap: 0;
+  }
+  .price-fraction span:first-child {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .price-fraction span:last-child {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border-top-width: 1px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Features ── */
+  .features-block {
+    flex: 1;
+    margin-bottom: 1.75rem;
+  }
+  .features-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.875rem;
+  }
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .feature-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+  .feature-item span {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  /* ── CTA Button ── */
+  .cta-block {
+    margin-top: auto;
+  }
+  .cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .cta-btn:hover {
+    transform: translateY(-1px);
+  }
+  .cta-arrow {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.25s ease;
+  }
+  .cta-btn:hover .cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .cta-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+  }
+  .cta-primary:hover {
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+
+  .cta-outline {
+    background: transparent;
+    color: #1f2937;
+    border: 2px solid #e5e7eb;
+  }
+  .cta-outline:hover {
+    border-color: #3b82f6;
+    color: #2563eb;
+    background: rgba(59, 130, 246, 0.04);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+  }
+</style>
+
 <script>
-  // Pricing toggle functionality - only for non-dedicated servers
   document.addEventListener('DOMContentLoaded', function() {
-    const pricingToggle = document.getElementById('pricing-toggle');
-    if (!pricingToggle) return; // Exit if toggle doesn't exist (dedicated servers)
+    const btnMonthly = document.getElementById('btn-monthly');
+    const btnYearly = document.getElementById('btn-yearly');
+    if (!btnMonthly || !btnYearly) return;
     
     const monthlyPrices = document.querySelectorAll('.monthly-price');
     const yearlyPrices = document.querySelectorAll('.yearly-price');
     
-    pricingToggle.addEventListener('change', function() {
-      if (this.checked) {
-        monthlyPrices.forEach(el => el.classList.add('hidden'));
-        yearlyPrices.forEach(el => el.classList.remove('hidden'));
-      } else {
-        monthlyPrices.forEach(el => el.classList.remove('hidden'));
-        yearlyPrices.forEach(el => el.classList.add('hidden'));
-      }
+    btnMonthly.addEventListener('click', () => {
+      btnMonthly.classList.add('active');
+      btnYearly.classList.remove('active');
+      monthlyPrices.forEach(el => el.classList.remove('hidden'));
+      yearlyPrices.forEach(el => el.classList.add('hidden'));
+    });
+    
+    btnYearly.addEventListener('click', () => {
+      btnYearly.classList.add('active');
+      btnMonthly.classList.remove('active');
+      monthlyPrices.forEach(el => el.classList.add('hidden'));
+      yearlyPrices.forEach(el => el.classList.remove('hidden'));
     });
   });
 </script>

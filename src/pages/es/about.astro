@@ -1,0 +1,218 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const ap = t.aboutPage;
+
+// Timeline data
+const timelineEvents = [
+  {
+    year: 2017,
+    title: "Company Founded",
+    description: "QIW HOST was established with a vision to provide reliable and affordable hosting solutions."
+  },
+  {
+    year: 2018,
+    title: "VPS Services Launch",
+    description: "Launched our first VPS hosting services with a focus on performance and reliability."
+  },
+  {
+    year: 2019,
+    title: "Expanded to Dedicated Servers",
+    description: "Added dedicated server options to our portfolio to meet growing customer demands."
+  },
+  {
+    year: 2020,
+    title: "Private RDP Solutions",
+    description: "Introduced secure Private RDP solutions for remote work and business continuity."
+  },
+  {
+    year: 2022,
+    title: "Global Expansion",
+    description: "Expanded our infrastructure to multiple data centers worldwide for better global coverage."
+  },
+  {
+    year: 2023,
+    title: "Next-Gen Infrastructure",
+    description: "Upgraded to next-generation hardware and networking technologies across all services."
+  }
+];
+
+// Team members data
+const founders = [
+  {
+    name: "John Smith",
+    position: "Co-Founder & CEO",
+    bio: "With over 15 years of experience in the hosting industry, John leads the company's strategic vision and growth initiatives.",
+    image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+  },
+  {
+    name: "Sarah Thompson",
+    position: "Co-Founder & CTO",
+    bio: "Sarah brings technical expertise and innovation to QIW HOST, overseeing the development and implementation of our hosting infrastructure.",
+    image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+  },
+  {
+    name: "Michael Chen",
+    position: "Operations Director",
+    bio: "Michael ensures the smooth operation of our global infrastructure and maintains our commitment to reliability and performance.",
+    image: "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+  }
+];
+
+// Partner logos
+const partners = [
+  {
+    name: "TechCorp",
+    logo: "https://via.placeholder.com/150x60?text=TechCorp"
+  },
+  {
+    name: "DataSystems",
+    logo: "https://via.placeholder.com/150x60?text=DataSystems"
+  },
+  {
+    name: "CloudNine",
+    logo: "https://via.placeholder.com/150x60?text=CloudNine"
+  },
+  {
+    name: "ServerPro",
+    logo: "https://via.placeholder.com/150x60?text=ServerPro"
+  },
+  {
+    name: "HostElite",
+    logo: "https://via.placeholder.com/150x60?text=HostElite"
+  },
+  {
+    name: "NetSolutions",
+    logo: "https://via.placeholder.com/150x60?text=NetSolutions"
+  }
+];
+---
+
+<Layout 
+  title={ap.meta.title} 
+  description={ap.meta.description}
+>
+  <!-- Hero Section -->
+  <Hero
+    title={ap.hero.title}
+    subtitle={ap.hero.subtitle}
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Mission & Vision -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">{ap.mission.title}</h2>
+          <p class="text-lg text-gray-700 mb-6">
+            At QIW HOST, our mission is to provide businesses of all sizes with reliable, high-performance hosting solutions that enable growth and success in the digital world.
+          </p>
+          <p class="text-lg text-gray-700">
+            We strive to deliver exceptional service, technical expertise, and cutting-edge infrastructure that our clients can depend on, allowing them to focus on their core business objectives.
+          </p>
+        </div>
+        
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">{ap.vision.title}</h2>
+          <p class="text-lg text-gray-700 mb-6">
+            We envision a future where every business has access to enterprise-grade hosting infrastructure that is secure, scalable, and affordable.
+          </p>
+          <p class="text-lg text-gray-700">
+            QIW HOST aims to be the trusted partner for businesses navigating the complex world of cloud hosting, setting the industry standard for reliability, security, and customer satisfaction.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Timeline -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.journey.title}</h2>
+        <p class="text-xl text-gray-600">{ap.journey.subtitle}</p>
+      </div>
+      
+      <div class="max-w-4xl mx-auto">
+        <div class="relative">
+          <!-- Timeline Line -->
+          <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-primary-200"></div>
+          
+          <!-- Timeline Events -->
+          {timelineEvents.map((event, index) => (
+            <div class={`relative z-10 mb-12 flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
+              <div class={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:pr-8 text-right' : 'md:pl-8 text-left'}`}>
+                <div class={`bg-white p-6 rounded-lg shadow-md border-l-4 ${index % 2 === 0 ? 'border-primary-500' : 'border-primary-600'}`}>
+                  <span class="text-2xl font-bold text-primary-600">{event.year}</span>
+                  <h3 class="text-xl font-semibold mt-2 mb-3">{event.title}</h3>
+                  <p class="text-gray-600">{event.description}</p>
+                </div>
+              </div>
+              
+              <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                <div class="w-8 h-8 rounded-full bg-primary-500 border-4 border-white shadow"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founders -->
+  <section class="py-16 md:py-24">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.team.title}</h2>
+        <p class="text-xl text-gray-600">{ap.team.subtitle}</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {founders.map(founder => (
+          <div class="bg-white rounded-xl shadow-md overflow-hidden hover-scale">
+            <div class="h-64 overflow-hidden">
+              <img src={founder.image} alt={founder.name} class="w-full h-full object-cover" />
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-1">{founder.name}</h3>
+              <p class="text-primary-600 font-medium mb-4">{founder.position}</p>
+              <p class="text-gray-600">{founder.bio}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners -->
+  <section class="py-16 md:py-24 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{ap.partners.title}</h2>
+        <p class="text-xl text-gray-600">{ap.partners.subtitle}</p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+        {partners.map(partner => (
+          <div class="flex items-center justify-center p-4 bg-white rounded-lg shadow-sm">
+            <img src={partner.logo} alt={partner.name} class="max-h-12" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={ap.cta.title}
+    subtitle={ap.cta.subtitle}
+    ctaText={ap.cta.ctaText}
+    ctaLink="/pricing"
+  />
+</Layout>

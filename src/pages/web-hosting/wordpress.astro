@@ -2,6 +2,11 @@
 import Layout from '../../layouts/MainLayout.astro';
 import Hero from '../../components/Hero.astro';
 import CTABanner from '../../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const wh = t.wordpressHosting;
 
 // Features data
 const features = [
@@ -39,13 +44,13 @@ const features = [
 ---
 
 <Layout 
-  title="WordPress Hosting" 
-  description="Managed WordPress hosting with automatic updates, enhanced security, and expert support. Optimized for WordPress performance."
+  title={wh.meta.title} 
+  description={wh.meta.description}
 >
   <!-- Hero Section -->
   <Hero
-    title="Managed WordPress Hosting"
-    subtitle="Powerful, secure, and optimized hosting specifically designed for WordPress websites with expert management."
+    title={wh.hero.title}
+    subtitle={wh.hero.subtitle}
     backgroundClass="bg-gradient-to-r from-primary-600 to-primary-800"
   />
 
@@ -95,8 +100,8 @@ const features = [
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">WordPress-Focused Features</h2>
-        <p class="text-xl text-gray-600">Everything you need for a fast, secure, and well-maintained WordPress website</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{wh.features.title}</h2>
+        <p class="text-xl text-gray-600">{wh.features.subtitle}</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -118,8 +123,8 @@ const features = [
     <div class="container">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Managed WordPress?</h2>
-          <p class="text-xl text-gray-600">Focus on your content while we handle the technical details</p>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{wh.benefits.title}</h2>
+          <p class="text-xl text-gray-600">{wh.benefits.subtitle}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -193,9 +198,9 @@ const features = [
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Need WordPress Hosting Now?"
-    subtitle="Install WordPress on our VPS hosting for full control and flexibility."
-    ctaText="View VPS Plans"
+    title={wh.cta.title}
+    subtitle={wh.cta.subtitle}
+    ctaText={wh.cta.ctaText}
     ctaLink="/vps"
   />
 </Layout>

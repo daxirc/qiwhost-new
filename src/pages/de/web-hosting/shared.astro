@@ -1,0 +1,445 @@
+---
+import Layout from '../../../layouts/MainLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const sh = t.sharedHosting;
+
+const PORTAL = 'https://portal.qiwhost.com';
+
+// Shared Hosting Plans
+const plans = [
+  {
+    name: sh.plans.starter.name,
+    tagline: sh.plans.starter.tagline,
+    pid: 160,
+    price: { monthly: 2.99, yearly: 1.99 },
+    popular: false,
+    features: [
+      '1 Website',
+      '5 GB NVMe Storage',
+      '2 TB Bandwidth',
+      '1 Email Account',
+      'Free SSL Certificate',
+      'LiteSpeed Cache',
+    ],
+  },
+  {
+    name: sh.plans.business.name,
+    tagline: sh.plans.business.tagline,
+    pid: 161,
+    price: { monthly: 4.99, yearly: 3.49 },
+    popular: true,
+    features: [
+      '5 Websites',
+      '15 GB NVMe Storage',
+      '4 TB Bandwidth',
+      '10 Email Accounts',
+      'Free SSL Certificate',
+      'LiteSpeed + Redis Cache',
+      'Daily Backups',
+    ],
+  },
+  {
+    name: sh.plans.pro.name,
+    tagline: sh.plans.pro.tagline,
+    pid: 162,
+    price: { monthly: 7.99, yearly: 5.99 },
+    popular: false,
+    features: [
+      '10 Websites',
+      '30 GB NVMe Storage',
+      '6 TB Bandwidth',
+      'Unlimited Email Accounts',
+      'Free SSL Certificate',
+      'LiteSpeed + Redis Cache',
+      'Daily Backups',
+      'Priority Support',
+    ],
+  },
+];
+
+// Features grid
+const features = [
+  { icon: 'fas fa-bolt',             title: sh.features.nvme.title,      desc: sh.features.nvme.desc },
+  { icon: 'fas fa-lock',             title: sh.features.ssl.title,       desc: sh.features.ssl.desc },
+  { icon: 'fas fa-cogs',             title: sh.features.panel.title,     desc: sh.features.panel.desc },
+  { icon: 'fab fa-wordpress-simple', title: sh.features.wordpress.title, desc: sh.features.wordpress.desc },
+  { icon: 'fas fa-shield-alt',       title: sh.features.ddos.title,      desc: sh.features.ddos.desc },
+  { icon: 'fas fa-headset',          title: sh.features.support.title,   desc: sh.features.support.desc },
+  { icon: 'fas fa-cloud-upload-alt', title: sh.features.backups.title,   desc: sh.features.backups.desc },
+  { icon: 'fas fa-tachometer-alt',   title: sh.features.litespeed.title, desc: sh.features.litespeed.desc },
+];
+
+// Tech stack logos
+const techStack = [
+  { name: 'PHP 8.3',      icon: 'fab fa-php' },
+  { name: 'MySQL 8',      icon: 'fas fa-database' },
+  { name: 'Node.js',      icon: 'fab fa-node-js' },
+  { name: 'Python',       icon: 'fab fa-python' },
+  { name: 'Git',          icon: 'fab fa-git-alt' },
+  { name: 'WordPress',    icon: 'fab fa-wordpress' },
+];
+---
+
+<Layout
+  title={sh.meta.title}
+  description={sh.meta.description}
+>
+  <!-- Hero -->
+  <Hero
+    title={sh.hero.title}
+    subtitle={sh.hero.subtitle}
+    ctaText={sh.hero.ctaText}
+    ctaLink="#pricing"
+    backgroundClass="bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900"
+  />
+
+  <!-- Trust Bar -->
+  <section class="py-5 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap justify-center items-center gap-6 md:gap-14 text-sm font-medium text-gray-600">
+        <span class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> {sh.trustBar.uptime}</span>
+        <span class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> {sh.trustBar.ssl}</span>
+        <span class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> {sh.trustBar.panel}</span>
+        <span class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> {sh.trustBar.support}</span>
+        <span class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> {sh.trustBar.moneyBack}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRICING ═══ -->
+  <section id="pricing" class="py-20 md:py-28 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{sh.pricing.title}</h2>
+        <p class="text-lg text-gray-500">{sh.pricing.subtitle}</p>
+
+        <!-- Billing Toggle -->
+        <div class="inline-flex items-center mt-8 bg-gray-100 rounded-full p-1">
+          <button id="btn-mo" class="sh-toggle active px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">{sh.pricing.monthly}</button>
+          <button id="btn-yr" class="sh-toggle px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">
+            {sh.pricing.yearly} <span class="ml-1 text-green-600 text-xs font-bold">{sh.pricing.yearlySave}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="sh-grid max-w-5xl mx-auto">
+        {plans.map((plan) => (
+          <div class={`sh-card ${plan.popular ? 'is-popular' : ''}`}>
+            {plan.popular && (
+              <div class="popular-pill"><span>{sh.pricing.mostPopular}</span></div>
+            )}
+
+            <div class={`card-body ${plan.popular ? 'dark' : 'light'}`}>
+              <!-- Tier Label -->
+              <p class={`tier-label ${plan.popular ? 'text-blue-400' : 'text-primary-600'}`}>
+                {plan.name.toUpperCase()}
+              </p>
+              <h3 class={`tier-name ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
+              <p class={`tier-tagline ${plan.popular ? 'text-gray-400' : 'text-gray-500'}`}>{plan.tagline}</p>
+
+              <!-- Price -->
+              <div class="price-wrap">
+                <div class="mo-price">
+                  <div class="price-row">
+                    <span class="cur">$</span>
+                    <span class={`val ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{String(plan.price.monthly).split('.')[0]}</span>
+                    <div class="frac">
+                      <span class={plan.popular ? 'text-gray-300' : 'text-gray-500'}>.{String(plan.price.monthly).split('.')[1] || '00'}</span>
+                      <span class={plan.popular ? 'text-gray-400' : 'text-gray-400'}>/month</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="yr-price hidden">
+                  <div class="price-row">
+                    <span class="cur">$</span>
+                    <span class={`val ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{String(plan.price.yearly).split('.')[0]}</span>
+                    <div class="frac">
+                      <span class={plan.popular ? 'text-gray-300' : 'text-gray-500'}>.{String(plan.price.yearly).split('.')[1] || '00'}</span>
+                      <span class={plan.popular ? 'text-gray-400' : 'text-gray-400'}>/month</span>
+                    </div>
+                  </div>
+                  <p class={`text-xs mt-1.5 font-medium ${plan.popular ? 'text-blue-400' : 'text-primary-600'}`}>
+                    {sh.pricing.billedAnnually} (${(plan.price.yearly * 12).toFixed(2)})
+                  </p>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class={`sh-divider ${plan.popular ? 'border-white/10' : 'border-gray-100'}`}></div>
+
+              <!-- Features -->
+              <p class={`feat-title ${plan.popular ? 'text-gray-400' : 'text-gray-400'}`}>{sh.pricing.whatsIncluded}</p>
+              <ul class="feat-list">
+                {plan.features.map(f => (
+                  <li class="feat-item">
+                    <svg class={`feat-check ${plan.popular ? 'text-blue-400' : 'text-primary-500'}`} viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    <span class={plan.popular ? 'text-gray-300' : 'text-gray-600'}>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <!-- CTA -->
+              <a href={`${PORTAL}/cart.php?a=add&pid=${plan.pid}`} class={`sh-cta ${plan.popular ? 'primary' : 'outline'}`}>
+                <span>{sh.pricing.getStarted}</span>
+                <svg class="cta-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section class="py-20 md:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{sh.features.title}</h2>
+        <p class="text-lg text-gray-500">{sh.features.subtitle}</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        {features.map(f => (
+          <div class="feat-card group">
+            <div class="feat-icon-wrap">
+              <i class={`${f.icon} text-xl text-primary-600 group-hover:text-white transition-colors duration-300`}></i>
+            </div>
+            <h3 class="text-base font-bold text-gray-900 mb-2">{f.title}</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TECH STACK ═══ -->
+  <section class="py-16 bg-gray-50 border-y border-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">{sh.techStack.title}</h2>
+        <p class="text-gray-500">{sh.techStack.subtitle}</p>
+      </div>
+      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-14 max-w-3xl mx-auto">
+        {techStack.map(ts => (
+          <div class="flex flex-col items-center gap-2 opacity-70 hover:opacity-100 transition-opacity">
+            <i class={`${ts.icon} text-3xl text-gray-600`}></i>
+            <span class="text-xs font-semibold text-gray-500">{ts.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="py-20 md:py-28">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">{sh.faq.title}</h2>
+      </div>
+
+      <div class="max-w-3xl mx-auto space-y-4">
+        <details class="faq-item group" open>
+          <summary class="faq-q">{sh.faq.q1.q}</summary>
+          <div class="faq-a">{sh.faq.q1.a}</div>
+        </details>
+        <details class="faq-item group">
+          <summary class="faq-q">{sh.faq.q2.q}</summary>
+          <div class="faq-a">{sh.faq.q2.a}</div>
+        </details>
+        <details class="faq-item group">
+          <summary class="faq-q">{sh.faq.q3.q}</summary>
+          <div class="faq-a">{sh.faq.q3.a}</div>
+        </details>
+        <details class="faq-item group">
+          <summary class="faq-q">{sh.faq.q4.q}</summary>
+          <div class="faq-a">{sh.faq.q4.a}</div>
+        </details>
+        <details class="faq-item group">
+          <summary class="faq-q">{sh.faq.q5.q}</summary>
+          <div class="faq-a">{sh.faq.q5.a}</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={sh.cta.title}
+    subtitle={sh.cta.subtitle}
+    ctaText={sh.cta.ctaText}
+    ctaLink={`${PORTAL}/cart.php?a=add&pid=160`}
+  />
+</Layout>
+
+<style>
+  /* ── Toggle ── */
+  .sh-toggle { color: #6b7280; cursor: pointer; }
+  .sh-toggle.active { background: white; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  /* ── Grid ── */
+  .sh-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  @media (min-width: 768px) {
+    .sh-grid { grid-template-columns: repeat(3, 1fr); gap: 0; }
+  }
+
+  /* ── Card ── */
+  .sh-card { position: relative; z-index: 1; }
+  .sh-card.is-popular { z-index: 10; }
+  @media (min-width: 768px) {
+    .sh-card.is-popular { transform: scaleY(1.03); }
+  }
+
+  /* ── Popular Pill ── */
+  .popular-pill {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 20;
+  }
+  .popular-pill span {
+    display: inline-flex; align-items: center; padding: 6px 20px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: white; background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8);
+    border-radius: 100px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  }
+
+  /* ── Body ── */
+  .card-body {
+    height: 100%; display: flex; flex-direction: column;
+    padding: 2rem 1.75rem; border-radius: 1.25rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-body:hover { transform: translateY(-4px); }
+
+  .card-body.light {
+    background: white; border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card-body.light:hover { border-color: #d1d5db; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+
+  .card-body.dark {
+    background: linear-gradient(165deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(59,130,246,0.1);
+  }
+  .card-body.dark:hover {
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.2), 0 0 40px rgba(59,130,246,0.06);
+  }
+
+  @media (min-width: 768px) {
+    .sh-card:first-child .card-body { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+    .sh-card:last-child .card-body  { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+    .sh-card.is-popular .card-body  { border-radius: 1.25rem; }
+  }
+
+  /* ── Tier ── */
+  .tier-label { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+  .tier-name  { font-size: 1.35rem; font-weight: 800; line-height: 1.3; }
+  .tier-tagline { font-size: 0.85rem; margin-top: 2px; margin-bottom: 1.25rem; }
+
+  /* ── Price ── */
+  .price-wrap { margin-bottom: 1.5rem; }
+  .price-row  { display: flex; align-items: flex-start; gap: 2px; }
+  .cur        { font-size: 1.1rem; font-weight: 600; margin-top: 8px; color: #9ca3af; }
+  .val        { font-size: 3.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  .frac       { display: flex; flex-direction: column; margin-top: 8px; }
+  .frac span:first-child { font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
+  .frac span:last-child  { font-size: 0.75rem; font-weight: 500; }
+
+  /* ── Divider ── */
+  .sh-divider { border-top-width: 1px; margin-bottom: 1.5rem; }
+
+  /* ── Features ── */
+  .feat-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.875rem; }
+  .feat-list  { display: flex; flex-direction: column; gap: 0.625rem; flex: 1; margin-bottom: 1.75rem; }
+  .feat-item  { display: flex; align-items: center; gap: 0.625rem; }
+  .feat-check { flex-shrink: 0; width: 18px; height: 18px; }
+  .feat-item span { font-size: 0.875rem; font-weight: 500; }
+
+  /* ── CTA ── */
+  .sh-cta {
+    display: flex; align-items: center; justify-content: center; width: 100%;
+    padding: 0.875rem 1.5rem; border-radius: 0.75rem;
+    font-size: 0.9rem; font-weight: 700; gap: 0.5rem;
+    transition: all 0.25s ease; cursor: pointer; text-decoration: none; margin-top: auto;
+  }
+  .sh-cta:hover { transform: translateY(-1px); }
+  .cta-arrow { width: 18px; height: 18px; transition: transform 0.25s ease; }
+  .sh-cta:hover .cta-arrow { transform: translateX(4px); }
+
+  .sh-cta.primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+  }
+  .sh-cta.primary:hover { box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45); background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+
+  .sh-cta.outline {
+    background: transparent; color: #1f2937; border: 2px solid #e5e7eb;
+  }
+  .sh-cta.outline:hover { border-color: #3b82f6; color: #2563eb; background: rgba(59,130,246,0.04); box-shadow: 0 4px 15px rgba(59,130,246,0.1); }
+
+  /* ── Feature Cards ── */
+  .feat-card {
+    background: white; border: 1px solid #e5e7eb; border-radius: 1rem;
+    padding: 1.5rem; transition: all 0.3s ease;
+  }
+  .feat-card:hover { border-color: #3b82f6; box-shadow: 0 8px 30px rgba(59,130,246,0.1); transform: translateY(-2px); }
+
+  .feat-icon-wrap {
+    width: 44px; height: 44px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;
+    background: rgba(59,130,246,0.08); margin-bottom: 1rem; transition: background 0.3s ease;
+  }
+  .feat-card:hover .feat-icon-wrap { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+  /* ── FAQ ── */
+  .faq-item {
+    background: white; border: 1px solid #e5e7eb; border-radius: 0.75rem;
+    overflow: hidden; transition: all 0.3s ease;
+  }
+  .faq-item[open] { border-color: #3b82f6; box-shadow: 0 4px 15px rgba(59,130,246,0.08); }
+  .faq-q {
+    padding: 1.25rem 1.5rem; font-weight: 700; font-size: 0.95rem; color: #111827;
+    cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::after {
+    content: '+'; font-size: 1.25rem; font-weight: 300; color: #9ca3af; transition: transform 0.2s ease;
+  }
+  .faq-item[open] .faq-q::after { content: '−'; color: #3b82f6; }
+  .faq-a { padding: 0 1.5rem 1.25rem; font-size: 0.9rem; color: #6b7280; line-height: 1.7; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnMo = document.getElementById('btn-mo');
+    const btnYr = document.getElementById('btn-yr');
+    if (!btnMo || !btnYr) return;
+
+    const mo = document.querySelectorAll('.mo-price');
+    const yr = document.querySelectorAll('.yr-price');
+
+    btnMo.addEventListener('click', () => {
+      btnMo.classList.add('active'); btnYr.classList.remove('active');
+      mo.forEach(e => e.classList.remove('hidden'));
+      yr.forEach(e => e.classList.add('hidden'));
+    });
+
+    btnYr.addEventListener('click', () => {
+      btnYr.classList.add('active'); btnMo.classList.remove('active');
+      mo.forEach(e => e.classList.add('hidden'));
+      yr.forEach(e => e.classList.remove('hidden'));
+    });
+  });
+</script>

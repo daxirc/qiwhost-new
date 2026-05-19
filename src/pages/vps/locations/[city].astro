@@ -3,7 +3,7 @@ import Layout from '../../../layouts/MainLayout.astro';
 import Hero from '../../../components/Hero.astro';
 import PricingTable from '../../../components/PricingTable.astro';
 import CTABanner from '../../../components/CTABanner.astro';
-import { supabase } from '../../../lib/supabase';
+import { vpsLocations, getLocationByCity } from '../../../data/plans';
 import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
 
 // Default city feature descriptions and icons (used when database doesn't provide them)
@@ -70,90 +70,14 @@ const countryNameToFlagEmoji = {
 };
 
 export async function getStaticPaths() {
-  // Define all locations with their regions and flag emojis
-  const allLocations = [
-    // Africa
-    { location: 'Cairo', region: 'Africa', flag_icon: '🇪🇬' },
-    { location: 'Johannesburg', region: 'Africa', flag_icon: '🇿🇦' },
-    
-    // East Asia
-    { location: 'Hong Kong', region: 'East Asia', flag_icon: '🇭🇰' },
-    { location: 'Seoul', region: 'East Asia', flag_icon: '🇰🇷' },
-    { location: 'Taipei', region: 'East Asia', flag_icon: '🇹🇼' },
-    { location: 'Tokyo', region: 'East Asia', flag_icon: '🇯🇵' },
-    
-    // Europe
-    { location: 'Athens', region: 'Europe', flag_icon: '🇬🇷' },
-    { location: 'Frankfurt', region: 'Europe', flag_icon: '🇩🇪' },
-    { location: 'London', region: 'Europe', flag_icon: '🇬🇧' },
-    { location: 'Marseille', region: 'Europe', flag_icon: '🇫🇷' },
-    { location: 'Moscow', region: 'Europe', flag_icon: '🇷🇺' },
-    { location: 'Sofia', region: 'Europe', flag_icon: '🇧🇬' },
-    
-    // Middle East
-    { location: 'Baghdad', region: 'Middle East', flag_icon: '🇮🇶' },
-    { location: 'Bahrain', region: 'Middle East', flag_icon: '🇧🇭' },
-    { location: 'Doha', region: 'Middle East', flag_icon: '🇶🇦' },
-    { location: 'Dubai', region: 'Middle East', flag_icon: '🇦🇪' },
-    { location: 'Istanbul', region: 'Middle East', flag_icon: '🇹🇷' },
-    { location: 'Jeddah', region: 'Middle East', flag_icon: '🇸🇦' },
-    { location: 'Kuwait City', region: 'Middle East', flag_icon: '🇰🇼' },
-    { location: 'Muscat', region: 'Middle East', flag_icon: '🇴🇲' },
-    { location: 'Riyadh', region: 'Middle East', flag_icon: '🇸🇦' },
-    
-    // North America
-    { location: 'Mexico City', region: 'North America', flag_icon: '🇲🇽' },
-    { location: 'Silicon Valley', region: 'North America', flag_icon: '🇺🇸' },
-    { location: 'Washington', region: 'North America', flag_icon: '🇺🇸' },
-    
-    // Oceania
-    { location: 'Sydney', region: 'Oceania', flag_icon: '🇦🇺' },
-    
-    // South America
-    { location: 'Bogota', region: 'South America', flag_icon: '🇨🇴' },
-    { location: 'Buenos Aires', region: 'South America', flag_icon: '🇦🇷' },
-    { location: 'Santiago', region: 'South America', flag_icon: '🇨🇱' },
-    { location: 'São Paulo', region: 'South America', flag_icon: '🇧🇷' },
-    
-    // South Asia
-    { location: 'Dhaka', region: 'South Asia', flag_icon: '🇧🇩' },
-    { location: 'Karachi', region: 'South Asia', flag_icon: '🇵🇰' },
-    { location: 'Kathmandu', region: 'South Asia', flag_icon: '🇳🇵' },
-    { location: 'Mumbai', region: 'South Asia', flag_icon: '🇮🇳' },
-    
-    // Southeast Asia
-    { location: 'Bangkok', region: 'Southeast Asia', flag_icon: '🇹🇭' },
-    { location: 'Hanoi', region: 'Southeast Asia', flag_icon: '🇻🇳' },
-    { location: 'Ho Chi Minh City', region: 'Southeast Asia', flag_icon: '🇻🇳' },
-    { location: 'Jakarta', region: 'Southeast Asia', flag_icon: '🇮🇩' },
-    { location: 'Kuala Lumpur', region: 'Southeast Asia', flag_icon: '🇲🇾' },
-    { location: 'Manila', region: 'Southeast Asia', flag_icon: '🇵🇭' },
-    { location: 'Phnom Penh', region: 'Southeast Asia', flag_icon: '🇰🇭' },
-    { location: 'Yangon', region: 'Southeast Asia', flag_icon: '🇲🇲' }
-  ];
-  
-  // Define countries that have dedicated VPS pages and should NOT be generated here
-  const cloudVpsCountries = ['USA', 'UK', 'Germany', 'Finland', 'Singapore', 'Japan', 'India', 'Australia'];
-  
-  // Create paths for each location, excluding those covered by dedicated country pages
-  const uniqueLocations = allLocations.filter(location => 
-    !cloudVpsCountries.includes(location.location)
-  ).map(location => ({
-    slug: location.location.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-    location: location.location,
-    region: location.region,
-    flag_icon: location.flag_icon,
-    page_description: ""
-  }));
-
-  // Generate paths for each location
-  return uniqueLocations.map(location => ({
-    params: { city: location.slug },
-    props: { 
-      cityName: location.location,
-      region: location.region,
-      flagIcon: location.flag_icon,
-      pageDescription: location.page_description
+  // Auto-generate paths from the single source of truth (plans.ts)
+  return vpsLocations.map(loc => ({
+    params: { city: loc.slug },
+    props: {
+      cityName: loc.city,
+      region: loc.region,
+      flagIcon: loc.flag,
+      pageDescription: ''
     }
   }));
 }
@@ -166,17 +90,8 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch VPS plans for this specific city
-const { data: cityPlans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('location', cityName)
-  .eq('visible', true)
-  .order('sort_order', { ascending: true });
-
-if (error) {
-  console.error('Error fetching city plans:', error);
-}
+const cityLocation = getLocationByCity(cityName);
+const cityPlans = cityLocation?.plans || [];
 
 // Ensure we have at least 3 plans (Basic, Standard, Pro)
 let processedPlans = cityPlans || [];
@@ -194,28 +109,26 @@ if (processedPlans.length > 0) {
   }
 }
 
-// Convert database plans to pricing table format
+// Convert plans to pricing table format
 const plans = processedPlans.length > 0 ? processedPlans.map(plan => ({
-  name: `${plan.plan_type || plan.name}`,
+  name: plan.name,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${(plan.priceAnnually / 12).toFixed(2)}`
   },
-  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
+  description: `${plan.cpu}, ${plan.ram}, ${plan.storage}`,
   features: [
     plan.cpu,
     plan.ram,
     plan.storage,
     plan.bandwidth,
-    ...(plan.plan_features || ['Full Root Access', '24/7 Support', 'SSD Storage'])
+    'Full Root Access',
+    '24/7 Support',
   ],
-  ctaLink: plan.order_url,
-  popular: plan.plan_type === 'Standard',
-  sale_enabled: plan.sale_enabled,
-  sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,
-  sale_price_yearly: plan.sale_price_yearly ? `$${plan.sale_price_yearly}` : undefined,
-  sale_badge_text: plan.sale_badge_text,
-  osType: plan.os_type
+  ctaText: 'Order Now',
+  ctaLink: plan.cartUrl,
+  popular: plan.tier === 'Professional',
+  osType: 'Linux'
 })) : [];
 
 // Features data with translations
@@ -312,100 +225,30 @@ const flagImageUrl = getFlagImageUrl(flagIcon);
     </div>
   </section>
 
-  <!-- Description Section -->
+  <!-- Pricing Section -->
   <section class="py-16 md:py-24 bg-gray-50">
     <div class="container mx-auto px-4">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          {plans.length > 0 ? pricingTitle : "VPS Plans Coming Soon"}
-        </h2>
-        <p class="text-xl text-gray-600">
-          {plans.length > 0 
-            ? t.vpsLocations.pricing.description 
-            : `We're expanding our infrastructure in ${cityName}. Check back soon for available plans.`}
-        </p>
-      </div>
-
       {plans.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {plans.map(plan => (
-            <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
-              {(plan.popular || plan.sale_enabled) && (
-                <div class={`${plan.sale_enabled ? 'bg-red-500' : 'bg-primary-500'} text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg`}>
-                  {plan.sale_enabled ? (plan.sale_badge_text || 'On Sale!') : 'Most Popular'}
-                </div>
-              )}
-              <div class="p-8">
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                {plan.osType && (
-                  <div class="text-sm text-gray-500 mb-4 bg-gray-100 px-3 py-1 rounded-full inline-block">
-                    {plan.osType}
-                  </div>
-                )}
-                <div class="pricing-amount mb-6">
-                  <div class="monthly-price">
-                    {plan.sale_enabled ? (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.sale_price_monthly}</span>
-                        <span class="text-gray-600">/month</span>
-                        <div class="text-sm mt-2">
-                          <span class="line-through text-gray-400">{plan.price.monthly}</span>
-                          <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
-                        <span class="text-gray-600">/month</span>
-                      </div>
-                    )}
-                  </div>
-                  <div class="yearly-price hidden">
-                    {plan.sale_enabled && plan.sale_price_yearly ? (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.sale_price_yearly}</span>
-                        <span class="text-gray-600">/month</span>
-                        <div class="text-sm mt-2">
-                          <span class="line-through text-gray-400">{plan.price.yearly}</span>
-                          <span class="text-red-600 ml-2 font-semibold">{plan.sale_badge_text}</span>
-                        </div>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
-                      </div>
-                    ) : (
-                      <div>
-                        <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
-                        <span class="text-gray-600">/month</span>
-                        <p class="text-sm text-primary-600 mt-1">Billed annually</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <p class="text-gray-600 mb-6">{plan.description}</p>
-                <ul class="space-y-3 mb-8">
-                  {plan.features.map(feature => (
-                    <li class="flex items-start">
-                      <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
-                      <span class="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular || plan.sale_enabled ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
-                  Order Now
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
+        <PricingTable
+          title={pricingTitle}
+          description={t.vpsLocations.pricing.description}
+          plans={plans}
+        />
       ) : (
-        <div class="text-center py-12 bg-white rounded-lg shadow-md">
-          <div class="text-gray-400 text-6xl mb-4">
-            <i class="fas fa-server"></i>
-          </div>
-          <h3 class="text-xl font-medium text-gray-900 mb-2">VPS Plans Coming Soon</h3>
-          <p class="text-gray-600 max-w-lg mx-auto">
-            We're currently expanding our infrastructure in {cityName}. 
-            Check back soon for available VPS plans in this location.
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">VPS Plans Coming Soon</h2>
+          <p class="text-xl text-gray-600 mb-8">
+            We're expanding our infrastructure in {cityName}. Check back soon for available plans.
           </p>
+          <div class="text-center py-12 bg-white rounded-2xl shadow-md">
+            <div class="text-gray-300 text-6xl mb-4">
+              <i class="fas fa-server"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">Coming Soon</h3>
+            <p class="text-gray-500 max-w-lg mx-auto">
+              VPS plans for {cityName} are being prepared.
+            </p>
+          </div>
         </div>
       )}
     </div>

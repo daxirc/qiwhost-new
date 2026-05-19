@@ -4,7 +4,7 @@ import Hero from '../../../components/Hero.astro';
 import PricingTable from '../../../components/PricingTable.astro';
 import CTABanner from '../../../components/CTABanner.astro';
 import FeaturesSection from '../../../components/FeaturesSection.astro';
-import { supabase } from '../../../lib/supabase';
+import { vpsLocations } from '../../../data/plans';
 import { getTranslations, getCurrentLocale, getFlagImageUrl } from '../../../i18n/utils';
 
 // Country name to flag emoji mapping
@@ -50,24 +50,15 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch VPS plans for this specific country
-const { data: countryPlans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'VPS')
-  .eq('visible', true)
-  .filter('flag_icon', 'eq', flagEmoji)
-  .order('sort_order', { ascending: true });
-
-if (error) {
-  console.error('Error fetching country plans:', error);
-}
+const matchingLocations = vpsLocations.filter(l => l.flag === flagEmoji);
+const countryPlans = matchingLocations.flatMap(l => l.plans);
 
 // Convert database plans to pricing table format
 const plans = countryPlans?.map(plan => ({
   name: `${plan.plan_type || plan.name}`,
   price: {
-    monthly: `$${plan.price_monthly}`,
-    yearly: `$${plan.price_yearly}`
+    monthly: `$${plan.priceMonthly}`,
+    yearly: `$${plan.priceAnnually}`
   },
   description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
   features: [
@@ -80,7 +71,7 @@ const plans = countryPlans?.map(plan => ({
     'SSD Storage'
   ],
   ctaText: t.pricing.ctaText,
-  ctaLink: plan.order_url,
+  ctaLink: plan.cartUrl,
   popular: plan.plan_type === 'Standard',
   sale_enabled: plan.sale_enabled,
   sale_price_monthly: plan.sale_price_monthly ? `$${plan.sale_price_monthly}` : undefined,

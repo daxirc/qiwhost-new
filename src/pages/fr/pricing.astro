@@ -1,0 +1,454 @@
+---
+import Layout from '../../layouts/MainLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FAQ from '../../components/FAQ.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const pp = t.pricingPage;
+
+// VPS plans
+const vpsPlans = [
+  {
+    name: "Starter VPS",
+    price: {
+      monthly: "$9.99",
+      yearly: "$7.99"
+    },
+    description: "Perfect for small websites and applications",
+    features: [
+      "1 vCPU",
+      "2GB RAM",
+      "30GB SSD Storage",
+      "1TB Bandwidth",
+      "24/7 Support"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  },
+  {
+    name: "Business VPS",
+    price: {
+      monthly: "$19.99",
+      yearly: "$15.99"
+    },
+    description: "Ideal for growing businesses and e-commerce",
+    features: [
+      "2 vCPU",
+      "4GB RAM",
+      "60GB SSD Storage",
+      "2TB Bandwidth",
+      "24/7 Priority Support",
+      "Free SSL Certificate"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login",
+    popular: true
+  },
+  {
+    name: "Enterprise VPS",
+    price: {
+      monthly: "$39.99",
+      yearly: "$31.99"
+    },
+    description: "For high-traffic sites and resource-intensive applications",
+    features: [
+      "4 vCPU",
+      "8GB RAM",
+      "120GB SSD Storage",
+      "4TB Bandwidth",
+      "24/7 Priority Support",
+      "Free SSL Certificate",
+      "Daily Backups"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  }
+];
+
+// Dedicated Server plans
+const dedicatedPlans = [
+  {
+    name: "Basic Server",
+    price: {
+      monthly: "$99.99",
+      yearly: "$89.99"
+    },
+    description: "Entry-level dedicated server for growing businesses",
+    features: [
+      "Intel Xeon E-2276G",
+      "32GB DDR4 RAM",
+      "2x 512GB SSD",
+      "10TB Bandwidth",
+      "1Gbps Network",
+      "24/7 Support",
+      "cPanel/WHM Available"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  },
+  {
+    name: "Professional Server",
+    price: {
+      monthly: "$199.99",
+      yearly: "$179.99"
+    },
+    description: "High-performance server for demanding applications",
+    features: [
+      "AMD EPYC 7302P",
+      "64GB DDR4 RAM",
+      "2x 1TB NVMe SSD",
+      "20TB Bandwidth",
+      "1Gbps Network",
+      "24/7 Priority Support",
+      "cPanel/WHM Available",
+      "DDoS Protection"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login",
+    popular: true
+  },
+  {
+    name: "Enterprise Server",
+    price: {
+      monthly: "$299.99",
+      yearly: "$269.99"
+    },
+    description: "Ultimate performance for mission-critical workloads",
+    features: [
+      "Intel Xeon Gold 6226R",
+      "128GB DDR4 RAM",
+      "2x 2TB NVMe SSD",
+      "Unlimited Bandwidth",
+      "10Gbps Network",
+      "24/7 Priority Support",
+      "cPanel/WHM Available",
+      "Advanced DDoS Protection",
+      "Daily Backups"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  }
+];
+
+// Private RDP plans
+const rdpPlans = [
+  {
+    name: "Basic RDP",
+    price: {
+      monthly: "$29.99",
+      yearly: "$23.99"
+    },
+    description: "Ideal for basic remote work and light applications",
+    features: [
+      "2 vCPU Cores",
+      "4GB RAM",
+      "60GB SSD",
+      "1TB Bandwidth",
+      "Windows Server 2022",
+      "Multiple Locations Available"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  },
+  {
+    name: "Professional RDP",
+    price: {
+      monthly: "$49.99",
+      yearly: "$39.99"
+    },
+    description: "Perfect for business applications and multitasking",
+    features: [
+      "4 vCPU Cores",
+      "8GB RAM",
+      "120GB SSD",
+      "2TB Bandwidth",
+      "Windows Server 2022",
+      "Multiple Locations Available",
+      "Free Backups"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login",
+    popular: true
+  },
+  {
+    name: "Enterprise RDP",
+    price: {
+      monthly: "$79.99",
+      yearly: "$63.99"
+    },
+    description: "For demanding workloads and resource-intensive applications",
+    features: [
+      "8 vCPU Cores",
+      "16GB RAM",
+      "240GB SSD",
+      "4TB Bandwidth",
+      "Windows Server 2022",
+      "Multiple Locations Available",
+      "Free Backups",
+      "Priority Support"
+    ],
+    ctaText: "Order Now",
+    ctaLink: "https://portal.qiwhost.com/login"
+  }
+];
+
+// FAQs
+const faqs = [
+  {
+    question: "What payment methods do you accept?",
+    answer: "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and cryptocurrency payments (Bitcoin, Ethereum)."
+  },
+  {
+    question: "Can I upgrade my plan later?",
+    answer: "Yes, you can easily upgrade your plan at any time through our client area. The price difference will be prorated for the remainder of your billing cycle."
+  },
+  {
+    question: "Do you offer a money-back guarantee?",
+    answer: "Yes, we offer a 7-day money-back guarantee for all our VPS and Private RDP plans. Dedicated servers have a 3-day money-back guarantee due to their customized nature."
+  },
+  {
+    question: "What is the difference between monthly and yearly billing?",
+    answer: "Yearly billing provides a 20% discount compared to monthly billing. You can choose your preferred billing cycle during checkout."
+  },
+  {
+    question: "Are there any setup fees?",
+    answer: "No, we don't charge any setup fees for our standard services. What you see in our pricing is what you pay."
+  }
+];
+---
+
+<Layout 
+  title={pp.meta.title} 
+  description={pp.meta.description}
+>
+  <!-- Add noindex meta tag -->
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <!-- Hero Section -->
+  <Hero
+    title={pp.hero.title}
+    subtitle={pp.hero.subtitle}
+    backgroundClass="bg-gradient-to-r from-primary-700 to-primary-900"
+  />
+
+  <!-- Pricing Toggle -->
+  <section class="py-12">
+    <div class="container">
+      <div class="text-center">
+        <div class="inline-flex items-center bg-gray-100 p-1 rounded-lg">
+          <button id="monthly-toggle" class="px-6 py-2 rounded-md bg-primary-600 text-white font-medium">Monthly</button>
+          <button id="yearly-toggle" class="px-6 py-2 rounded-md text-gray-700 font-medium">Yearly (Save 20%)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VPS Plans -->
+  <section id="vps-plans" class="py-16">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.vps.title}</h2>
+        <p class="text-xl text-gray-600">Powerful virtual private servers with dedicated resources and full root access.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {vpsPlans.map(plan => (
+          <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
+            {plan.popular && (
+              <div class="bg-primary-500 text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg">
+                Most Popular
+              </div>
+            )}
+            <div class="p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+              <div class="pricing-amount mb-6">
+                <div class="monthly-price">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
+                  <span class="text-gray-600">/month</span>
+                </div>
+                <div class="yearly-price hidden">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
+                  <span class="text-gray-600">/month</span>
+                  <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                </div>
+              </div>
+              <p class="text-gray-600 mb-6">{plan.description}</p>
+              <ul class="space-y-3 mb-8">
+                {plan.features.map(feature => (
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
+                    <span class="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
+                {plan.ctaText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="/vps" class="text-primary-600 font-medium hover:text-primary-700 transition-colors">
+          Learn more about our VPS hosting <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated Server Plans -->
+  <section id="dedicated-plans" class="py-16 bg-gray-50">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.dedicated.title}</h2>
+        <p class="text-xl text-gray-600">Powerful physical servers with exclusive resources for maximum performance.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {dedicatedPlans.map(plan => (
+          <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
+            {plan.popular && (
+              <div class="bg-primary-500 text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg">
+                Most Popular
+              </div>
+            )}
+            <div class="p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+              <div class="pricing-amount mb-6">
+                <div class="monthly-price">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
+                  <span class="text-gray-600">/month</span>
+                </div>
+                <div class="yearly-price hidden">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
+                  <span class="text-gray-600">/month</span>
+                  <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                </div>
+              </div>
+              <p class="text-gray-600 mb-6">{plan.description}</p>
+              <ul class="space-y-3 mb-8">
+                {plan.features.map(feature => (
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
+                    <span class="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
+                {plan.ctaText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="/dedicated-servers" class="text-primary-600 font-medium hover:text-primary-700 transition-colors">
+          Learn more about our dedicated servers <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Private RDP Plans -->
+  <section id="rdp-plans" class="py-16">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{pp.rdp.title}</h2>
+        <p class="text-xl text-gray-600">Secure remote desktop solutions with full administrator access.</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {rdpPlans.map(plan => (
+          <div class={`bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 ${plan.popular ? 'border-2 border-primary-500 relative' : ''}`}>
+            {plan.popular && (
+              <div class="bg-primary-500 text-white text-sm font-semibold py-1 px-4 absolute top-0 right-0 rounded-bl-lg">
+                Most Popular
+              </div>
+            )}
+            <div class="p-8">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+              <div class="pricing-amount mb-6">
+                <div class="monthly-price">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.monthly}</span>
+                  <span class="text-gray-600">/month</span>
+                </div>
+                <div class="yearly-price hidden">
+                  <span class="text-4xl font-bold text-gray-900">{plan.price.yearly}</span>
+                  <span class="text-gray-600">/month</span>
+                  <p class="text-sm text-primary-600 mt-1">Billed annually</p>
+                </div>
+              </div>
+              <p class="text-gray-600 mb-6">{plan.description}</p>
+              <ul class="space-y-3 mb-8">
+                {plan.features.map(feature => (
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-primary-500 mr-3 mt-1"></i>
+                    <span class="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href={plan.ctaLink} class={`block text-center py-3 px-4 rounded-lg font-medium transition-colors ${plan.popular ? 'bg-primary-600 text-white hover:bg-primary-700' : 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50'}`}>
+                {plan.ctaText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="/rdp/usa" class="text-primary-600 font-medium hover:text-primary-700 transition-colors">
+          Learn more about our Private RDP solutions <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <FAQ faqs={faqs} />
+
+  <!-- CTA Banner -->
+  <CTABanner
+    title={pp.customCta.title}
+    subtitle={pp.customCta.subtitle}
+    ctaText={pp.customCta.ctaText}
+    ctaLink="/contact"
+  />
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const monthlyToggle = document.getElementById('monthly-toggle');
+    const yearlyToggle = document.getElementById('yearly-toggle');
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+    
+    monthlyToggle.addEventListener('click', function() {
+      // Update toggle buttons
+      monthlyToggle.classList.add('bg-primary-600', 'text-white');
+      monthlyToggle.classList.remove('text-gray-700');
+      yearlyToggle.classList.remove('bg-primary-600', 'text-white');
+      yearlyToggle.classList.add('text-gray-700');
+      
+      // Show monthly prices, hide yearly prices
+      monthlyPrices.forEach(el => el.classList.remove('hidden'));
+      yearlyPrices.forEach(el => el.classList.add('hidden'));
+    });
+    
+    yearlyToggle.addEventListener('click', function() {
+      // Update toggle buttons
+      yearlyToggle.classList.add('bg-primary-600', 'text-white');
+      yearlyToggle.classList.remove('text-gray-700');
+      monthlyToggle.classList.remove('bg-primary-600', 'text-white');
+      monthlyToggle.classList.add('text-gray-700');
+      
+      // Show yearly prices, hide monthly prices
+      yearlyPrices.forEach(el => el.classList.remove('hidden'));
+      monthlyPrices.forEach(el => el.classList.add('hidden'));
+    });
+  });
+</script>

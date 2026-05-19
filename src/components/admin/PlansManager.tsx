@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+// Uses /api/plans endpoint
 import { toast } from 'react-hot-toast';
 import { getFlagImageUrl } from '../../i18n/utils';
 
@@ -186,51 +186,24 @@ export default function PlansManager({
 
   async function fetchAvailableFilterOptions() {
     try {
-      let query;
-      
+      if (filterType === 'flag_icon' && allowedFlagIcons && allowedFlagIcons.length > 0) {
+        setAvailableFilterOptions(['All', ...allowedFlagIcons]);
+        return;
+      }
+
+      const distinctField = filterType === 'location' ? 'location' : 'flag_icon';
+      const res = await fetch(`/api/plans?distinct=${distinctField}`);
+      if (!res.ok) return;
+      const data = await res.json();
+
+      let options;
       if (filterType === 'location') {
-        // Fetch distinct locations for city-based filtering
-        query = supabase
-          .from('hosting_plans')
-          .select('location')
-          .eq('category', 'VPS')
-          .eq('visible', true)
-          .not('location', 'is', null)
-          .distinct('location');
+        options = data.map(item => item.location).sort();
       } else if (filterType === 'flag_icon') {
-        if (allowedFlagIcons && allowedFlagIcons.length > 0) {
-          // Use the predefined list of allowed flag icons
-          setAvailableFilterOptions(['All', ...allowedFlagIcons]);
-          return;
-        } else {
-          // Fetch distinct flag_icons for country-based filtering
-          query = supabase
-            .from('hosting_plans')
-            .select('flag_icon')
-            .eq('category', 'VPS')
-            .eq('visible', true)
-            .not('flag_icon', 'is', null)
-            .distinct('flag_icon');
-        }
+        options = data.map(item => item.flag_icon).sort();
       }
 
-      if (query) {
-        const { data, error } = await query;
-
-        if (error) {
-          console.error(`Error fetching available ${filterType} options:`, error);
-          return;
-        }
-
-        let options;
-        if (filterType === 'location') {
-          options = data.map(item => item.location).sort();
-        } else if (filterType === 'flag_icon') {
-          options = data.map(item => item.flag_icon).sort();
-        }
-
-        setAvailableFilterOptions(['All', ...options]);
-      }
+      setAvailableFilterOptions(['All', ...(options || [])]);
     } catch (error) {
       console.error(`Error fetching available ${filterType} options:`, error);
     }
@@ -239,52 +212,34 @@ export default function PlansManager({
   async function fetchPlans() {
     try {
       setLoading(true);
-      let query = supabase
-        .from('hosting_plans')
-        .select('*')
-        .eq('category', category)
-        .order('sort_order', { ascending: true });
+      const params = new URLSearchParams();
+      params.set('category', category);
 
-      // Add OS type filter for VPS plans
       if (category === 'VPS' && osTypeFilter) {
-        query = query.eq('os_type', osTypeFilter);
+        params.set('os_type', osTypeFilter);
       }
-
       if (category === 'DEDICATED' && selectedSubcategory) {
-        query = query.eq('subcategory', selectedSubcategory);
+        params.set('subcategory', selectedSubcategory);
       }
-
       if (category === 'RDP' && selectedLocation) {
-        query = query.eq('location', selectedLocation);
+        params.set('location', selectedLocation);
       }
-
-      // Apply filter based on filterType and selectedFilterValue
       if (filterType === 'location' && selectedFilterValue !== 'All') {
-        query = query.eq('location', selectedFilterValue);
+        params.set('location', selectedFilterValue);
       } else if (filterType === 'flag_icon' && selectedFilterValue !== 'All') {
-        query = query.eq('flag_icon', selectedFilterValue);
-      } 
-      // Filter by allowed flag icons if provided
-      else if (filterType === 'flag_icon' && allowedFlagIcons && allowedFlagIcons.length > 0) {
-        query = query.in('flag_icon', allowedFlagIcons);
+        params.set('flag_icon', selectedFilterValue);
+      } else if (filterType === 'flag_icon' && allowedFlagIcons && allowedFlagIcons.length > 0) {
+        params.set('flag_icons', allowedFlagIcons.join(','));
+      } else if (category === 'VPS' && selectedRegion && !osTypeFilter && !filterType) {
+        params.set('region', selectedRegion);
       }
-      // Only filter by region if not showing location filter and not using filterType
-      else if (category === 'VPS' && selectedRegion && !osTypeFilter && !filterType) {
-        query = query.eq('region', selectedRegion);
-      }
-
-      // If we're managing Linux featured plans, filter accordingly
       if (isLinuxFeatured) {
-        // We want to see all Linux VPS plans, but we'll highlight the featured ones in the UI
-        query = query.eq('os_type', 'Linux');
+        params.set('os_type', 'Linux');
       }
 
-      const { data, error } = await query;
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
+      const res = await fetch(`/api/plans?${params.toString()}`);
+      if (!res.ok) throw new Error('Failed to fetch plans');
+      const data = await res.json();
       
       console.log('Fetched plans:', data);
       setPlans(data || []);
@@ -315,12 +270,12 @@ export default function PlansManager({
         }
       }
       
-      const { error } = await supabase
-        .from('hosting_plans')
-        .update({ is_linux_featured: !plan.is_linux_featured })
-        .eq('id', plan.id);
-
-      if (error) throw error;
+      const res = await fetch('/api/plans', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: plan.id, is_linux_featured: !plan.is_linux_featured }),
+      });
+      if (!res.ok) throw new Error('Failed to update featured status');
       
       toast.success(`Plan ${!plan.is_linux_featured ? 'featured' : 'unfeatured'} successfully`);
       fetchPlans();
@@ -1086,12 +1041,12 @@ export default function PlansManager({
     if (!confirm('Are you sure you want to delete this plan?')) return;
 
     try {
-      const { error } = await supabase
-        .from('hosting_plans')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
+      const res = await fetch('/api/plans', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Failed to delete plan');
       
       toast.success('Plan deleted successfully');
       fetchPlans();
@@ -1142,25 +1097,26 @@ export default function PlansManager({
         sale_badge_text: plan.sale_enabled ? plan.sale_badge_text : null
       };
 
-      let error;
+      let method, body;
       if (editingPlan?.id) {
         console.log('Updating plan:', editingPlan.id, planData);
-        const { error: updateError } = await supabase
-          .from('hosting_plans')
-          .update(planData)
-          .eq('id', editingPlan.id);
-        error = updateError;
+        method = 'PUT';
+        body = { id: editingPlan.id, ...planData };
       } else {
         console.log('Creating plan:', planData);
-        const { error: insertError } = await supabase
-          .from('hosting_plans')
-          .insert([planData]);
-        error = insertError;
+        method = 'POST';
+        body = planData;
       }
 
-      if (error) {
-        console.error('Supabase save error:', error);
-        throw error;
+      const res = await fetch('/api/plans', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        console.error('API save error:', err);
+        throw new Error(err.error || 'Failed to save plan');
       }
       
       toast.success(`Plan ${editingPlan?.id ? 'updated' : 'created'} successfully`);

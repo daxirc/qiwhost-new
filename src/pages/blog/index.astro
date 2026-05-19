@@ -2,19 +2,11 @@
 import Layout from '../../layouts/MainLayout.astro';
 import Hero from '../../components/Hero.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { supabase } from '../../lib/supabase';
+import { getBlogPosts } from '../../lib/db';
 import { format } from 'date-fns';
 
 // Fetch all published blog posts
-const { data: posts, error } = await supabase
-  .from('blog_posts')
-  .select('*')
-  .eq('status', 'published')
-  .order('published_at', { ascending: false });
-
-if (error) {
-  console.error('Error fetching blog posts:', error);
-}
+const posts = await getBlogPosts({ status: 'published', orderBy: 'published_at' });
 
 // Function to create excerpt from content
 function createExcerpt(content, maxLength = 150) {

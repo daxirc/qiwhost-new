@@ -1,17 +1,8 @@
 ---
-import { supabase } from '../lib/supabase';
+import { getBlogPosts } from '../lib/db';
 
 // Fetch recent posts
-const { data: recentPosts, error: recentPostsError } = await supabase
-  .from('blog_posts')
-  .select('title, slug, published_at')
-  .eq('status', 'published')
-  .order('published_at', { ascending: false })
-  .limit(5);
-
-if (recentPostsError) {
-  console.error('Error fetching recent posts:', recentPostsError);
-}
+const recentPosts = await getBlogPosts({ status: 'published', columns: 'title, slug, published_at', limit: 5, orderBy: 'published_at' });
 
 // Popular categories (for future implementation)
 const categories = [

@@ -1,6 +1,11 @@
 ---
 import Layout from '../layouts/MainLayout.astro';
 import CTABanner from '../components/CTABanner.astro';
+import { getTranslations, getCurrentLocale } from '../i18n/utils';
+
+const locale = getCurrentLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const dp = t.domainsPage;
 
 // Domain pricing data (demo prices)
 const domainPricing = [
@@ -60,8 +65,8 @@ const features = [
 ---
 
 <Layout 
-  title="Domain Registration" 
-  description="Register your perfect domain name with QIW HOST. Competitive pricing, free DNS management, and 24/7 support."
+  title={dp.meta.title} 
+  description={dp.meta.description}
 >
   <!-- Red Bar Notice -->
   <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 mt-8">
@@ -241,9 +246,9 @@ const features = [
 
   <!-- CTA Banner -->
   <CTABanner
-    title="Ready to Register Your Domain?"
-    subtitle="Get started with your perfect domain name today and build your online presence."
-    ctaText="Search Domains"
+    title={dp.cta.title}
+    subtitle={dp.cta.subtitle}
+    ctaText={dp.cta.ctaText}
     ctaLink="#"
   />
 </Layout>

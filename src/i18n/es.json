@@ -467,5 +467,292 @@
         "subtitle": "Servidores de Protocolo de Escritorio Remoto premium con recursos dedicados y acceso completo de administrador."
       }
     }
+  },
+  "sharedHosting": {
+    "meta": {
+      "title": "Hosting Web Compartido — Rápido, Seguro y Económico | QIW HOST",
+      "description": "Hosting compartido confiable con NVMe SSD, SSL gratuito, CyberPanel y soporte 24/7. Planes desde $2.99/mes."
+    },
+    "hero": {
+      "title": "Hosting Web Compartido",
+      "subtitle": "Hosting NVMe SSD ultrarrápido con CyberPanel, SSL gratuito y WordPress con un clic. Inicia tu sitio web en minutos.",
+      "ctaText": "Ver Planes"
+    },
+    "trustBar": {
+      "uptime": "99.9% Tiempo Activo SLA",
+      "ssl": "SSL Gratuito Incluido",
+      "panel": "CyberPanel Incluido",
+      "support": "Soporte 24/7",
+      "moneyBack": "30 Días de Garantía"
+    },
+    "pricing": {
+      "title": "Precios Simples y Transparentes",
+      "subtitle": "Sin tarifas ocultas. Cancela cuando quieras. Todos los planes incluyen SSL gratuito y CyberPanel.",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "yearlySave": "Ahorra 33%",
+      "billedAnnually": "Facturado anualmente",
+      "whatsIncluded": "Qué incluye:",
+      "getStarted": "Comenzar",
+      "mostPopular": "Más Popular"
+    },
+    "plans": {
+      "starter": {
+        "name": "Inicial",
+        "tagline": "Perfecto para sitios personales y blogs"
+      },
+      "business": {
+        "name": "Empresarial",
+        "tagline": "Ideal para negocios en crecimiento"
+      },
+      "pro": {
+        "name": "Pro",
+        "tagline": "Máxima potencia para agencias y tiendas"
+      }
+    },
+    "features": {
+      "title": "Todo lo que Necesitas para Tener Éxito en Línea",
+      "subtitle": "Infraestructura de nivel empresarial a precios de hosting compartido.",
+      "nvme": { "title": "Almacenamiento NVMe SSD", "desc": "Unidades de estado sólido NVMe ultrarrápidas para cargas de página instantáneas y consultas de base de datos ágiles." },
+      "ssl": { "title": "Certificados SSL Gratuitos", "desc": "Cada dominio obtiene un SSL Let's Encrypt gratuito — renovación automática, sin configuración." },
+      "panel": { "title": "CyberPanel", "desc": "Un panel de control moderno y ligero para gestionar archivos, correos, bases de datos y DNS — todo en un lugar." },
+      "wordpress": { "title": "WordPress con Un Clic", "desc": "Lanza un sitio WordPress en segundos con el instalador integrado — más de 400 apps disponibles." },
+      "ddos": { "title": "Protección DDoS", "desc": "Mitigación DDoS de nivel empresarial mantiene tus sitios en línea durante ataques volumétricos." },
+      "support": { "title": "Soporte Experto 24/7", "desc": "Personas reales, respuestas rápidas — nuestro equipo de soporte está disponible las 24 horas por chat en vivo y tickets." },
+      "backups": { "title": "Copias de Seguridad Automatizadas", "desc": "Copias de seguridad diarias (o semanales) con restauración con un clic para que nunca pierdas un byte." },
+      "litespeed": { "title": "Servidor Web LiteSpeed", "desc": "Hasta 12x más rápido que Apache — caché integrado y soporte HTTP/3 para máximo rendimiento." }
+    },
+    "techStack": {
+      "title": "Impulsado por Tecnología Moderna",
+      "subtitle": "Todos los lenguajes, frameworks y herramientas que tus proyectos necesitan."
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": { "q": "¿Qué es el hosting compartido?", "a": "El hosting compartido significa que tu sitio web comparte recursos del servidor (CPU, RAM, disco) con otros sitios en el mismo servidor. Es la opción más económica y es perfecta para sitios personales, blogs, portafolios y sitios web de pequeñas empresas." },
+      "q2": { "q": "¿Puedo instalar WordPress?", "a": "¡Por supuesto! Todos los planes incluyen el instalador de un clic Softaculous, que te permite instalar WordPress (y más de 400 otras apps) en menos de 60 segundos — no se requieren habilidades técnicas." },
+      "q3": { "q": "¿El SSL está incluido gratis?", "a": "Sí. Cada plan incluye un certificado SSL Let's Encrypt gratuito que se emite y renueva automáticamente. Tus visitantes verán el ícono de candado seguro desde el primer día." },
+      "q4": { "q": "¿Puedo actualizar mi plan después?", "a": "Por supuesto. Puedes actualizar (o degradar) en cualquier momento desde tu área de cliente. La diferencia de precio se prorratea automáticamente — sin tiempo de inactividad, sin pérdida de datos." },
+      "q5": { "q": "¿Ofrecen garantía de devolución?", "a": "¡Sí! Ofrecemos una garantía de devolución de 30 días en todos los planes de hosting compartido. Si no estás satisfecho, emitiremos un reembolso completo — sin preguntas." }
+    },
+    "cta": {
+      "title": "¿Listo para Lanzar tu Sitio Web?",
+      "subtitle": "Comienza con hosting compartido hoy. Planes desde solo $2.99/mes.",
+      "ctaText": "Comenzar Ahora"
+    }
+  },
+  "wordpressHosting": {
+    "meta": {
+      "title": "Hosting WordPress",
+      "description": "Hosting WordPress administrado con actualizaciones automáticas, seguridad mejorada y soporte experto."
+    },
+    "hero": {
+      "title": "Hosting WordPress Administrado",
+      "subtitle": "Hosting potente, seguro y optimizado diseñado específicamente para sitios web WordPress con gestión experta."
+    },
+    "comingSoon": {
+      "title": "¡Planes de Hosting WordPress Próximamente!",
+      "description": "Estamos desarrollando la experiencia definitiva de hosting WordPress con actualizaciones administradas, seguridad mejorada y optimización de rendimiento. ¡Prepárate para un hosting WordPress sin complicaciones!",
+      "notifyPlaceholder": "Ingresa tu correo electrónico",
+      "notifyButton": "Notifícame",
+      "notifySubtext": "¡Sé de los primeros en experimentar nuestro hosting WordPress administrado!"
+    },
+    "features": {
+      "title": "Características Enfocadas en WordPress",
+      "subtitle": "Todo lo que necesitas para un sitio WordPress rápido, seguro y bien mantenido",
+      "optimized": { "title": "Optimizado para WordPress", "desc": "Configuraciones de servidor específicamente ajustadas para el rendimiento de WordPress." },
+      "updates": { "title": "Actualizaciones Automáticas", "desc": "Mantén el núcleo de WordPress, temas y plugins actualizados automáticamente." },
+      "security": { "title": "Seguridad Mejorada", "desc": "Medidas de seguridad avanzadas para proteger contra amenazas de WordPress." },
+      "staging": { "title": "Entorno de Pruebas", "desc": "Prueba cambios de forma segura con entornos de staging de un clic." },
+      "toolkit": { "title": "Kit de Herramientas WordPress", "desc": "Herramientas potentes para gestionar múltiples instalaciones de WordPress." },
+      "support": { "title": "Soporte Experto", "desc": "Especialistas en WordPress disponibles 24/7 para ayudar con cualquier problema." }
+    },
+    "benefits": {
+      "title": "¿Por Qué Elegir WordPress Administrado?",
+      "subtitle": "Concéntrate en tu contenido mientras nosotros manejamos los detalles técnicos",
+      "maintenance": { "title": "Mantenimiento Sin Esfuerzo", "desc": "Actualizaciones automáticas, copias de seguridad y monitoreo de seguridad para que puedas enfocarte en crear contenido." },
+      "performance": { "title": "Rendimiento Ultrarrápido", "desc": "Servidores optimizados y caché configurados específicamente para la velocidad de WordPress." },
+      "enhancedSecurity": { "title": "Seguridad Mejorada", "desc": "Medidas de seguridad avanzadas y monitoreo para proteger contra amenazas específicas de WordPress." },
+      "expertSupport": { "title": "Soporte WordPress Experto", "desc": "Obtén ayuda de especialistas en WordPress que conocen la plataforma a fondo." },
+      "stagingEnv": { "title": "Entornos de Prueba", "desc": "Prueba cambios de forma segura antes de publicarlos con staging de un clic." },
+      "scalable": { "title": "Soluciones Escalables", "desc": "Escala fácilmente tu hosting a medida que tu sitio WordPress crece en tráfico y complejidad." }
+    },
+    "cta": {
+      "title": "¿Necesitas Hosting WordPress Ahora?",
+      "subtitle": "Instala WordPress en nuestro hosting VPS para control total y flexibilidad.",
+      "ctaText": "Ver Planes VPS"
+    },
+    "successMessage": {
+      "title": "¡Gracias!",
+      "text": "Te notificaremos cuando el hosting WordPress esté disponible."
+    }
+  },
+  "aboutPage": {
+    "meta": {
+      "title": "Sobre Nosotros",
+      "description": "Conoce QIW HOST, nuestra misión, visión y el equipo detrás de nuestras soluciones de hosting confiables."
+    },
+    "hero": {
+      "title": "Sobre QIW HOST",
+      "subtitle": "Fundada en 2017, hemos estado entregando soluciones de hosting confiables para empresas en todo el mundo."
+    },
+    "mission": {
+      "title": "Nuestra Misión",
+      "p1": "En QIW HOST, nuestra misión es proporcionar a empresas de todos los tamaños soluciones de hosting confiables y de alto rendimiento que permitan el crecimiento y el éxito en el mundo digital.",
+      "p2": "Nos esforzamos por ofrecer un servicio excepcional, experiencia técnica e infraestructura de vanguardia en la que nuestros clientes puedan confiar, permitiéndoles enfocarse en sus objetivos comerciales principales."
+    },
+    "vision": {
+      "title": "Nuestra Visión",
+      "p1": "Visualizamos un futuro donde cada empresa tenga acceso a infraestructura de hosting de nivel empresarial que sea segura, escalable y asequible.",
+      "p2": "QIW HOST aspira a ser el socio de confianza para empresas que navegan el complejo mundo del hosting en la nube, estableciendo el estándar de la industria en confiabilidad, seguridad y satisfacción del cliente."
+    },
+    "journey": {
+      "title": "Nuestro Camino",
+      "subtitle": "Una mirada a cómo QIW HOST ha evolucionado a lo largo de los años."
+    },
+    "team": {
+      "title": "Conoce a Nuestro Equipo",
+      "subtitle": "Los profesionales dedicados detrás del éxito de QIW HOST."
+    },
+    "partners": {
+      "title": "Nuestros Socios",
+      "subtitle": "Colaboramos con empresas tecnológicas líderes para ofrecer las mejores soluciones."
+    },
+    "cta": {
+      "title": "Únete a Miles de Clientes Satisfechos",
+      "subtitle": "Experimenta la diferencia QIW HOST hoy.",
+      "ctaText": "Comenzar"
+    },
+    "timeline": {
+      "2017": { "title": "Empresa Fundada", "desc": "QIW HOST fue establecida con la visión de proporcionar soluciones de hosting confiables y asequibles." },
+      "2018": { "title": "Lanzamiento de Servicios VPS", "desc": "Lanzamos nuestros primeros servicios de hosting VPS con enfoque en rendimiento y confiabilidad." },
+      "2019": { "title": "Expansión a Servidores Dedicados", "desc": "Agregamos opciones de servidores dedicados a nuestro portafolio para satisfacer la creciente demanda de los clientes." },
+      "2020": { "title": "Soluciones RDP Privadas", "desc": "Introdujimos soluciones RDP Privadas seguras para trabajo remoto y continuidad empresarial." },
+      "2022": { "title": "Expansión Global", "desc": "Expandimos nuestra infraestructura a múltiples centros de datos en todo el mundo para mejor cobertura global." },
+      "2023": { "title": "Infraestructura de Nueva Generación", "desc": "Actualizamos a hardware y tecnologías de red de nueva generación en todos los servicios." }
+    }
+  },
+  "contactPage": {
+    "meta": {
+      "title": "Contáctanos",
+      "description": "Ponte en contacto con el equipo de QIW HOST para consultas de ventas, soporte técnico o preguntas generales."
+    },
+    "hero": {
+      "title": "Contáctanos",
+      "subtitle": "¿Tienes preguntas? Estamos aquí para ayudar. Comunícate con nuestro equipo para asistencia."
+    },
+    "getInTouch": "Ponte en Contacto",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "supportHours": "Horario de Soporte",
+    "connectWithUs": "Conéctate con Nosotros",
+    "sendMessage": "Envíanos un Mensaje",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "emailAddress": "Correo Electrónico",
+    "subject": "Asunto",
+    "message": "Mensaje",
+    "sendButton": "Enviar Mensaje",
+    "offices": {
+      "title": "Nuestras Oficinas Globales",
+      "subtitle": "Tenemos oficinas en todo el mundo para servirte mejor",
+      "mainOffice": "Oficina Principal"
+    },
+    "success": {
+      "title": "¡Mensaje Enviado Exitosamente!",
+      "text": "Gracias por contactarnos, {name}. Te responderemos pronto.",
+      "sendAnother": "Enviar Otro Mensaje"
+    }
+  },
+  "pricingPage": {
+    "meta": {
+      "title": "Precios",
+      "description": "Precios transparentes para las soluciones de hosting en la nube de QIW HOST."
+    },
+    "hero": {
+      "title": "Precios Simples y Transparentes",
+      "subtitle": "Elige el plan que mejor funcione para las necesidades de tu negocio. Sin tarifas ocultas ni contratos a largo plazo."
+    },
+    "monthly": "Mensual",
+    "yearly": "Anual (Ahorra 20%)",
+    "mostPopular": "Más Popular",
+    "billedAnnually": "Facturado anualmente",
+    "perMonth": "/mes",
+    "vps": {
+      "title": "Planes de Hosting VPS",
+      "subtitle": "Servidores privados virtuales potentes con recursos dedicados y acceso root completo.",
+      "learnMore": "Más información sobre nuestro hosting VPS"
+    },
+    "dedicated": {
+      "title": "Planes de Servidores Dedicados",
+      "subtitle": "Servidores físicos potentes con recursos exclusivos para máximo rendimiento.",
+      "learnMore": "Más información sobre nuestros servidores dedicados"
+    },
+    "rdp": {
+      "title": "Planes de RDP Privado",
+      "subtitle": "Soluciones de escritorio remoto seguras con acceso completo de administrador.",
+      "learnMore": "Más información sobre nuestras soluciones RDP Privado"
+    },
+    "orderNow": "Ordenar Ahora",
+    "faq": {
+      "q1": { "q": "¿Qué métodos de pago aceptan?", "a": "Aceptamos todas las tarjetas de crédito principales (Visa, MasterCard, American Express), PayPal y pagos con criptomonedas (Bitcoin, Ethereum)." },
+      "q2": { "q": "¿Puedo actualizar mi plan después?", "a": "Sí, puedes actualizar tu plan fácilmente en cualquier momento a través de tu área de cliente. La diferencia de precio se prorrateará para el resto de tu ciclo de facturación." },
+      "q3": { "q": "¿Ofrecen garantía de devolución?", "a": "Sí, ofrecemos una garantía de devolución de 7 días para todos nuestros planes VPS y RDP Privado. Los servidores dedicados tienen una garantía de devolución de 3 días debido a su naturaleza personalizada." },
+      "q4": { "q": "¿Cuál es la diferencia entre facturación mensual y anual?", "a": "La facturación anual proporciona un 20% de descuento en comparación con la facturación mensual. Puedes elegir tu ciclo de facturación preferido durante el pago." },
+      "q5": { "q": "¿Hay tarifas de configuración?", "a": "No, no cobramos tarifas de configuración para nuestros servicios estándar. Lo que ves en nuestros precios es lo que pagas." }
+    },
+    "customCta": {
+      "title": "¿Necesitas una Solución Personalizada?",
+      "subtitle": "Contacta a nuestro equipo para planes de hosting personalizados adaptados a tus requisitos específicos.",
+      "ctaText": "Contáctanos"
+    }
+  },
+  "domainsPage": {
+    "meta": {
+      "title": "Registro de Dominios",
+      "description": "Registra tu nombre de dominio perfecto con QIW HOST. Precios competitivos, gestión DNS gratuita y soporte 24/7."
+    },
+    "notice": "Actualmente no estamos ofreciendo registro de dominios, por favor espera una actualización.",
+    "search": {
+      "title": "Busca tu Dominio",
+      "subtitle": "Ingresa el nombre de dominio deseado y verifica la disponibilidad al instante",
+      "domainLabel": "Nombre de Dominio",
+      "placeholder": "tudominio",
+      "extensionLabel": "Extensión",
+      "searchButton": "Buscar",
+      "popularExtensions": "Extensiones populares:"
+    },
+    "features": {
+      "dns": { "title": "Gestión DNS Gratuita", "desc": "Control DNS completo con nuestra interfaz de gestión fácil de usar." },
+      "privacy": { "title": "Protección de Privacidad de Dominio", "desc": "Mantén tu información personal privada con protección WHOIS." },
+      "transfer": { "title": "Transferencia Fácil de Dominio", "desc": "Transfiere tus dominios existentes a nosotros con nuestro proceso simple." },
+      "support": { "title": "Soporte 24/7", "desc": "Soporte experto disponible las 24 horas para todos los problemas de dominio." },
+      "autoRenew": { "title": "Renovación Automática", "desc": "Nunca pierdas tu dominio con opciones de renovación automática." },
+      "bulk": { "title": "Gestión Masiva", "desc": "Gestiona múltiples dominios eficientemente desde un solo panel." }
+    },
+    "pricingTable": {
+      "title": "Precios de Dominios",
+      "subtitle": "Precios transparentes para todas las extensiones de dominio populares",
+      "extension": "Extensión",
+      "registration": "Registro",
+      "renewal": "Renovación",
+      "transferCol": "Transferencia",
+      "action": "Acción",
+      "firstYear": "1er año",
+      "perYear": "por año",
+      "plusYear": "+ 1 año",
+      "register": "Registrar"
+    },
+    "pricingNotes": {
+      "title": "Información de Precios",
+      "note1": "Todos los precios están en USD e incluyen tarifas ICANN donde corresponda",
+      "note2": "Protección de privacidad de dominio disponible por $9.99/año adicional",
+      "note3": "Descuentos por volumen disponibles para 10+ dominios",
+      "note4": "Gestión DNS gratuita incluida con todos los dominios"
+    },
+    "cta": {
+      "title": "¿Listo para Registrar tu Dominio?",
+      "subtitle": "Comienza con tu nombre de dominio perfecto hoy y construye tu presencia en línea.",
+      "ctaText": "Buscar Dominios"
+    }
   }
 }

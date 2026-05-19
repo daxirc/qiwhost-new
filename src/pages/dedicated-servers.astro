@@ -4,7 +4,7 @@ import Hero from '../components/Hero.astro';
 import FeaturesSection from '../components/FeaturesSection.astro';
 import PricingTable from '../components/PricingTable.astro';
 import CTABanner from '../components/CTABanner.astro';
-import { supabase } from '../lib/supabase';
+import { getDedicatedPlans } from '../lib/db';
 import { getTranslations, getCurrentLocale } from '../i18n/utils';
 
 // Get translations for current locale
@@ -12,15 +12,7 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch plans from database
-const { data: plans, error } = await supabase
-  .from('hosting_plans')
-  .select('*')
-  .eq('category', 'DEDICATED')
-  .order('sort_order', { ascending: true });
-
-if (error) {
-  console.error('Error fetching plans:', error);
-}
+const plans = await getDedicatedPlans();
 
 // Convert plans to pricing table format
 function formatPlans(plans) {
