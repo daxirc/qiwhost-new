@@ -2,11 +2,11 @@
 import Layout from '../../layouts/MainLayout.astro';
 import Hero from '../../components/Hero.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { getBlogPosts } from '../../lib/db';
+import { fetchBlogPosts } from '../../lib/api';
 import { format } from 'date-fns';
 
-// Fetch all published blog posts
-const posts = await getBlogPosts({ status: 'published', orderBy: 'published_at' });
+// Fetch all published blog posts from VPS API at build time
+const posts = await fetchBlogPosts();
 
 // Function to create excerpt from content
 function createExcerpt(content, maxLength = 150) {

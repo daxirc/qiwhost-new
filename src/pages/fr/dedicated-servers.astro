@@ -4,7 +4,7 @@ import Hero from '../../components/Hero.astro';
 import FeaturesSection from '../../components/FeaturesSection.astro';
 import PricingTable from '../../components/PricingTable.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { getDedicatedPlans } from '../../lib/db';
+import { fetchDedicatedPlans } from '../../lib/api';
 import { getTranslations, getCurrentLocale } from '../../i18n/utils';
 
 // Get translations for current locale
@@ -12,7 +12,7 @@ const locale = getCurrentLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 
 // Fetch plans from database
-const plans = await getDedicatedPlans();
+const plans = await fetchDedicatedPlans();
 
 // Convert plans to pricing table format
 function formatPlans(plans) {

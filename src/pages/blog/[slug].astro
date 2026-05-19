@@ -1,11 +1,11 @@
 ---
 import Layout from '../../layouts/MainLayout.astro';
 import CTABanner from '../../components/CTABanner.astro';
-import { getBlogPosts } from '../../lib/db';
+import { fetchBlogPosts } from '../../lib/api';
 import { format } from 'date-fns';
 
 export async function getStaticPaths() {
-  const posts = await getBlogPosts({ status: 'published' });
+  const posts = await fetchBlogPosts();
   return posts.map(post => ({
     params: { slug: post.slug },
     props: { post },

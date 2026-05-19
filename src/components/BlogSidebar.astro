@@ -1,8 +1,9 @@
 ---
-import { getBlogPosts } from '../lib/db';
+import { fetchBlogPosts } from '../lib/api';
 
-// Fetch recent posts
-const recentPosts = await getBlogPosts({ status: 'published', columns: 'title, slug, published_at', limit: 5, orderBy: 'published_at' });
+// Fetch recent posts from VPS API at build time
+const allPosts = await fetchBlogPosts();
+const recentPosts = allPosts.slice(0, 5);
 
 // Popular categories (for future implementation)
 const categories = [
