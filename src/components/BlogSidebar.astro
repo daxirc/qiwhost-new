@@ -1,5 +1,6 @@
 ---
 import { fetchBlogPosts } from '../lib/api';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 // Fetch recent posts from VPS API at build time
 const allPosts = await fetchBlogPosts();
@@ -13,6 +14,8 @@ const categories = [
   { name: 'Tutorials', count: 7, slug: 'tutorials' },
   { name: 'News', count: 2, slug: 'news' }
 ];
+
+const currentLocale = Astro.currentLocale || 'en';
 ---
 
 <div class="space-y-8">
@@ -23,7 +26,7 @@ const categories = [
       <ul class="space-y-4">
         {recentPosts.map(post => (
           <li>
-            <a href={`/blog/${post.slug}`} class="flex items-start group">
+            <a href={getRelativeLocaleUrl(currentLocale, `/blog/${post.slug}`)} class="flex items-start group">
               <i class="fas fa-angle-right text-primary-500 mt-1 mr-2 group-hover:text-primary-600"></i>
               <span class="text-gray-700 group-hover:text-primary-600 transition-colors">{post.title}</span>
             </a>
@@ -41,7 +44,7 @@ const categories = [
     <ul class="space-y-2">
       {categories.map(category => (
         <li>
-          <a href={`/blog/category/${category.slug}`} class="flex items-center justify-between group">
+          <a href={getRelativeLocaleUrl(currentLocale, `/blog/category/${category.slug}`)} class="flex items-center justify-between group">
             <span class="text-gray-700 group-hover:text-primary-600 transition-colors">{category.name}</span>
             <span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">{category.count}</span>
           </a>

@@ -1,7 +1,7 @@
 ---
-import Layout from '../../layouts/MainLayout.astro';
-import CTABanner from '../../components/CTABanner.astro';
-import { fetchBlogPosts } from '../../lib/api';
+import Layout from '../../../layouts/MainLayout.astro';
+import CTABanner from '../../../components/CTABanner.astro';
+import { fetchBlogPosts } from '../../../lib/api';
 import { format } from 'date-fns';
 
 export async function getStaticPaths() {

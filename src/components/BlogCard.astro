@@ -1,5 +1,6 @@
 ---
 import { format } from 'date-fns';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 interface Props {
   title: string;
@@ -23,10 +24,12 @@ function createExcerpt(text, maxLength = 150) {
 }
 
 const excerpt = createExcerpt(description);
+
+const currentLocale = Astro.currentLocale || 'en';
 ---
 
 <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-  <a href={`/blog/${slug}`} class="block">
+  <a href={getRelativeLocaleUrl(currentLocale, `/blog/${slug}`)} class="block">
     <div class="h-48 overflow-hidden">
       <img 
         src={featuredImage} 
@@ -45,13 +48,13 @@ const excerpt = createExcerpt(description);
       )}
     </div>
     <h2 class="text-xl font-bold text-gray-900 mb-3 hover:text-primary-600 transition-colors">
-      <a href={`/blog/${slug}`}>{title}</a>
+      <a href={getRelativeLocaleUrl(currentLocale, `/blog/${slug}`)}>{title}</a>
     </h2>
     <p class="text-gray-600 mb-4">
       {excerpt}
     </p>
     <a 
-      href={`/blog/${slug}`} 
+      href={getRelativeLocaleUrl(currentLocale, `/blog/${slug}`)} 
       class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
     >
       Read More

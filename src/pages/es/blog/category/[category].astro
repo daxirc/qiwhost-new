@@ -1,10 +1,10 @@
 ---
-import Layout from '../../../layouts/MainLayout.astro';
-import Hero from '../../../components/Hero.astro';
-import BlogCard from '../../../components/BlogCard.astro';
-import BlogSidebar from '../../../components/BlogSidebar.astro';
-import CTABanner from '../../../components/CTABanner.astro';
-import { fetchBlogPosts } from '../../../lib/api';
+import Layout from '../../../../layouts/MainLayout.astro';
+import Hero from '../../../../components/Hero.astro';
+import BlogCard from '../../../../components/BlogCard.astro';
+import BlogSidebar from '../../../../components/BlogSidebar.astro';
+import CTABanner from '../../../../components/CTABanner.astro';
+import { fetchBlogPosts } from '../../../../lib/api';
 
 export function getStaticPaths() {
   // Define categories within getStaticPaths to ensure they're in scope
