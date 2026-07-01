@@ -1,0 +1,100 @@
+---
+import { getRdpBySlug } from '../data/plans';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const existingLinks = getRdpBySlug('usa-rdp')?.plans.map(plan => plan.cartUrl) || [];
+
+const plans = [
+  {
+    name: 'Starter RDP',
+    specs: ['2GB RAM', '1 vCPU', '30GB SSD Storage', '1TB Bandwidth', 'USA Location', 'Full Admin Access'],
+    price: '$7.99',
+    ctaLink: existingLinks[0],
+  },
+  {
+    name: 'Pro RDP',
+    specs: ['4GB RAM', '2 vCPU', '50GB SSD Storage', '2TB Bandwidth', 'USA Location', 'Full Admin Access'],
+    price: '$13.99',
+    ctaLink: existingLinks[1],
+    best: true,
+  },
+  {
+    name: 'Elite RDP',
+    specs: ['8GB RAM', '4 vCPU', '120GB SSD Storage', '4TB Bandwidth', 'USA Location', 'Full Admin Access'],
+    price: '$27.99',
+    ctaLink: existingLinks[2],
+  },
+  {
+    name: 'Advanced RDP',
+    specs: ['16GB RAM', '8 vCPU', '240GB SSD Storage', '8TB Bandwidth', 'USA Location', 'Full Admin Access'],
+    price: '$44.99',
+    ctaLink: 'https://portal.qiwhost.com/cart.php?a=add&pid=167',
+  },
+];
+---
+
+<section class="usa-rdp-pricing py-16 md:py-20">
+  <div class="container">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">{title}</h2>
+      {description && <p class="text-lg text-gray-600 leading-relaxed">{description}</p>}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      {plans.map(plan => (
+        <article class={`relative bg-white border ${plan.best ? 'border-primary-500 shadow-xl shadow-primary-100/80' : 'border-gray-200 shadow-lg'} rounded-xl p-6 flex flex-col min-h-[420px]`}>
+          {plan.best && (
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span class="inline-flex items-center rounded-full bg-primary-600 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-md">
+                Best
+              </span>
+            </div>
+          )}
+
+          <div class="mb-6 pt-2">
+            <h3 class="text-2xl font-bold text-gray-900">{plan.name}</h3>
+            <div class="mt-5 flex items-end">
+              <span class="text-4xl font-extrabold text-gray-900">{plan.price}</span>
+              <span class="ml-1 pb-1 text-sm font-semibold text-gray-500">/mo</span>
+            </div>
+          </div>
+
+          <ul class="space-y-3 flex-1">
+            {plan.specs.map(spec => (
+              <li class="flex items-start gap-3 text-sm font-medium text-gray-700">
+                <span class="mt-0.5 inline-flex h-5 w-5 flex-none items-center justify-center rounded-full bg-primary-50 text-primary-600">
+                  <i class="fas fa-check text-[10px]"></i>
+                </span>
+                <span>{spec}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-8">
+            {plan.ctaLink ? (
+              <a
+                href={plan.ctaLink}
+                class={`inline-flex w-full items-center justify-center rounded-lg px-5 py-3 text-sm font-bold transition ${plan.best ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-md' : 'bg-gray-900 text-white hover:bg-gray-800'}`}
+              >
+                Order Now
+              </a>
+            ) : (
+              <span
+                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-lg bg-gray-200 px-5 py-3 text-sm font-bold text-gray-500"
+                aria-disabled="true"
+              >
+                Order Now
+              </span>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

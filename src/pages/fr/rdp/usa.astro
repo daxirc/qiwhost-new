@@ -1,10 +1,9 @@
 ---
 import Layout from '../../../layouts/MainLayout.astro';
 import Hero from '../../../components/Hero.astro';
-import PricingTable from '../../../components/PricingTable.astro';
+import UsaRdpPricing from '../../../components/UsaRdpPricing.astro';
 import CTABanner from '../../../components/CTABanner.astro';
 import FeaturesSection from '../../../components/FeaturesSection.astro';
-import { getRdpBySlug } from '../../../data/plans';
 import { getTranslations, getCurrentLocale } from '../../../i18n/utils';
 
 // Get translations for current locale
@@ -20,31 +19,6 @@ function getFlagImageUrl(flagEmoji) {
   const countryCode = flagEmojiToCountryCode[flagEmoji];
   return countryCode ? `https://flagcdn.com/${countryCode}.svg` : null;
 }
-
-// Get hardcoded RDP plans
-const rdpPlans = getRdpBySlug('usa-rdp')?.plans || [];
-
-// Convert database plans to pricing table format
-const plans = rdpPlans.map(plan => ({
-  name: plan.name,
-  price: {
-    monthly: `$${plan.priceMonthly}`,
-    yearly: `$${plan.priceAnnually}`
-  },
-  description: `${plan.cpu}, ${plan.ram} RAM, ${plan.storage}`,
-  features: [
-    plan.cpu,
-    plan.ram,
-    plan.storage,
-    plan.bandwidth,
-    'Windows Server 2022' || 'Windows Server 2022',
-    'USA Location',
-    '24/7 Support'
-  ],
-  ctaText: t.pricing.ctaText,
-  ctaLink: plan.cartUrl,
-  osType: 'Windows Server 2022'
-})) || [];
 
 // Country-specific information
 const country = {
@@ -162,13 +136,12 @@ const pingText = t.rdp.common.locations.ping.replace('{ping}', country.ping);
   </section>
 
   <!-- Pricing Table -->
-  <section id="pricing" class="py-12 md:py-16">
-    <PricingTable
+  <div id="pricing">
+    <UsaRdpPricing
       title={pricingTitle}
       description={t.rdp.common.pricing.description}
-      plans={plans}
     />
-  </section>
+  </div>
 
   <!-- RDP Overview -->
   <section class="py-16 md:py-24">
